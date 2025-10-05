@@ -4,8 +4,8 @@ import './index.css'
 import App from './App.jsx'
 import axios from 'axios'
 
-// Configure axios base URL
-axios.defaults.baseURL = 'http://localhost:5000'
+// Configure axios base URL for production deployment
+axios.defaults.baseURL = 'https://data-entry-backend-pkeo.onrender.com'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
