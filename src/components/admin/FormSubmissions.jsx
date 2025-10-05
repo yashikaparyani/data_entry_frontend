@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config/api';
 import './FormSubmissions.css';
 
 // Form configurations - moved outside component to prevent re-creation
@@ -70,7 +71,7 @@ const FormSubmissions = () => {
         return;
       }
 
-      const response = await axios.get(`/api/admin/submissions/${formType}`, {
+      const response = await axios.get(`${API_BASE_URL}/api/admin/submissions/${formType}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

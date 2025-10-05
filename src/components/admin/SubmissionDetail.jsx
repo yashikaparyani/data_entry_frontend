@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config/api';
 import './SubmissionDetail.css';
 
 const SubmissionDetail = () => {
@@ -63,7 +64,7 @@ const SubmissionDetail = () => {
         return;
       }
 
-      const response = await axios.get(`/api/admin/submissions/${formType}/${submissionId}`, {
+      const response = await axios.get(`${API_BASE_URL}/api/admin/submissions/${formType}/${submissionId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

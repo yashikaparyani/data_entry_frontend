@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config/api';
 import './UserManagement.css';
 
 const UserManagement = () => {
@@ -20,7 +21,7 @@ const UserManagement = () => {
         return;
       }
 
-      const response = await axios.get('/api/admin/users', {
+      const response = await axios.get(`${API_BASE_URL}/api/admin/users`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { API_BASE_URL } from '../../config/api';
 import './Auth.css';
 
 const Login = () => {
@@ -31,7 +32,7 @@ const Login = () => {
     if (formData.email === 'admin@dataentry.com' && formData.password === 'admin123') {
       // Admin login
       try {
-        const response = await fetch('/api/admin/login', {
+        const response = await fetch(`${API_BASE_URL}/api/admin/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config/api';
 import './AdminDashboard.css';
 
 // Form configurations for navigation cards - moved outside component to prevent re-creation
@@ -77,7 +78,7 @@ const AdminDashboard = () => {
         return;
       }
 
-      const response = await axios.get('/api/admin/stats', {
+      const response = await axios.get(`${API_BASE_URL}/api/admin/stats`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
