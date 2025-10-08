@@ -1,11 +1,11 @@
-/* Form Navigation Styles - New Hamburger Layout */
+/* Form Navigation Styles - Minimal Hamburger Only */
 .form-navigation-bar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 1rem 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  background: var(--samvit-white);
+  border-bottom: 2px solid var(--samvit-primary-light);
+  padding: 0.75rem 0;
+  box-shadow: 0 2px 8px var(--samvit-shadow);
   position: relative;
-  z-index: 1000;
+  z-index: 999;
 }
 
 .nav-content {
@@ -13,7 +13,7 @@
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -23,23 +23,25 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.1);
+  width: 45px;
+  height: 45px;
+  background: var(--samvit-primary);
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 8px var(--samvit-shadow-medium);
 }
 
 .hamburger-menu:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.05);
+  background: var(--samvit-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--samvit-shadow-strong);
 }
 
 .hamburger-line {
-  width: 24px;
+  width: 22px;
   height: 3px;
   background: white;
   border-radius: 3px;

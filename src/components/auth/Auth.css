@@ -1,22 +1,43 @@
-/* Auth Container */
+/* Samvit Insights Auth Styles */
 .auth-container {
   width: 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--samvit-primary) 0%, var(--samvit-primary-dark) 100%);
   padding: 2rem;
+  position: relative;
+}
+
+.auth-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="30" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="60" r="2.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+  background-size: 100px 100px;
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
 
 .auth-card {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  background: var(--samvit-white);
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(139, 195, 74, 0.2);
   padding: 3rem;
   width: 100%;
   max-width: 500px;
-  animation: slideUp 0.5s ease-out;
+  animation: slideUp 0.6s ease-out;
+  border: 1px solid var(--samvit-border);
+  position: relative;
+  z-index: 10;
 }
 
 @media (min-width: 1024px) {
@@ -48,23 +69,27 @@
   }
 }
 
-/* Auth Header */
+/* Samvit Auth Header */
 .auth-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--samvit-primary-light);
 }
 
 .auth-header h1 {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 700;
-  color: #1a202c;
-  margin: 0 0 8px 0;
+  color: var(--samvit-secondary);
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 1px 2px var(--samvit-shadow);
 }
 
 .auth-header p {
-  color: #718096;
-  font-size: 1rem;
+  color: var(--samvit-gray-medium);
+  font-size: 1.1rem;
   margin: 0;
+  font-weight: 500;
 }
 
 /* Auth Form */
@@ -74,63 +99,66 @@
   gap: 24px;
 }
 
+/* Samvit Form Styles */
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .form-group label {
   font-weight: 600;
-  color: #2d3748;
-  font-size: 0.875rem;
+  color: var(--samvit-secondary);
+  font-size: 0.95rem;
 }
 
 .form-group input {
-  padding: 12px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
+  padding: 0.875rem 1rem;
+  border: 2px solid var(--samvit-border);
+  border-radius: 10px;
   font-size: 1rem;
-  transition: all 0.2s ease;
-  background: #f7fafc;
-  color: #1a202c !important;
+  transition: all 0.3s ease;
+  background: var(--samvit-white);
+  color: var(--samvit-secondary) !important;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-  color: #1a202c !important;
+  border-color: var(--samvit-primary);
+  background: var(--samvit-white);
+  box-shadow: 0 0 0 3px var(--samvit-shadow-medium);
+  color: var(--samvit-secondary) !important;
+  transform: translateY(-1px);
 }
 
 .form-group input:disabled {
-  background: #f1f5f9;
+  background: var(--samvit-gray-light);
   cursor: not-allowed;
   opacity: 0.7;
 }
 
-/* Auth Button */
+/* Samvit Auth Button */
 .auth-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--samvit-primary) 0%, var(--samvit-primary-dark) 100%);
   color: white;
   border: none;
-  padding: 14px 24px;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 8px;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 15px var(--samvit-shadow-medium);
 }
 
 .auth-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px var(--samvit-shadow-strong);
 }
 
 .auth-button:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translateY(-1px);
 }
 
 .auth-button:disabled {
@@ -139,37 +167,39 @@
   transform: none;
 }
 
-/* Auth Footer */
+/* Samvit Auth Footer */
 .auth-footer {
   text-align: center;
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid #e2e8f0;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--samvit-primary-light);
 }
 
 .auth-footer p {
-  color: #718096;
+  color: var(--samvit-gray-medium);
   margin: 0;
+  font-weight: 500;
 }
 
 .auth-link {
-  color: #667eea;
+  color: var(--samvit-primary);
   text-decoration: none;
   font-weight: 600;
-  transition: color 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .auth-link:hover {
-  color: #5a67d8;
+  color: var(--samvit-primary-dark);
   text-decoration: underline;
+  text-shadow: 0 1px 2px var(--samvit-shadow);
 }
 
-/* Error Message */
+/* Samvit Error Message */
 .error-message {
-  background: #fed7d7;
-  color: #c53030;
-  padding: 12px 16px;
-  border-radius: 8px;
+  background: rgba(244, 67, 54, 0.1);
+  color: var(--samvit-error);
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
   font-size: 0.875rem;
   font-weight: 500;
   border: 1px solid #feb2b2;

@@ -13,6 +13,7 @@ const MSECreditAssessment = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     fetchFormData();
@@ -357,12 +358,28 @@ const MSECreditAssessment = () => {
   const currentStepData = mseFormConfig.steps[currentStep - 1];
   const progressPercentage = (currentStep / mseFormConfig.totalSteps) * 100;
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <div className="mse-form">
-      <FormNavigation />
+      <FormNavigation isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
       <header className="form-header">
         <div className="header-content">
-          <h1>MSE Credit Assessment (Excel Based)</h1>
+          <div className="header-left">
+            {/* Hamburger Menu Button */}
+            <button 
+              className={`hamburger-menu ${isMenuOpen ? 'open' : ''}`} 
+              onClick={toggleMenu}
+              aria-label="Toggle navigation menu"
+            >
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+            </button>
+            <h1>MSE Credit Assessment Form v3.1</h1>
+          </div>
           <div className="user-info">
             <span>Welcome, {user?.name}</span>
             <button className="logout-btn" onClick={logout}>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Green arc at top -->
+  <path d="M20 60 Q100 10 180 60" stroke="#8BC34A" stroke-width="8" fill="none"/>
+  
+  <!-- Gray triangular shapes -->
+  <path d="M40 40 Q80 80 60 100 Q40 85 40 40" fill="#999999"/>
+  <path d="M160 40 Q120 80 140 100 Q160 85 160 40" fill="#999999"/>
+  
+  <!-- "16" in green -->
+  <text x="85" y="85" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#8BC34A">16</text>
+  
+  <!-- "YEARS" in gray -->
+  <text x="100" y="105" font-family="Arial, sans-serif" font-size="12" fill="#999999" text-anchor="middle">YEARS</text>
+</svg>

@@ -1,18 +1,12 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useState } from 'react';
 import './FormNavigation.css';
 
-const FormNavigation = () => {
+const FormNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
   const { user } = useAuth();
   const location = useLocation();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   if (!user) return null;
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
 
   const closeMenu = () => {
     setIsMenuOpen(false);
@@ -20,37 +14,6 @@ const FormNavigation = () => {
 
   return (
     <>
-      <div className="form-navigation-bar">
-        <div className="nav-content">
-          {/* Hamburger Menu Button */}
-          <button 
-            className={`hamburger-menu ${isMenuOpen ? 'open' : ''}`} 
-            onClick={toggleMenu}
-            aria-label="Toggle navigation menu"
-          >
-            <span className="hamburger-line"></span>
-            <span className="hamburger-line"></span>
-            <span className="hamburger-line"></span>
-          </button>
-
-          {/* App Logo and Name */}
-          <div className="app-branding">
-            <div className="app-logo">
-              <span className="logo-icon">🏦</span>
-            </div>
-            <div className="app-name">
-              <h1>Credit Assessment Portal</h1>
-              <p>Data Entry & Analysis System</p>
-            </div>
-          </div>
-
-          {/* User Welcome */}
-          <div className="nav-user">
-            <span>Welcome, {user?.name}</span>
-          </div>
-        </div>
-      </div>
-
       {/* Sidebar Menu */}
       <div className={`sidebar-menu ${isMenuOpen ? 'open' : ''}`}>
         <div className="sidebar-content">

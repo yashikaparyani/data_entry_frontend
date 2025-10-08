@@ -1,18 +1,19 @@
-/* MSE Credit Assessment Form Styles */
+/* Samvit MSE Credit Assessment Form Styles */
 .mse-form {
   width: 100%;
-  height: 100vh;
-  background: #f8fafc;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--samvit-white) 0%, var(--samvit-gray-light) 100%);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  padding-top: 0;
 }
 
 .form-header {
-  background: white;
-  border-bottom: 1px solid #e2e8f0;
-  padding: 1rem 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: var(--samvit-white);
+  border-bottom: 3px solid var(--samvit-primary);
+  padding: 1.5rem 0;
+  box-shadow: 0 4px 20px var(--samvit-shadow);
 }
 
 .header-content {
@@ -25,11 +26,62 @@
   align-items: center;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .form-header h1 {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  color: #1a202c;
+  color: var(--samvit-secondary);
   margin: 0;
+  text-shadow: 0 1px 2px var(--samvit-shadow);
+}
+
+/* Hamburger Menu in Form Header */
+.header-left .hamburger-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 45px;
+  height: 45px;
+  background: var(--samvit-primary);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 10px;
+  box-shadow: 0 2px 8px var(--samvit-shadow-medium);
+}
+
+.header-left .hamburger-menu:hover {
+  background: var(--samvit-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--samvit-shadow-strong);
+}
+
+.header-left .hamburger-line {
+  width: 22px;
+  height: 3px;
+  background: white;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+  margin: 2px 0;
+}
+
+.header-left .hamburger-menu.open .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.header-left .hamburger-menu.open .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.header-left .hamburger-menu.open .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
 }
 
 .user-info {
@@ -39,15 +91,16 @@
 }
 
 .user-info span {
-  color: #4a5568;
-  font-weight: 500;
+  color: var(--samvit-gray-medium);
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
 .logout-btn {
-  background: #e53e3e;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem;
   border-radius: 6px;
   font-size: 0.875rem;
   font-weight: 500;
@@ -100,9 +153,10 @@
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--samvit-primary) 0%, var(--samvit-primary-dark) 100%);
   border-radius: 4px;
   transition: width 0.3s ease;
+  box-shadow: 0 2px 8px var(--samvit-shadow-medium);
 }
 
 .progress-section p {
@@ -212,10 +266,10 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--samvit-primary);
   background: white;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-  color: #1a202c !important;
+  box-shadow: 0 0 0 3px var(--samvit-shadow-medium);
+  color: var(--samvit-secondary) !important;
 }
 
 .form-group textarea {
@@ -304,13 +358,14 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--samvit-primary) 0%, var(--samvit-primary-dark) 100%);
   color: white;
+  box-shadow: 0 4px 15px var(--samvit-shadow-medium);
 }
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 25px var(--samvit-shadow-strong);
 }
 
 .btn-secondary {
@@ -325,12 +380,12 @@
 
 .btn-outline {
   background: white;
-  color: #667eea;
-  border: 2px solid #667eea;
+  color: var(--samvit-primary);
+  border: 2px solid var(--samvit-primary);
 }
 
 .btn-outline:hover:not(:disabled) {
-  background: #667eea;
+  background: var(--samvit-primary);
   color: white;
   transform: translateY(-2px);
 }
@@ -366,8 +421,8 @@
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #667eea;
+  border: 4px solid var(--samvit-primary-light);
+  border-top: 4px solid var(--samvit-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -461,7 +516,8 @@
 
 .form-step[data-step="6"] {
   /* Business Operations - final step emphasis */
-  border: 2px solid #667eea;
+  border: 2px solid var(--samvit-primary);
   border-radius: 12px;
   padding: 1rem;
+  box-shadow: 0 4px 15px var(--samvit-shadow-medium);
 }
