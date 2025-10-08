@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { formConfig } from '../data/formConfig';
 import FormNavigation from './FormNavigation';
@@ -6,7 +6,7 @@ import axios from 'axios';
 import './UserForm.css';
 
 const UserForm = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [formData, setFormData] = useState({});
   const [currentStep, setCurrentStep] = useState(1);
   const [totalSteps, setTotalSteps] = useState(formConfig.totalSteps);
@@ -14,27 +14,36 @@ const UserForm = () => {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    fetchFormData();
-  }, []);
-
-  const fetchFormData = async () => {
+  const fetchFormData = useCallback(async () => {
+    // Skip fetch if user is not authenticated
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+    
     try {
-      const response = await axios.get('/api/form/data/MSE-Credit-Assessment');
+      const response = await axios.get('/api/form/data/User-Form');
       const data = response.data.formData;
       setFormData(data.responses || {});
       setCurrentStep(data.currentStep || 1);
       setTotalSteps(formConfig.totalSteps); // Always use formConfig totalSteps
     } catch (error) {
-      console.error('Error fetching form data:', error);
-      // Initialize empty form if no data exists
+      // Only log error if it's not a 404 (no existing form data)
+      if (error.response?.status !== 404) {
+        console.error('Error fetching form data:', error);
+      }
+      // Initialize empty form if no data exists (404 is expected for new forms)
       setFormData({});
       setCurrentStep(1);
       setTotalSteps(formConfig.totalSteps);
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]); // Close useCallback with dependency array
+
+  useEffect(() => {
+    fetchFormData();
+  }, [fetchFormData]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -49,7 +58,7 @@ const UserForm = () => {
 
     try {
       await axios.post('/api/form/save', {
-        formName: 'MSE-Credit-Assessment',
+        formName: 'User-Form',
         responses: formData,
         currentStep,
         totalSteps: totalSteps,
@@ -126,7 +135,7 @@ const UserForm = () => {
     setSaving(true);
     try {
       await axios.post('/api/form/save', {
-        formName: 'MSE-Credit-Assessment',
+        formName: 'User-Form',
         responses: formData,
         currentStep,
         totalSteps: totalSteps,
@@ -155,42 +164,19 @@ const UserForm = () => {
   return (
     <div className="user-form">
       <FormNavigation />
-      <header className="form-header">
-        <div className="header-content">
-          <h1>MSE Credit Assessment Form v{formConfig.version}</h1>
-          <div className="user-info">
-            <span>Welcome, {user?.name}</span>
-            <button onClick={logout} className="logout-btn">
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
-
       <main className="form-main">
         <div className="form-container">
-          {/* Progress Bar */}
-          <div className="progress-section">
-            <div className="progress-bar">
+          {/* Compact Step Indicators - Single Row */}
+          <div className="compact-step-indicators">
+            {formConfig.steps.map((step, index) => (
               <div 
-                className="progress-fill" 
-                style={{ width: `${(currentStep / totalSteps) * 100}%` }}
-              ></div>
-            </div>
-            <p>Step {currentStep} of {totalSteps} - {formConfig.steps[currentStep - 1]?.title}</p>
-            
-            {/* Step Indicators */}
-            <div className="step-indicators">
-              {formConfig.steps.map((step, index) => (
-                <div 
-                  key={index} 
-                  className={`step-indicator ${currentStep === index + 1 ? 'active' : ''} ${currentStep > index + 1 ? 'completed' : ''}`}
-                >
-                  <span className="step-number">{index + 1}</span>
-                  <span className="step-title">{step.title}</span>
-                </div>
-              ))}
-            </div>
+                key={index} 
+                className={`compact-step ${currentStep === index + 1 ? 'active' : ''} ${currentStep > index + 1 ? 'completed' : ''}`}
+              >
+                <div className="step-circle">{index + 1}</div>
+                <div className="step-label">{step.title}</div>
+              </div>
+            ))}
           </div>
 
           {/* Message */}

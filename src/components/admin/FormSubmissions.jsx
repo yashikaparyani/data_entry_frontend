@@ -6,6 +6,13 @@ import './FormSubmissions.css';
 
 // Form configurations - moved outside component to prevent re-creation
 const formConfigs = {
+    'user-form': {
+      title: 'User Forms',
+      icon: '👤',
+      color: '#8BC34A',
+      description: 'User registration and basic information form submissions',
+      dataFields: ['userName', 'email', 'phone', 'address', 'dateOfBirth']
+    },
     'mse-assessment': {
       title: 'MSE Credit Assessment',
       icon: '🏢',
@@ -47,6 +54,13 @@ const formConfigs = {
       color: '#3498db',
       description: 'Final output sheets and comprehensive reports',
       dataFields: ['reportType', 'finalScore', 'recommendation']
+    },
+    'all-submissions': {
+      title: 'All Submissions',
+      icon: '📊',
+      color: '#8BC34A',
+      description: 'View all form submissions across all form types',
+      dataFields: ['formType', 'userName', 'submissionDate', 'status']
     }
   };
 
@@ -71,7 +85,12 @@ const FormSubmissions = () => {
         return;
       }
 
-      const response = await axios.get(`${API_BASE_URL}/api/admin/submissions/${formType}`, {
+      // Handle different API endpoints based on form type
+      const apiEndpoint = formType === 'all-submissions' 
+        ? `${API_BASE_URL}/api/admin/submissions`
+        : `${API_BASE_URL}/api/admin/submissions/${formType}`;
+
+      const response = await axios.get(apiEndpoint, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

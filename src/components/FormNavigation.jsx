@@ -1,19 +1,70 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useState } from 'react';
 import './FormNavigation.css';
 
-const FormNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
+const FormNavigation = () => {
   const { user } = useAuth();
   const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   if (!user) return null;
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
 
+  // Get current form name based on URL
+  const getCurrentFormName = () => {
+    const path = location.pathname;
+    const formNames = {
+      '/form': 'Standard Form',
+      '/mse-assessment': 'MSE Credit Assessment Form v3.1',
+      '/output-analysis': 'Cash Flow Analysis',
+      '/expert-scorecard': 'Expert Scorecard',
+      '/financial-analysis': 'Financial Analysis > $50K',
+      '/bank-analysis': 'Bank Analysis > $50K',
+      '/credit-app-memo': 'Credit App Memo',
+      '/dashboard': 'User Dashboard'
+    };
+    return formNames[path] || 'Data Entry Portal';
+  };
+
   return (
     <>
+      {/* Navigation with hamburger menu and form name */}
+      <div className="form-navigation-bar">
+        <div className="nav-content">
+          {/* Hamburger Menu Button */}
+          <button 
+            className={`hamburger-menu ${isMenuOpen ? 'open' : ''}`} 
+            onClick={toggleMenu}
+            aria-label="Toggle navigation menu"
+          >
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+          </button>
+          
+          {/* Current Form Name */}
+          <div className="current-form-name">
+            <h2>{getCurrentFormName()}</h2>
+          </div>
+          
+          {/* User Info and Logout - Right Side */}
+          <div className="nav-user-section">
+            <span className="welcome-text">Welcome, {user?.name}</span>
+            <button className="logout-btn" onClick={() => window.location.href = '/login'}>
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Sidebar Menu */}
       <div className={`sidebar-menu ${isMenuOpen ? 'open' : ''}`}>
         <div className="sidebar-content">

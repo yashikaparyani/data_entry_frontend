@@ -7,6 +7,14 @@ import './AdminDashboard.css';
 // Form configurations for navigation cards - moved outside component to prevent re-creation
 const formConfigs = [
     {
+      key: 'user-form',
+      title: 'User Forms',
+      icon: '👤',
+      color: '#8BC34A',
+      description: 'User registration and basic information forms',
+      route: '/admin/forms/user-form'
+    },
+    {
       key: 'mse-assessment',
       title: 'MSE Credit Assessment',
       icon: '🏢',
@@ -53,6 +61,14 @@ const formConfigs = [
       color: '#3498db',
       description: 'Final output sheets and comprehensive reports',
       route: '/admin/forms/output-sheet'
+    },
+    {
+      key: 'all-submissions',
+      title: 'All Submissions',
+      icon: '📊',
+      color: '#8BC34A',
+      description: 'View all form submissions across all form types',
+      route: '/admin/forms/all-submissions'
     }
   ];
 

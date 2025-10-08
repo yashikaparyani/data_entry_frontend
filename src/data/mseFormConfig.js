@@ -120,11 +120,19 @@ export const mseFormConfig = {
         { name: 'totalOtherIncome', label: 'Total Other Income (USD)', type: 'number', required: true },
         { name: 'totalMonthlyIncome', label: 'Total Monthly Income (USD)', type: 'number', required: true },
         
-        // Income Verification Flags
-        { name: 'agricultureIncomeConsider', label: 'Consider Agriculture Income', type: 'checkbox', required: false },
-        { name: 'rentalIncomeConsider', label: 'Consider Rental Income', type: 'checkbox', required: false },
-        { name: 'salaryIncomeConsider', label: 'Consider Salary Income', type: 'checkbox', required: false },
-        { name: 'otherIncomeConsider', label: 'Consider Other Income', type: 'checkbox', required: false }
+        // Income Verification Flags - Grouped
+        { 
+          name: 'incomeConsiderationGroup', 
+          label: 'Income Consideration Options', 
+          type: 'checkbox-group',
+          required: false,
+          options: [
+            { name: 'agricultureIncomeConsider', label: 'Consider Agriculture Income' },
+            { name: 'rentalIncomeConsider', label: 'Consider Rental Income' },
+            { name: 'salaryIncomeConsider', label: 'Consider Salary Income' },
+            { name: 'otherIncomeConsider', label: 'Consider Other Income' }
+          ]
+        }
       ]
     },
     {

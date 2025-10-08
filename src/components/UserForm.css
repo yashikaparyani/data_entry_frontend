@@ -198,6 +198,7 @@
   transition: all 0.2s ease;
   background: #f7fafc;
   color: #1a202c !important;
+  text-align: left !important;
 }
 
 .form-group input:focus,
@@ -280,66 +281,87 @@
   opacity: 1;
 }
 
-/* Step Indicators */
-.step-indicators {
+/* Compact Step Indicators - Single Row */
+.compact-step-indicators {
   display: flex;
   justify-content: space-between;
-  margin-top: 1rem;
-  padding: 1rem;
-  background: #f7fafc;
-  border-radius: 8px;
-  overflow-x: auto;
+  margin-bottom: 2rem;
+  padding: 1.5rem 1rem;
+  background: var(--samvit-white);
+  border-radius: 12px;
+  border: 2px solid var(--samvit-primary-light);
+  overflow: hidden;
+  box-shadow: 0 4px 12px var(--samvit-shadow);
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.step-indicator {
+.compact-step {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 6px;
+  padding: 0.8rem 0.4rem;
+  border-radius: 10px;
   transition: all 0.3s ease;
-  min-width: 120px;
+  min-width: 100px;
+  max-width: 140px;
   text-align: center;
+  flex: 1;
+  overflow: visible;
+  white-space: normal;
 }
 
-.step-indicator.active {
-  background: #667eea;
+.compact-step.active {
+  background: var(--samvit-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--samvit-shadow-medium);
+}
+
+.compact-step.completed {
+  background: var(--samvit-success);
   color: white;
 }
 
-.step-indicator.completed {
-  background: #48bb78;
-  color: white;
-}
-
-.step-number {
-  width: 24px;
-  height: 24px;
+.step-circle {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: #e2e8f0;
-  color: #4a5568;
+  background: var(--samvit-gray-light);
+  color: var(--samvit-gray-medium);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  border: 3px solid var(--samvit-border);
+  transition: all 0.3s ease;
+}
+
+.compact-step.active .step-circle {
+  background: white;
+  color: var(--samvit-primary);
+  border-color: white;
+  box-shadow: 0 2px 8px var(--samvit-shadow-medium);
+}
+
+.compact-step.completed .step-circle {
+  background: white;
+  color: var(--samvit-success);
+  border-color: white;
+}
+
+.step-label {
+  font-size: 0.85rem;
   font-weight: 600;
-  font-size: 0.75rem;
-}
-
-.step-indicator.active .step-number {
-  background: white;
-  color: #667eea;
-}
-
-.step-indicator.completed .step-number {
-  background: white;
-  color: #48bb78;
-}
-
-.step-title {
-  font-size: 0.75rem;
-  font-weight: 500;
   line-height: 1.2;
+  text-align: center;
+  color: inherit;
+  word-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
 
 /* Step Summary */
@@ -454,22 +476,30 @@
   border-color: #48bb78;
 }
 
-/* Responsive Step Indicators */
+/* Responsive Compact Step Indicators */
 @media (max-width: 768px) {
-  .step-indicators {
-    flex-direction: column;
-    gap: 0.5rem;
+  .compact-step-indicators {
+    padding: 1rem 0.5rem;
+    margin-bottom: 1.5rem;
   }
   
-  .step-indicator {
-    min-width: auto;
-    flex-direction: row;
-    justify-content: flex-start;
-    text-align: left;
+  .compact-step {
+    min-width: 70px;
+    max-width: 85px;
+    padding: 0.5rem 0.2rem;
   }
   
-  .step-title {
-    font-size: 0.875rem;
+  .step-circle {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+  
+  .step-label {
+    font-size: 0.7rem;
+    line-height: 1.1;
+    overflow: visible;
+    white-space: normal;
   }
 }
 

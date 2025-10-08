@@ -74,6 +74,17 @@ body {
   100% { transform: rotate(360deg); }
 }
 
+/* Global Input Styles - Samvit Insights */
+input[type="number"],
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+select,
+textarea {
+  text-align: left !important;
+}
+
 /* Form Styles */
 .form-group {
   display: flex;

@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
-  <!-- Green arc at top -->
-  <path d="M20 60 Q100 10 180 60" stroke="#8BC34A" stroke-width="8" fill="none"/>
+<svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+  <!-- Green curved arc at top -->
+  <path d="M20 80 Q100 20 180 80" stroke="#8BC34A" stroke-width="12" fill="none" stroke-linecap="round"/>
   
-  <!-- Gray triangular shapes -->
-  <path d="M40 40 Q80 80 60 100 Q40 85 40 40" fill="#999999"/>
-  <path d="M160 40 Q120 80 140 100 Q160 85 160 40" fill="#999999"/>
+  <!-- Left gray curved triangle -->
+  <path d="M40 70 Q70 110 60 140 Q45 125 35 110 Q30 90 40 70" fill="#AAAAAA" stroke="#999999" stroke-width="1"/>
   
-  <!-- "16" in green -->
-  <text x="85" y="85" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#8BC34A">16</text>
+  <!-- Right gray curved triangle -->  
+  <path d="M160 70 Q170 90 165 110 Q155 125 140 140 Q130 110 160 70" fill="#AAAAAA" stroke="#999999" stroke-width="1"/>
   
-  <!-- "YEARS" in gray -->
-  <text x="100" y="105" font-family="Arial, sans-serif" font-size="12" fill="#999999" text-anchor="middle">YEARS</text>
+  <!-- Large "16" in green -->
+  <text x="100" y="130" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="#8BC34A" text-anchor="middle">16</text>
+  
+  <!-- "YEARS" in smaller gray text -->
+  <text x="100" y="155" font-family="Arial, sans-serif" font-size="16" font-weight="500" fill="#999999" text-anchor="middle">YEARS</text>
+  
+  <!-- "TRANSFORMING" text -->
+  <text x="100" y="185" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#333333" text-anchor="middle">TRANSFORMING</text>
+  
+  <!-- "Insights into Results" text -->
+  <text x="100" y="210" font-family="Arial, sans-serif" font-size="16" font-weight="normal" fill="#666666" text-anchor="middle">Insights into Results</text>
 </svg>

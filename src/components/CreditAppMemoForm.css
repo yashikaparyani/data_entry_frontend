@@ -225,7 +225,7 @@
 
 .currency-input,
 .percentage-input {
-  text-align: right;
+  text-align: left !important;
 }
 
 .date-input {

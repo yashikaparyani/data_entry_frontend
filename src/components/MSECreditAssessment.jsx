@@ -1,19 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 import { mseFormConfig } from '../data/mseFormConfig';
 import FormNavigation from './FormNavigation';
 import axios from 'axios';
 import './MSECreditAssessment.css';
 
 const MSECreditAssessment = () => {
-  const { user, logout } = useAuth();
   const [formData, setFormData] = useState({});
   const [currentStep, setCurrentStep] = useState(1);
   const [totalSteps, setTotalSteps] = useState(mseFormConfig.totalSteps);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     fetchFormData();
@@ -305,6 +302,29 @@ const MSECreditAssessment = () => {
           </div>
         );
 
+      case 'checkbox-group':
+        return (
+          <div key={field.name} className="form-group">
+            <label className="group-label">
+              {field.label}
+              {field.required && <span className="required">*</span>}
+            </label>
+            <div className="checkbox-group">
+              {field.options.map((option) => (
+                <label key={option.name} className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name={option.name}
+                    checked={formData[option.name] === true || formData[option.name] === 'true'}
+                    onChange={(e) => handleInputChange(option.name, e.target.checked)}
+                  />
+                  {option.label}
+                </label>
+              ))}
+            </div>
+          </div>
+        );
+
       case 'textarea':
         return (
           <div key={field.name} className="form-group">
@@ -358,36 +378,9 @@ const MSECreditAssessment = () => {
   const currentStepData = mseFormConfig.steps[currentStep - 1];
   const progressPercentage = (currentStep / mseFormConfig.totalSteps) * 100;
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   return (
     <div className="mse-form">
-      <FormNavigation isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-      <header className="form-header">
-        <div className="header-content">
-          <div className="header-left">
-            {/* Hamburger Menu Button */}
-            <button 
-              className={`hamburger-menu ${isMenuOpen ? 'open' : ''}`} 
-              onClick={toggleMenu}
-              aria-label="Toggle navigation menu"
-            >
-              <span className="hamburger-line"></span>
-              <span className="hamburger-line"></span>
-              <span className="hamburger-line"></span>
-            </button>
-            <h1>MSE Credit Assessment Form v3.1</h1>
-          </div>
-          <div className="user-info">
-            <span>Welcome, {user?.name}</span>
-            <button className="logout-btn" onClick={logout}>
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
+      <FormNavigation />
 
       <main className="form-main">
         <div className="form-container">

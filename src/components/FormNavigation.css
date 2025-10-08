@@ -15,6 +15,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  gap: 1.5rem;
 }
 
 /* Hamburger Menu Button */
@@ -59,6 +60,70 @@
 
 .hamburger-menu.open .hamburger-line:nth-child(3) {
   transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Current Form Name Display */
+.current-form-name {
+  flex: 1;
+}
+
+.current-form-name h2 {
+  color: var(--samvit-secondary);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 1px 2px var(--samvit-shadow);
+}
+
+/* User Section - Right Side */
+.nav-user-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.welcome-text {
+  color: var(--samvit-gray-medium);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.logout-btn {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+}
+
+.logout-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+/* Responsive Design for User Section */
+@media (max-width: 768px) {
+  .nav-content {
+    padding: 0 1rem;
+    gap: 1rem;
+  }
+  
+  .current-form-name h2 {
+    font-size: 1.2rem;
+  }
+  
+  .welcome-text {
+    display: none; /* Hide welcome text on mobile */
+  }
+  
+  .logout-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
 }
 
 /* App Branding */
