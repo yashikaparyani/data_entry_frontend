@@ -265,7 +265,7 @@ const UserManagement = () => {
                       {user.submissionCount > 0 && (
                         <button 
                           className="submissions-btn"
-                          onClick={() => navigate(`/admin/user-submissions/${user._id}`)}
+                          onClick={() => navigate(`/admin/users/${user._id}/submissions`)}
                           title="View user submissions"
                         >
                           📋 Submissions

@@ -15,6 +15,7 @@ import FormSubmissions from './components/admin/FormSubmissions';
 import SubmissionDetail from './components/admin/SubmissionDetail';
 import UserManagement from './components/admin/UserManagement';
 import UserCreation from './components/admin/UserCreation';
+import UserSubmissions from './components/admin/UserSubmissions';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
@@ -138,6 +139,16 @@ function App() {
               element={
                 <AdminRoute>
                   <UserCreation />
+                </AdminRoute>
+              } 
+            />
+            
+            {/* Admin User Submissions Route */}
+            <Route 
+              path="/admin/users/:userId/submissions" 
+              element={
+                <AdminRoute>
+                  <UserSubmissions />
                 </AdminRoute>
               } 
             />
