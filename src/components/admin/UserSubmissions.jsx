@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../../config/api';
@@ -12,11 +12,7 @@ const UserSubmissions = () => {
   const [userSubmissions, setUserSubmissions] = useState(null);
   const [selectedView, setSelectedView] = useState('all');
 
-  useEffect(() => {
-    fetchUserSubmissions();
-  }, [userId]);
-
-  const fetchUserSubmissions = async () => {
+  const fetchUserSubmissions = useCallback(async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
@@ -47,7 +43,11 @@ const UserSubmissions = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, navigate]);
+
+  useEffect(() => {
+    fetchUserSubmissions();
+  }, [fetchUserSubmissions]);
 
   const exportUserSubmissions = async (format) => {
     try {
