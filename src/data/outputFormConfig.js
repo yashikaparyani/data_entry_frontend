@@ -532,20 +532,34 @@ export const outputFormSections = [
 export const calculationFormulas = {
   // Total Business Outflow = Business Cash Outflow (for step 1) or sum of detailed expenses (if available)
   total_business_outflow: (data) => {
+    console.log('💰 Total Business Outflow Calc - Input data:', data);
+    
     // First try detailed expense breakdown (from later sections)
     const detailedExpenses = [
       'shop_rent', 'electricity', 'staff_salary', 'transport_conveyance',
       'labour_expense', 'other_business_expense'
     ];
-    const detailedTotal = detailedExpenses.reduce((sum, field) => sum + (parseFloat(data[field]) || 0), 0);
+    
+    console.log('💰 Total Business Outflow Calc - Checking detailed expenses...');
+    const detailedTotal = detailedExpenses.reduce((sum, field) => {
+      const value = parseFloat(data[field]) || 0;
+      console.log(`💰 ${field}:`, value);
+      return sum + value;
+    }, 0);
+    
+    console.log('💰 Total Business Outflow Calc - Detailed total:', detailedTotal);
     
     // If detailed expenses are available, use them; otherwise use business_cash_outflow
     if (detailedTotal > 0) {
+      console.log('💰 Total Business Outflow Calc - Using detailed total:', detailedTotal);
       return detailedTotal;
     }
     
     // Fallback to business_cash_outflow from current step
-    return parseFloat(data.business_cash_outflow) || 0;
+    const fallbackValue = parseFloat(data.business_cash_outflow) || 0;
+    console.log('💰 Total Business Outflow Calc - business_cash_outflow value:', data.business_cash_outflow);
+    console.log('💰 Total Business Outflow Calc - Fallback result:', fallbackValue);
+    return fallbackValue;
   },
 
   // Monthly Sales Average = (Daily * 30 + Weekly * 4 + Monthly) / 3
