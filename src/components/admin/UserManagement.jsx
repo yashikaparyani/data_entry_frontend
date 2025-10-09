@@ -125,6 +125,55 @@ const UserManagement = () => {
     setDeleteConfirm({ show: false, user: null });
   };
 
+  const exportUsers = async (format) => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      
+      if (!token) {
+        navigate('/admin/login');
+        return;
+      }
+
+      const response = await axios.get(`${API_BASE_URL}/api/admin/export/users/${format}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        responseType: 'blob'
+      });
+
+      // Create blob and download
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Get filename from response headers
+      const contentDisposition = response.headers['content-disposition'];
+      let filename = `samvit-users.${format === 'excel' ? 'xlsx' : 'csv'}`;
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+        if (filenameMatch) {
+          filename = filenameMatch[1];
+        }
+      }
+      
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+    } catch (err) {
+      console.error('Error exporting users:', err);
+      if (err.response?.status === 401) {
+        localStorage.removeItem('adminToken');
+        navigate('/admin/login');
+      } else {
+        setError('Failed to export users');
+      }
+    }
+  };
+
   if (loading) {
     return (
       <div className="user-management-loading">
@@ -180,6 +229,26 @@ const UserManagement = () => {
               <span className="btn-icon">➕</span>
               Create New User
             </button>
+            
+            <div className="export-buttons">
+              <button 
+                onClick={() => exportUsers('excel')} 
+                className="export-btn excel-btn"
+                title="Export users to Excel"
+              >
+                <span className="btn-icon">📊</span>
+                Export Excel
+              </button>
+              <button 
+                onClick={() => exportUsers('csv')} 
+                className="export-btn csv-btn"
+                title="Export users to CSV"
+              >
+                <span className="btn-icon">📋</span>
+                Export CSV
+              </button>
+            </div>
+            
             <button onClick={fetchUsers} className="refresh-btn">
               <span className="btn-icon">🔄</span>
               Refresh

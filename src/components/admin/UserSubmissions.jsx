@@ -49,6 +49,55 @@ const UserSubmissions = () => {
     }
   };
 
+  const exportUserSubmissions = async (format) => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      
+      if (!token) {
+        navigate('/admin/login');
+        return;
+      }
+
+      const response = await axios.get(`${API_BASE_URL}/api/admin/export/users/${userId}/submissions/${format}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        responseType: 'blob'
+      });
+
+      // Create blob and download
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Get filename from response headers
+      const contentDisposition = response.headers['content-disposition'];
+      let filename = `user-submissions.${format === 'excel' ? 'xlsx' : 'csv'}`;
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+        if (filenameMatch) {
+          filename = filenameMatch[1];
+        }
+      }
+      
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+    } catch (err) {
+      console.error('Error exporting submissions:', err);
+      if (err.response?.status === 401) {
+        localStorage.removeItem('adminToken');
+        navigate('/admin/login');
+      } else {
+        setError('Failed to export submissions');
+      }
+    }
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
@@ -124,6 +173,25 @@ const UserSubmissions = () => {
               </div>
             </div>
             <div className="header-actions">
+              <div className="export-buttons">
+                <button 
+                  onClick={() => exportUserSubmissions('excel')} 
+                  className="export-btn excel-btn"
+                  title="Export submissions to Excel"
+                >
+                  <span className="btn-icon">📊</span>
+                  Export Excel
+                </button>
+                <button 
+                  onClick={() => exportUserSubmissions('csv')} 
+                  className="export-btn csv-btn"
+                  title="Export submissions to CSV"
+                >
+                  <span className="btn-icon">📋</span>
+                  Export CSV
+                </button>
+              </div>
+              
               <button onClick={fetchUserSubmissions} className="refresh-btn">
                 <span className="btn-icon">🔄</span>
                 Refresh
