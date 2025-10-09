@@ -10,6 +10,8 @@ const UserManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [deleteConfirm, setDeleteConfirm] = useState({ show: false, user: null });
+  const [deleting, setDeleting] = useState(false);
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -75,6 +77,54 @@ const UserManagement = () => {
     }
   };
 
+  const handleDeleteUser = (user) => {
+    setDeleteConfirm({ show: true, user });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteConfirm.user) return;
+    
+    try {
+      setDeleting(true);
+      const token = localStorage.getItem('adminToken');
+      
+      if (!token) {
+        navigate('/admin/login');
+        return;
+      }
+
+      await axios.delete(`${API_BASE_URL}/api/admin/users/${deleteConfirm.user._id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      // Remove user from local state
+      setUsers(users.filter(u => u._id !== deleteConfirm.user._id));
+      setDeleteConfirm({ show: false, user: null });
+      setError('');
+      
+      // Show success message (optional - you can add a success state if needed)
+      alert(`User "${deleteConfirm.user.name || deleteConfirm.user.username}" deleted successfully`);
+      
+    } catch (err) {
+      console.error('Error deleting user:', err);
+      if (err.response?.status === 401) {
+        localStorage.removeItem('adminToken');
+        navigate('/admin/login');
+      } else {
+        const errorMessage = err.response?.data?.message || 'Failed to delete user';
+        setError(errorMessage);
+      }
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirm({ show: false, user: null });
+  };
+
   if (loading) {
     return (
       <div className="user-management-loading">
@@ -101,13 +151,25 @@ const UserManagement = () => {
       {/* Header */}
       <header className="user-management-header">
         <div className="header-content">
-          <div className="header-left">
-            <button onClick={() => navigate('/admin')} className="back-btn">
-              ← Back to Dashboard
-            </button>
-            <div className="header-info">
-              <h1>👥 User Management</h1>
-              <p>Manage and monitor all registered users</p>
+          <div className="header-top">
+            <div className="header-left">
+              <button onClick={() => navigate('/admin')} className="back-btn">
+                ← Back to Dashboard
+              </button>
+              <div className="header-info">
+                <h1>👥 User Management</h1>
+                <p>Manage and monitor all registered users</p>
+              </div>
+            </div>
+            <div className="header-stats">
+              <div className="stat-card">
+                <span className="stat-value">{users.length}</span>
+                <span className="stat-label">Total Users</span>
+              </div>
+              <div className="stat-card">
+                <span className="stat-value">{users.filter(u => u.submissionCount > 0).length}</span>
+                <span className="stat-label">Active Users</span>
+              </div>
             </div>
           </div>
           <div className="header-actions">
@@ -122,16 +184,6 @@ const UserManagement = () => {
               <span className="btn-icon">🔄</span>
               Refresh
             </button>
-          </div>
-          <div className="header-stats">
-            <div className="stat-card">
-              <span className="stat-value">{users.length}</span>
-              <span className="stat-label">Total Users</span>
-            </div>
-            <div className="stat-card">
-              <span className="stat-value">{users.filter(u => u.submissionCount > 0).length}</span>
-              <span className="stat-label">Active Users</span>
-            </div>
           </div>
         </div>
       </header>
@@ -219,6 +271,13 @@ const UserManagement = () => {
                           📋 Submissions
                         </button>
                       )}
+                      <button 
+                        className="delete-btn"
+                        onClick={() => handleDeleteUser(user)}
+                        title="Delete user"
+                      >
+                        🗑️ Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -235,6 +294,47 @@ const UserManagement = () => {
           {searchTerm && ` (filtered by "${searchTerm}")`}
         </p>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm.show && (
+        <div className="modal-overlay">
+          <div className="delete-modal">
+            <div className="modal-header">
+              <h3>⚠️ Confirm User Deletion</h3>
+            </div>
+            <div className="modal-body">
+              <p>Are you sure you want to delete the following user?</p>
+              <div className="user-info-delete">
+                <strong>{deleteConfirm.user?.name || deleteConfirm.user?.username}</strong>
+                <span className="email">({deleteConfirm.user?.email})</span>
+              </div>
+              {deleteConfirm.user?.submissionCount > 0 && (
+                <div className="warning-message">
+                  <p>⚠️ This user has {deleteConfirm.user.submissionCount} form submissions.</p>
+                  <p>The submissions will be preserved for data integrity, but the user account will be permanently removed.</p>
+                </div>
+              )}
+              <p className="confirm-text">This action cannot be undone.</p>
+            </div>
+            <div className="modal-actions">
+              <button 
+                className="cancel-btn" 
+                onClick={cancelDelete}
+                disabled={deleting}
+              >
+                Cancel
+              </button>
+              <button 
+                className="confirm-delete-btn" 
+                onClick={confirmDelete}
+                disabled={deleting}
+              >
+                {deleting ? 'Deleting...' : 'Delete User'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

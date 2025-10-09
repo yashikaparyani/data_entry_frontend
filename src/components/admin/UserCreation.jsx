@@ -166,10 +166,14 @@ const UserCreation = () => {
         localStorage.removeItem('adminToken');
         navigate('/admin/login');
       } else if (err.response?.status === 409) {
-        setErrors({ 
-          username: 'Username already exists',
-          email: 'Email already exists' 
-        });
+        const conflictMessage = err.response?.data?.message || 'User already exists';
+        if (conflictMessage.toLowerCase().includes('username')) {
+          setErrors({ username: conflictMessage });
+        } else if (conflictMessage.toLowerCase().includes('email')) {
+          setErrors({ email: conflictMessage });
+        } else {
+          setErrors({ general: conflictMessage });
+        }
       } else {
         const errorMessage = err.response?.data?.message || err.message || 'Failed to create user';
         setErrors({ general: errorMessage });
