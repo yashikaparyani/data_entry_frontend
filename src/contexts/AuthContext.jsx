@@ -30,10 +30,17 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       if (token) {
         try {
+          console.log('🔐 Auth Debug - Checking authentication with token:', token.substring(0, 20) + '...');
           const response = await axios.get('/api/auth/profile');
+          console.log('✅ Auth Debug - Profile check successful:', response.data);
           setUser(response.data.user);
         } catch (error) {
-          console.error('Auth check failed:', error);
+          console.error('❌ Auth check failed:', {
+            status: error.response?.status,
+            statusText: error.response?.statusText,
+            data: error.response?.data,
+            message: error.message
+          });
           localStorage.removeItem('token');
           setToken(null);
         }
@@ -46,7 +53,10 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      console.log('🔐 Login Debug - Attempting login for:', email);
       const response = await axios.post('/api/auth/login', { email, password });
+      console.log('✅ Login Debug - Login successful:', response.data);
+      
       const { token: newToken, user: userData } = response.data;
       
       localStorage.setItem('token', newToken);
@@ -55,6 +65,13 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
+      console.error('❌ Login Debug - Login failed:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        message: error.message
+      });
+      
       return { 
         success: false, 
         message: error.response?.data?.message || 'Login failed' 
@@ -64,7 +81,10 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (name, email, password) => {
     try {
+      console.log('📝 Register Debug - Attempting registration for:', email);
       const response = await axios.post('/api/auth/register', { name, email, password });
+      console.log('✅ Register Debug - Registration successful:', response.data);
+      
       const { token: newToken, user: userData } = response.data;
       
       localStorage.setItem('token', newToken);
@@ -73,6 +93,13 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
+      console.error('❌ Register Debug - Registration failed:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        message: error.message
+      });
+      
       return { 
         success: false, 
         message: error.response?.data?.message || 'Registration failed' 
