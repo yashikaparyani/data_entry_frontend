@@ -110,6 +110,19 @@ const UserManagement = () => {
               <p>Manage and monitor all registered users</p>
             </div>
           </div>
+          <div className="header-actions">
+            <button 
+              onClick={() => navigate('/admin/users/create')} 
+              className="create-user-btn"
+            >
+              <span className="btn-icon">➕</span>
+              Create New User
+            </button>
+            <button onClick={fetchUsers} className="refresh-btn">
+              <span className="btn-icon">🔄</span>
+              Refresh
+            </button>
+          </div>
           <div className="header-stats">
             <div className="stat-card">
               <span className="stat-value">{users.length}</span>

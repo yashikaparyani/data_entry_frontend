@@ -276,6 +276,14 @@ const AdminDashboard = () => {
               <span className="action-icon">👥</span>
               <span className="action-text">Manage Users</span>
             </button>
+
+            <button 
+              className="action-btn create-user-btn"
+              onClick={() => navigate('/admin/users/create')}
+            >
+              <span className="action-icon">➕</span>
+              <span className="action-text">Create New User</span>
+            </button>
             
             <button 
               className="action-btn"

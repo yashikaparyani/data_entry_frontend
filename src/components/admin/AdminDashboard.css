@@ -303,6 +303,25 @@
   color: #2c3e50;
 }
 
+.create-user-btn {
+  border: 2px solid var(--samvit-primary);
+  background: var(--samvit-primary);
+}
+
+.create-user-btn .action-text {
+  color: white;
+}
+
+.create-user-btn .action-icon {
+  color: white;
+}
+
+.create-user-btn:hover {
+  background: var(--samvit-primary-dark);
+  border-color: var(--samvit-primary-dark);
+  transform: translateY(-2px);
+}
+
 /* Loading States */
 .admin-loading, .submissions-loading, .detail-loading {
   display: flex;

@@ -29,7 +29,7 @@ body {
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, var(--samvit-white) 0%, var(--samvit-gray-light) 100%);
+  background: #ffffff;
   color: var(--samvit-secondary);
   line-height: 1.6;
   width: 100vw;
@@ -47,6 +47,7 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: #ffffff;
 }
 
 /* Utility Classes */
