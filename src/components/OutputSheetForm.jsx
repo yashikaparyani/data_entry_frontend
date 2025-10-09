@@ -58,8 +58,12 @@ const OutputSheetForm = () => {
 
     currentSection.fields.forEach(field => {
       if (field.required) {
+        // Check both form data and calculated fields
         const value = formData[field.name];
-        if (!value && value !== 0) {
+        const calculatedValue = calculatedFields[field.name];
+        const effectiveValue = calculatedValue !== undefined ? calculatedValue : value;
+        
+        if (!effectiveValue && effectiveValue !== 0) {
           stepErrors[field.name] = `${field.label} is required`;
           isValid = false;
         }
