@@ -35,11 +35,29 @@ const UserForm = () => {
     }
     
     try {
-      const response = await axios.get('/api/form/data/User-Form');
-      const data = response.data.formData;
-      setFormData(data.responses || {});
-      setCurrentStep(data.currentStep || 1);
-      setTotalSteps(formConfig.totalSteps); // Always use formConfig totalSteps
+      if (isLoanOfficer && formId) {
+        // Loan officer: fetch existing form data by formId
+        const response = await axios.get(`/api/loan-officer/forms/${formId}`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        const data = response.data.form;
+        setFormData(data.formData || {});
+        setCurrentStep(data.currentStep || 1);
+        setTotalSteps(formConfig.totalSteps);
+        setClientId(data.client._id);
+      } else if (!isLoanOfficer) {
+        // Regular user: fetch from old form data route
+        const response = await axios.get('/api/form/data/User-Form');
+        const data = response.data.formData;
+        setFormData(data.responses || {});
+        setCurrentStep(data.currentStep || 1);
+        setTotalSteps(formConfig.totalSteps);
+      } else {
+        // New form for loan officer - initialize empty
+        setFormData({});
+        setCurrentStep(1);
+        setTotalSteps(formConfig.totalSteps);
+      }
     } catch (error) {
       // Only log error if it's not a 404 (no existing form data)
       if (error.response?.status !== 404) {
@@ -52,7 +70,7 @@ const UserForm = () => {
     } finally {
       setLoading(false);
     }
-  }, [user]); // Close useCallback with dependency array
+  }, [user, isLoanOfficer, formId]); // Close useCallback with dependency array
 
   useEffect(() => {
     fetchFormData();
@@ -117,27 +135,41 @@ const UserForm = () => {
             name: formData.customerName,
             email: formData.email || '',
             phone: formData.phone || ''
+          }, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
           });
           const newClientId = clientResponse.data.client._id;
           setClientId(newClientId);
           
-          // Create form for this client
+          // Create form for this client - use 'user_form' 
           const formResponse = await axios.post(`/api/loan-officer/clients/${newClientId}/forms`, {
             formType: 'user_form'
+          }, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
           });
           
-          // Save the form data
-          await axios.post(`/api/loan-officer/forms/${formResponse.data.form._id}/save`, {
+          const newFormId = formResponse.data.form._id;
+          
+          // Save the form data using PUT method
+          await axios.put(`/api/loan-officer/forms/${newFormId}/save`, {
             formData,
             currentStep,
-            status: 'in_progress'
+            completionPercentage: Math.round((currentStep / totalSteps) * 100)
+          }, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
           });
+          
+          // Update URL to include formId for future saves
+          window.history.replaceState(null, '', `/form/${newFormId}`);
+          
         } else if (formId) {
-          // Update existing form
-          await axios.post(`/api/loan-officer/forms/${formId}/save`, {
+          // Update existing form using PUT method
+          await axios.put(`/api/loan-officer/forms/${formId}/save`, {
             formData,
             currentStep,
-            status: 'in_progress'
+            completionPercentage: Math.round((currentStep / totalSteps) * 100)
+          }, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
           });
         }
         setMessage('Form saved successfully!');
@@ -205,12 +237,15 @@ const UserForm = () => {
 
     setSubmitting(true);
     try {
-      if (isLoanOfficer && clientId) {
+      if (isLoanOfficer && (clientId || formId)) {
         // Loan officer final submission
-        await axios.post(`/api/loan-officer/forms/${formId}/submit`, {
+        const formIdToSubmit = formId || clientId; // Use formId if available
+        await axios.post(`/api/loan-officer/forms/${formIdToSubmit}/submit`, {
           formData,
           currentStep: totalSteps + 1,
-          status: 'completed'
+          completionPercentage: 100
+        }, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         setMessage('Form submitted successfully!');
         setTimeout(() => navigate('/loan-officer/dashboard'), 2000);
