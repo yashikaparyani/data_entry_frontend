@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -13,19 +13,43 @@ const LoanOfficerDashboard = () => {
 
   useEffect(() => {
     fetchClients();
-  }, []);
+  }, [fetchClients]);
 
-  const fetchClients = async () => {
+  const fetchClients = useCallback(async () => {
     try {
-      const response = await axios.get('/api/loan-officer/clients');
+      // Check if we have a token
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found, redirecting to login');
+        navigate('/login');
+        return;
+      }
+
+      console.log('🔍 Fetching clients with token:', token.substring(0, 20) + '...');
+      
+      const response = await axios.get('/api/loan-officer/clients', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      console.log('✅ Clients fetched successfully:', response.data);
       setClients(response.data.clients);
     } catch (error) {
-      console.error('Error fetching clients:', error);
-      alert('Error fetching clients');
+      console.error('❌ Error fetching clients:', error);
+      
+      if (error.response?.status === 401) {
+        console.error('Authentication failed, redirecting to login');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/login');
+      } else {
+        alert('Error fetching clients: ' + (error.response?.data?.message || error.message));
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
 
   // Generate client ID from customer name + loan officer name
   const generateClientId = (customerName, loanOfficerName) => {

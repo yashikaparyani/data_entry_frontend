@@ -59,9 +59,14 @@ const AuthProvider = ({ children }) => {
       
       const { token: newToken, user: userData } = response.data;
       
+      // Set token first in localStorage and state
       localStorage.setItem('token', newToken);
       setToken(newToken);
       setUser(userData);
+      
+      // Manually set axios header immediately
+      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+      console.log('🔗 Axios authorization header set for token:', newToken.substring(0, 20) + '...');
       
       return { success: true, user: userData };
     } catch (error) {
