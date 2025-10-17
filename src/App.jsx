@@ -73,6 +73,16 @@ function App() {
               } 
             />
             
+            {/* Resume form with formId */}
+            <Route 
+              path="/form/:formId" 
+              element={
+                <ProtectedRoute>
+                  <UserForm />
+                </ProtectedRoute>
+              } 
+            />
+            
             {/* MSE Credit Assessment Route */}
             <Route 
               path="/mse-assessment" 

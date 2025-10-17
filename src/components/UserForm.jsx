@@ -31,6 +31,7 @@ const UserForm = () => {
   const fetchFormData = useCallback(async () => {
     // Skip fetch if user is not authenticated
     if (!user) {
+      console.log('⚠️ No user found, skipping form data fetch');
       setLoading(false);
       return;
     }
@@ -46,11 +47,25 @@ const UserForm = () => {
         const response = await axios.get(`/api/loan-officer/forms/${formId}`, {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
+        console.log('📦 Form data received:', response.data);
         const data = response.data.form;
+        
+        // Set form data
         setFormData(data.formData || {});
         setCurrentStep(data.currentStep || 1);
         setTotalSteps(formConfig.totalSteps);
-        setClientId(data.client._id);
+        
+        // Set client ID - check if client is populated or just an ID
+        const clientIdValue = typeof data.client === 'object' ? data.client._id : data.client;
+        setClientId(clientIdValue);
+        setActiveFormId(formId);
+        
+        console.log('✅ Resume: Form loaded successfully', {
+          formData: data.formData,
+          currentStep: data.currentStep,
+          clientId: clientIdValue,
+          formId: formId
+        });
       } else if (!isUserLoanOfficer) {
         // Regular user: fetch from old form data route
         console.log('👤 Fetching regular user form data');
@@ -67,16 +82,19 @@ const UserForm = () => {
         setTotalSteps(formConfig.totalSteps);
       }
     } catch (error) {
-      // Only log error if it's not a 404 (no existing form data)
-      if (error.response?.status !== 404) {
-        console.error('Error fetching form data:', error);
-      }
+      console.error('💥 Error fetching form data:', {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
+      });
+      
       // Initialize empty form if no data exists (404 is expected for new forms)
       setFormData({});
       setCurrentStep(1);
       setTotalSteps(formConfig.totalSteps);
     } finally {
       setLoading(false);
+      console.log('✅ Loading complete');
     }
   }, [user, formId]); // Close useCallback with dependency array
 
