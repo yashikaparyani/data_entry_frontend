@@ -69,7 +69,7 @@ const LoanOfficerDashboard = () => {
     navigate(`/form/${formId}`);
   };
 
-  const handleViewClient = (clientId) => {
+  const handleViewClient = () => {
     // Navigate to client detail view (you can implement a detail page later)
     alert('View client details - Feature coming soon!');
     // navigate(`/loan-officer/clients/${clientId}`);
