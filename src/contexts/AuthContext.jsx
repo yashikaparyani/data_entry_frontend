@@ -63,7 +63,7 @@ const AuthProvider = ({ children }) => {
       setToken(newToken);
       setUser(userData);
       
-      return { success: true };
+      return { success: true, user: userData };
     } catch (error) {
       console.error('❌ Login Debug - Login failed:', {
         status: error.response?.status,
@@ -157,6 +157,7 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-// Export AuthProvider as default (includes useAuth in the module)
-export default AuthProvider;
+// Export AuthProvider as default and useAuth hook
+// eslint-disable-next-line react-refresh/only-export-components
 export { useAuth };
+export default AuthProvider;

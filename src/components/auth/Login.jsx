@@ -75,7 +75,14 @@ const Login = () => {
       const result = await login(formData.email, formData.password);
       
       if (result.success) {
-        navigate('/dashboard');
+        // Check user role and redirect accordingly
+        const userRole = result.user?.role;
+        
+        if (userRole === 'loan_officer') {
+          navigate('/loan-officer/dashboard');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
         setError(result.message);
       }

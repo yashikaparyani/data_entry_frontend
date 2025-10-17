@@ -49,12 +49,18 @@ function App() {
             
             {/* Loan Officer Dashboard */}
             <Route 
-              path="/loan-officer" 
+              path="/loan-officer/dashboard" 
               element={
                 <LoanOfficerRoute>
                   <LoanOfficerDashboard />
                 </LoanOfficerRoute>
               } 
+            />
+            
+            {/* Legacy loan officer route redirect */}
+            <Route 
+              path="/loan-officer" 
+              element={<Navigate to="/loan-officer/dashboard" replace />}
             />
             
             {/* User Routes */}

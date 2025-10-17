@@ -14,7 +14,7 @@ const UserCreation = () => {
     firstName: '',
     lastName: '',
     phone: '',
-    role: 'user',
+    role: 'loan_officer', // Default to loan officer role
     department: '',
     position: ''
   });
@@ -22,12 +22,7 @@ const UserCreation = () => {
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState('');
 
-  const roles = [
-    { value: 'user', label: 'Regular User' },
-    { value: 'admin', label: 'Administrator' },
-    { value: 'manager', label: 'Manager' },
-    { value: 'analyst', label: 'Analyst' }
-  ];
+  // All users created are loan officers by default
 
   const departments = [
     'Finance',
@@ -330,24 +325,10 @@ const UserCreation = () => {
               </div>
             </div>
 
-            {/* Role & Organization */}
+            {/* Organization Details */}
             <div className="form-section">
-              <h3>Role & Organization</h3>
+              <h3>Organization Details</h3>
               <div className="form-grid">
-                <div className="form-group">
-                  <label htmlFor="role">User Role *</label>
-                  <select
-                    id="role"
-                    name="role"
-                    value={formData.role}
-                    onChange={handleInputChange}
-                  >
-                    {roles.map(role => (
-                      <option key={role.value} value={role.value}>{role.label}</option>
-                    ))}
-                  </select>
-                </div>
-
                 <div className="form-group">
                   <label htmlFor="department">Department</label>
                   <select
@@ -374,6 +355,11 @@ const UserCreation = () => {
                     placeholder="Enter job position"
                   />
                 </div>
+              </div>
+              
+              {/* Role information display */}
+              <div className="role-info">
+                <p><strong>User Role:</strong> Loan Officer (All users are created as loan officers)</p>
               </div>
             </div>
 

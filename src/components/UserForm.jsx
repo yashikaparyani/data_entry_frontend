@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate, useParams } from 'react-router-dom';
 import { formConfig } from '../data/formConfig';
 import FormNavigation from './FormNavigation';
 import axios from 'axios';
@@ -7,12 +8,24 @@ import './UserForm.css';
 
 const UserForm = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { formId } = useParams(); // For resume functionality
   const [formData, setFormData] = useState({});
   const [currentStep, setCurrentStep] = useState(1);
   const [totalSteps, setTotalSteps] = useState(formConfig.totalSteps);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState('');
+  const [clientId, setClientId] = useState(null);
+  const [isLoanOfficer, setIsLoanOfficer] = useState(false);
+
+  // Check if user is loan officer
+  useEffect(() => {
+    if (user?.role === 'loan_officer') {
+      setIsLoanOfficer(true);
+    }
+  }, [user]);
 
   const fetchFormData = useCallback(async () => {
     // Skip fetch if user is not authenticated
@@ -89,6 +102,64 @@ const UserForm = () => {
     return missingFields;
   };
 
+  const saveForm = async () => {
+    if (!formData.customerName && isLoanOfficer) {
+      setMessage('Please enter customer name first');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      if (isLoanOfficer) {
+        // Create client first if it doesn't exist
+        if (!clientId && formData.customerName) {
+          const clientResponse = await axios.post('/api/loan-officer/clients', {
+            name: formData.customerName,
+            email: formData.email || '',
+            phone: formData.phone || ''
+          });
+          const newClientId = clientResponse.data.client._id;
+          setClientId(newClientId);
+          
+          // Create form for this client
+          const formResponse = await axios.post(`/api/loan-officer/clients/${newClientId}/forms`, {
+            formType: 'user_form'
+          });
+          
+          // Save the form data
+          await axios.post(`/api/loan-officer/forms/${formResponse.data.form._id}/save`, {
+            formData,
+            currentStep,
+            status: 'in_progress'
+          });
+        } else if (formId) {
+          // Update existing form
+          await axios.post(`/api/loan-officer/forms/${formId}/save`, {
+            formData,
+            currentStep,
+            status: 'in_progress'
+          });
+        }
+        setMessage('Form saved successfully!');
+      } else {
+        // Regular user save
+        await axios.post('/api/form/save', {
+          formName: 'User-Form',
+          responses: formData,
+          currentStep,
+          totalSteps: totalSteps,
+          isCompleted: false
+        });
+        setMessage('Form saved successfully!');
+      }
+    } catch (error) {
+      setMessage('Error saving form');
+      console.error('Save error:', error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const nextStep = () => {
     const missingFields = validateCurrentStep();
     
@@ -132,23 +203,33 @@ const UserForm = () => {
       return;
     }
 
-    setSaving(true);
+    setSubmitting(true);
     try {
-      await axios.post('/api/form/save', {
-        formName: 'User-Form',
-        responses: formData,
-        currentStep,
-        totalSteps: totalSteps,
-        isCompleted: true
-      });
-
-      setMessage('Form submitted successfully!');
-      // Redirect to success page or dashboard
+      if (isLoanOfficer && clientId) {
+        // Loan officer final submission
+        await axios.post(`/api/loan-officer/forms/${formId}/submit`, {
+          formData,
+          currentStep: totalSteps + 1,
+          status: 'completed'
+        });
+        setMessage('Form submitted successfully!');
+        setTimeout(() => navigate('/loan-officer/dashboard'), 2000);
+      } else {
+        // Regular user submission
+        await axios.post('/api/form/save', {
+          formName: 'User-Form',
+          responses: formData,
+          currentStep,
+          totalSteps: totalSteps,
+          isCompleted: true
+        });
+        setMessage('Form submitted successfully!');
+      }
     } catch (error) {
       setMessage('Error submitting form');
       console.error('Submit error:', error);
     } finally {
-      setSaving(false);
+      setSubmitting(false);
     }
   };
 
@@ -274,21 +355,38 @@ const UserForm = () => {
 
             <div className="nav-center">
               <button 
-                onClick={saveFormData}
+                onClick={isLoanOfficer ? saveForm : saveFormData}
                 disabled={saving}
                 className="save-btn"
               >
                 {saving ? 'Saving...' : 'Save Progress'}
               </button>
+              
+              {isLoanOfficer && (
+                <button 
+                  onClick={submitForm}
+                  disabled={submitting}
+                  className="submit-btn final-submit"
+                >
+                  {submitting ? 'Submitting...' : 'Final Submit ✓'}
+                </button>
+              )}
             </div>
 
-            {currentStep === totalSteps ? (
+            {currentStep === totalSteps && !isLoanOfficer ? (
               <button 
                 onClick={submitForm}
-                disabled={saving}
+                disabled={submitting}
                 className="nav-btn submit-btn"
               >
-                {saving ? 'Submitting...' : 'Submit Form ✓'}
+                {submitting ? 'Submitting...' : 'Submit Form ✓'}
+              </button>
+            ) : !isLoanOfficer ? (
+              <button 
+                onClick={nextStep}
+                className="nav-btn next-btn"
+              >
+                Next →
               </button>
             ) : (
               <button 
