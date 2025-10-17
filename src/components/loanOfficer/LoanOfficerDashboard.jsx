@@ -122,51 +122,55 @@ const LoanOfficerDashboard = () => {
   return (
     <div className="loan-officer-dashboard">
       <div className="dashboard-header">
-        <h1>Loan Officer Dashboard</h1>
-        <p>Welcome back, {user?.name}!</p>
-        
-        <div className="header-actions">
-          <input
-            type="text"
-            placeholder="Search clients by name, email, or ID..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-          <button
-            onClick={handleNewForm}
-            className="btn btn-primary"
-          >
-            + New Client Form
-          </button>
-        </div>
+        <h1>📊 Loan Officer Dashboard</h1>
+        <p className="welcome-text">Welcome back, <strong>{user?.name}!</strong></p>
       </div>
 
       <div className="dashboard-stats">
-        <div className="stat-card">
-          <h3>{clients.length}</h3>
-          <p>Total Clients</p>
+        <div className="stat-card stat-total">
+          <div className="stat-number">{clients.length}</div>
+          <div className="stat-label">Total Clients</div>
         </div>
-        <div className="stat-card">
-          <h3>{clients.filter(c => getFormStatus(c).status === 'Incomplete').length}</h3>
-          <p>Incomplete Forms</p>
+        <div className="stat-card stat-incomplete">
+          <div className="stat-number">{clients.filter(c => getFormStatus(c).status === 'Incomplete').length}</div>
+          <div className="stat-label">Incomplete Forms</div>
         </div>
-        <div className="stat-card">
-          <h3>{clients.filter(c => getFormStatus(c).status === 'Complete').length}</h3>
-          <p>Complete Forms</p>
+        <div className="stat-card stat-complete">
+          <div className="stat-number">{clients.filter(c => getFormStatus(c).status === 'Complete').length}</div>
+          <div className="stat-label">Complete Forms</div>
         </div>
       </div>
 
       <div className="clients-section">
-        <h2>Client List</h2>
+        <div className="section-header">
+          <h2>📋 Client List</h2>
+          <div className="header-controls">
+            <input
+              type="text"
+              placeholder="🔍 Search clients by name, email, or ID..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            <button
+              onClick={handleNewForm}
+              className="btn-new-client"
+            >
+              + New Client Form
+            </button>
+          </div>
+        </div>
         
         {filteredClients.length === 0 ? (
           <div className="no-clients">
-            <p>No clients found. Click "New Client Form" to get started.</p>
+            <div className="empty-state">
+              <div className="empty-icon">📝</div>
+              <p>No clients found. Click "New Client Form" to get started.</p>
+            </div>
           </div>
         ) : (
-          <div className="clients-table">
-            <table>
+          <div className="table-container">
+            <table className="clients-table">
               <thead>
                 <tr>
                   <th>Client ID</th>
@@ -184,32 +188,34 @@ const LoanOfficerDashboard = () => {
                   return (
                     <tr key={client._id}>
                       <td className="client-id">
-                        {client.clientId || generateClientId(client.name, user?.name || 'LO')}
+                        <span className="id-badge">{client.clientId || generateClientId(client.name, user?.name || 'LO')}</span>
                       </td>
-                      <td className="client-name">{client.name}</td>
+                      <td className="client-name">
+                        <strong>{client.name}</strong>
+                      </td>
                       <td>{client.email || '-'}</td>
                       <td>{client.phone || '-'}</td>
                       <td>
                         <span 
-                          className="status-badge"
-                          style={{ backgroundColor: formStatus.color }}
+                          className={`status-badge status-${formStatus.status.toLowerCase().replace(' ', '-')}`}
                         >
                           {formStatus.status}
                         </span>
                       </td>
-                      <td>
+                      <td className="date-cell">
                         {client.lastUpdated 
-                          ? new Date(client.lastUpdated).toLocaleDateString()
-                          : new Date(client.createdAt).toLocaleDateString()
+                          ? new Date(client.lastUpdated).toLocaleDateString('en-GB')
+                          : new Date(client.createdAt).toLocaleDateString('en-GB')
                         }
                       </td>
-                      <td className="actions">
+                      <td className="actions-cell">
                         <div className="action-buttons">
                           <button
-                            onClick={() => handleViewClient(client._id)}
-                            className="btn btn-info btn-sm"
+                            onClick={() => handleViewClient()}
+                            className="btn-action btn-view"
+                            title="View Details"
                           >
-                            View
+                            👁️ View
                           </button>
                           
                           {(formStatus.status === 'Incomplete' || formStatus.status === 'Partial Complete') && (
@@ -220,17 +226,19 @@ const LoanOfficerDashboard = () => {
                                   handleResumeForm(client._id, incompleteForm._id);
                                 }
                               }}
-                              className="btn btn-warning btn-sm"
+                              className="btn-action btn-resume"
+                              title="Resume Form"
                             >
-                              Resume
+                              ▶️ Resume
                             </button>
                           )}
                           
                           <button
                             onClick={() => handleDeleteClient(client._id, client.name)}
-                            className="btn btn-danger btn-sm"
+                            className="btn-action btn-delete"
+                            title="Delete User"
                           >
-                            Delete User
+                            🗑️ Delete
                           </button>
                         </div>
                       </td>
