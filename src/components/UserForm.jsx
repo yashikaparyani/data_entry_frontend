@@ -461,16 +461,6 @@ const UserForm = () => {
               >
                 {saving ? 'Saving...' : 'Save Progress'}
               </button>
-              
-              {isLoanOfficer && (
-                <button 
-                  onClick={submitForm}
-                  disabled={submitting}
-                  className="submit-btn final-submit"
-                >
-                  {submitting ? 'Submitting...' : 'Final Submit ✓'}
-                </button>
-              )}
             </div>
 
             {currentStep === totalSteps && !isLoanOfficer ? (
