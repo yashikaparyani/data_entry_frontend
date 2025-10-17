@@ -18,6 +18,7 @@ const UserForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState('');
   const [clientId, setClientId] = useState(null);
+  const [activeFormId, setActiveFormId] = useState(formId); // Track current form ID
   const [isLoanOfficer, setIsLoanOfficer] = useState(false);
 
   // Check if user is loan officer
@@ -34,9 +35,14 @@ const UserForm = () => {
       return;
     }
     
+    // Check user role directly from user object
+    const isUserLoanOfficer = user?.role === 'loan_officer';
+    console.log('🔍 UserForm Debug - User role:', user?.role, 'isLoanOfficer:', isUserLoanOfficer, 'formId:', formId);
+    
     try {
-      if (isLoanOfficer && formId) {
+      if (isUserLoanOfficer && formId) {
         // Loan officer: fetch existing form data by formId
+        console.log('📋 Fetching existing loan officer form:', formId);
         const response = await axios.get(`/api/loan-officer/forms/${formId}`, {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
@@ -45,8 +51,9 @@ const UserForm = () => {
         setCurrentStep(data.currentStep || 1);
         setTotalSteps(formConfig.totalSteps);
         setClientId(data.client._id);
-      } else if (!isLoanOfficer) {
+      } else if (!isUserLoanOfficer) {
         // Regular user: fetch from old form data route
+        console.log('👤 Fetching regular user form data');
         const response = await axios.get('/api/form/data/User-Form');
         const data = response.data.formData;
         setFormData(data.responses || {});
@@ -54,6 +61,7 @@ const UserForm = () => {
         setTotalSteps(formConfig.totalSteps);
       } else {
         // New form for loan officer - initialize empty
+        console.log('✨ Initializing new loan officer form');
         setFormData({});
         setCurrentStep(1);
         setTotalSteps(formConfig.totalSteps);
@@ -70,7 +78,7 @@ const UserForm = () => {
     } finally {
       setLoading(false);
     }
-  }, [user, isLoanOfficer, formId]); // Close useCallback with dependency array
+  }, [user, formId]); // Close useCallback with dependency array
 
   useEffect(() => {
     fetchFormData();
@@ -121,16 +129,22 @@ const UserForm = () => {
   };
 
   const saveForm = async () => {
-    if (!formData.customerName && isLoanOfficer) {
+    // Check user role directly from user object
+    const isUserLoanOfficer = user?.role === 'loan_officer';
+    
+    if (!formData.customerName && isUserLoanOfficer) {
       setMessage('Please enter customer name first');
       return;
     }
 
+    console.log('💾 Save Debug - User role:', user?.role, 'isLoanOfficer:', isUserLoanOfficer, 'clientId:', clientId, 'formId:', formId, 'activeFormId:', activeFormId);
+
     setSaving(true);
     try {
-      if (isLoanOfficer) {
+      if (isUserLoanOfficer) {
         // Create client first if it doesn't exist
         if (!clientId && formData.customerName) {
+          console.log('👤 Creating new client:', formData.customerName);
           const clientResponse = await axios.post('/api/loan-officer/clients', {
             name: formData.customerName,
             email: formData.email || '',
@@ -140,8 +154,10 @@ const UserForm = () => {
           });
           const newClientId = clientResponse.data.client._id;
           setClientId(newClientId);
+          console.log('✅ Client created with ID:', newClientId);
           
           // Create form for this client - use 'user_form' 
+          console.log('📋 Creating form for client:', newClientId);
           const formResponse = await axios.post(`/api/loan-officer/clients/${newClientId}/forms`, {
             formType: 'user_form'
           }, {
@@ -149,8 +165,11 @@ const UserForm = () => {
           });
           
           const newFormId = formResponse.data.form._id;
+          setActiveFormId(newFormId);
+          console.log('✅ Form created with ID:', newFormId);
           
           // Save the form data using PUT method
+          console.log('💾 Saving form data for form:', newFormId);
           await axios.put(`/api/loan-officer/forms/${newFormId}/save`, {
             formData,
             currentStep,
@@ -161,10 +180,13 @@ const UserForm = () => {
           
           // Update URL to include formId for future saves
           window.history.replaceState(null, '', `/form/${newFormId}`);
+          console.log('🔄 Updated URL with formId:', newFormId);
           
-        } else if (formId) {
+        } else if (activeFormId || formId) {
           // Update existing form using PUT method
-          await axios.put(`/api/loan-officer/forms/${formId}/save`, {
+          const currentFormId = activeFormId || formId;
+          console.log('📝 Updating existing form:', currentFormId);
+          await axios.put(`/api/loan-officer/forms/${currentFormId}/save`, {
             formData,
             currentStep,
             completionPercentage: Math.round((currentStep / totalSteps) * 100)
@@ -175,6 +197,7 @@ const UserForm = () => {
         setMessage('Form saved successfully!');
       } else {
         // Regular user save
+        console.log('👤 Saving regular user form');
         await axios.post('/api/form/save', {
           formName: 'User-Form',
           responses: formData,
@@ -185,8 +208,13 @@ const UserForm = () => {
         setMessage('Form saved successfully!');
       }
     } catch (error) {
-      setMessage('Error saving form');
-      console.error('Save error:', error);
+      console.error('💥 Save error details:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        message: error.message
+      });
+      setMessage('Error saving form: ' + (error.response?.data?.message || error.message));
     } finally {
       setSaving(false);
     }
@@ -237,9 +265,10 @@ const UserForm = () => {
 
     setSubmitting(true);
     try {
-      if (isLoanOfficer && (clientId || formId)) {
+      if (user?.role === 'loan_officer' && (activeFormId || formId)) {
         // Loan officer final submission
-        const formIdToSubmit = formId || clientId; // Use formId if available
+        const formIdToSubmit = activeFormId || formId;
+        console.log('📨 Submitting loan officer form:', formIdToSubmit);
         await axios.post(`/api/loan-officer/forms/${formIdToSubmit}/submit`, {
           formData,
           currentStep: totalSteps + 1,
@@ -251,6 +280,7 @@ const UserForm = () => {
         setTimeout(() => navigate('/loan-officer/dashboard'), 2000);
       } else {
         // Regular user submission
+        console.log('📨 Submitting regular user form');
         await axios.post('/api/form/save', {
           formName: 'User-Form',
           responses: formData,
@@ -261,8 +291,13 @@ const UserForm = () => {
         setMessage('Form submitted successfully!');
       }
     } catch (error) {
-      setMessage('Error submitting form');
-      console.error('Submit error:', error);
+      console.error('💥 Submit error details:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        message: error.message
+      });
+      setMessage('Error submitting form: ' + (error.response?.data?.message || error.message));
     } finally {
       setSubmitting(false);
     }
@@ -282,6 +317,18 @@ const UserForm = () => {
       <FormNavigation />
       <main className="form-main">
         <div className="form-container">
+          {/* Back to Dashboard Button for Loan Officers */}
+          {user?.role === 'loan_officer' && (
+            <div className="back-to-dashboard">
+              <button 
+                onClick={() => navigate('/loan-officer/dashboard')}
+                className="btn-back-dashboard"
+              >
+                ← Back to Dashboard
+              </button>
+            </div>
+          )}
+          
           {/* Compact Step Indicators - Single Row */}
           <div className="compact-step-indicators">
             {formConfig.steps.map((step, index) => (

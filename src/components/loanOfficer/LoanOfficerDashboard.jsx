@@ -11,10 +11,6 @@ const LoanOfficerDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    fetchClients();
-  }, [fetchClients]);
-
   const fetchClients = useCallback(async () => {
     try {
       // Check if we have a token
@@ -51,6 +47,10 @@ const LoanOfficerDashboard = () => {
     }
   }, [navigate]);
 
+  useEffect(() => {
+    fetchClients();
+  }, [fetchClients]);
+
   // Generate client ID from customer name + loan officer name
   const generateClientId = (customerName, loanOfficerName) => {
     const cleanCustomer = customerName.replace(/\s+/g, '').toLowerCase();
@@ -67,6 +67,27 @@ const LoanOfficerDashboard = () => {
   const handleResumeForm = (clientId, formId) => {
     // Navigate to specific form with formId for resume
     navigate(`/form/${formId}`);
+  };
+
+  const handleViewClient = (clientId) => {
+    // Navigate to client detail view (you can implement a detail page later)
+    alert('View client details - Feature coming soon!');
+    // navigate(`/loan-officer/clients/${clientId}`);
+  };
+
+  const handleDeleteClient = async (clientId, clientName) => {
+    if (window.confirm(`Are you sure you want to delete ${clientName}? This will delete all their forms too.`)) {
+      try {
+        await axios.delete(`/api/loan-officer/clients/${clientId}`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        alert('Client deleted successfully!');
+        fetchClients(); // Refresh the list
+      } catch (error) {
+        console.error('Error deleting client:', error);
+        alert('Error deleting client: ' + (error.response?.data?.message || error.message));
+      }
+    }
   };
 
   const getFormStatus = (client) => {
@@ -183,26 +204,35 @@ const LoanOfficerDashboard = () => {
                         }
                       </td>
                       <td className="actions">
-                        {formStatus.status === 'Incomplete' || formStatus.status === 'Partial Complete' ? (
+                        <div className="action-buttons">
                           <button
-                            onClick={() => {
-                              const incompleteForm = client.forms?.find(f => f.status === 'in_progress' || f.status === 'draft');
-                              if (incompleteForm) {
-                                handleResumeForm(client._id, incompleteForm._id);
-                              }
-                            }}
-                            className="btn btn-warning btn-sm"
+                            onClick={() => handleViewClient(client._id)}
+                            className="btn btn-info btn-sm"
                           >
-                            Resume
+                            View
                           </button>
-                        ) : (
+                          
+                          {(formStatus.status === 'Incomplete' || formStatus.status === 'Partial Complete') && (
+                            <button
+                              onClick={() => {
+                                const incompleteForm = client.forms?.find(f => f.status === 'in_progress' || f.status === 'draft');
+                                if (incompleteForm) {
+                                  handleResumeForm(client._id, incompleteForm._id);
+                                }
+                              }}
+                              className="btn btn-warning btn-sm"
+                            >
+                              Resume
+                            </button>
+                          )}
+                          
                           <button
-                            onClick={handleNewForm}
-                            className="btn btn-primary btn-sm"
+                            onClick={() => handleDeleteClient(client._id, client.name)}
+                            className="btn btn-danger btn-sm"
                           >
-                            New Form
+                            Delete User
                           </button>
-                        )}
+                        </div>
                       </td>
                     </tr>
                   );
