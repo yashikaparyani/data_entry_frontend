@@ -16,6 +16,7 @@ import SubmissionDetail from './components/admin/SubmissionDetail';
 import UserManagement from './components/admin/UserManagement';
 import UserCreation from './components/admin/UserCreation';
 import UserSubmissions from './components/admin/UserSubmissions';
+import LoanOfficerDashboard from './components/loanOfficer/LoanOfficerDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
@@ -25,6 +26,16 @@ const AdminRoute = ({ children }) => {
   return token ? children : <Navigate to="/admin/login" replace />;
 };
 
+// Loan Officer Route Protection
+const LoanOfficerRoute = ({ children }) => {
+  const token = localStorage.getItem('token');
+  if (!token) return <Navigate to="/login" replace />;
+  
+  // In a real app, you'd decode the token to check the role
+  // For now, we'll assume the role is checked on the backend
+  return children;
+};
+
 function App() {
   return (
     <AuthProvider>
@@ -32,9 +43,21 @@ function App() {
         <div className="App">
           <Header />
           <Routes>
-            {/* User Routes */}
+            {/* Authentication Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            
+            {/* Loan Officer Dashboard */}
+            <Route 
+              path="/loan-officer" 
+              element={
+                <LoanOfficerRoute>
+                  <LoanOfficerDashboard />
+                </LoanOfficerRoute>
+              } 
+            />
+            
+            {/* User Routes */}
             <Route 
               path="/form" 
               element={
