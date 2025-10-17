@@ -1,0 +1,122 @@
+/* Professional Radio Button Styles - Common for All Forms */
+
+/* Radio Group Container */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* Radio Option Wrapper */
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+  background: #ffffff;
+  position: relative;
+}
+
+.radio-option:hover {
+  background: #f0fdf4;
+  border-color: #10b981;
+  transform: translateX(5px);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+}
+
+/* Hide default radio button */
+.radio-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  width: 0;
+  height: 0;
+}
+
+/* Custom radio button circle */
+.radio-option input[type="radio"] + span::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #cbd5e0;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  transition: all 0.3s ease;
+  background: white;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+/* Radio button checked state - green with white dot */
+.radio-option input[type="radio"]:checked + span::before {
+  border-color: #10b981;
+  background: #10b981;
+  box-shadow: inset 0 0 0 4px white;
+}
+
+/* Radio button focus state */
+.radio-option input[type="radio"]:focus + span::before {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  outline: none;
+}
+
+/* Radio option selected state - full card highlight */
+.radio-option:has(input[type="radio"]:checked) {
+  background: #f0fdf4;
+  border-color: #10b981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+  transform: translateX(5px);
+}
+
+/* Radio label text */
+.radio-option span {
+  font-size: 1rem;
+  color: #374151;
+  font-weight: 500;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Selected radio label text */
+.radio-option:has(input[type="radio"]:checked) span {
+  color: #059669;
+  font-weight: 600;
+}
+
+/* Disabled state */
+.radio-option:has(input[type="radio"]:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f3f4f6;
+}
+
+.radio-option:has(input[type="radio"]:disabled):hover {
+  transform: none;
+  border-color: #e2e8f0;
+  background: #f3f4f6;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .radio-option {
+    padding: 0.875rem;
+  }
+  
+  .radio-option input[type="radio"] + span::before {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+  }
+  
+  .radio-option span {
+    font-size: 0.95rem;
+  }
+}

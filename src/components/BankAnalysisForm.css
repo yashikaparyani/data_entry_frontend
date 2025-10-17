@@ -1,3 +1,6 @@
+/* Import Common Radio Styles */
+@import './common-radio-styles.css';
+
 /* Bank Analysis Form Styles */
 .bank-analysis-form {
   max-width: 1400px;

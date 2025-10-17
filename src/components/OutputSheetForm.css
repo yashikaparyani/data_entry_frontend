@@ -1,3 +1,6 @@
+/* Import Common Radio Styles */
+@import './common-radio-styles.css';
+
 /* Output Sheet Form Styles */
 .output-sheet-form {
   width: 100%;

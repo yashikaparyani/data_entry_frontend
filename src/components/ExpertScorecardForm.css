@@ -1,3 +1,6 @@
+/* Import Common Radio Styles */
+@import './common-radio-styles.css';
+
 /* Expert Scorecard Form Styles */
 .expert-scorecard-container {
   max-width: 1200px;
