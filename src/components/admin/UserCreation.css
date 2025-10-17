@@ -304,24 +304,3 @@
   }
 }
 
-/* Role Information Display */
-.role-info {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: linear-gradient(135deg, var(--samvit-primary-light) 0%, var(--samvit-white) 100%);
-  border: 2px solid var(--samvit-primary);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px var(--samvit-shadow);
-}
-
-.role-info p {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--samvit-secondary);
-}
-
-.role-info strong {
-  color: var(--samvit-primary);
-  font-weight: 600;
-}

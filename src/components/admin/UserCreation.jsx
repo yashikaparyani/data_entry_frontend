@@ -14,25 +14,13 @@ const UserCreation = () => {
     firstName: '',
     lastName: '',
     phone: '',
-    role: 'loan_officer', // Default to loan officer role
-    department: '',
-    position: ''
+    role: 'loan_officer' // Default to loan officer role
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState('');
 
   // All users created are loan officers by default
-
-  const departments = [
-    'Finance',
-    'Credit Analysis',
-    'Risk Management',
-    'Operations',
-    'IT',
-    'Administration',
-    'Other'
-  ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -120,8 +108,6 @@ const UserCreation = () => {
         lastName: formData.lastName,
         phone: formData.phone,
         role: formData.role,
-        department: formData.department,
-        position: formData.position,
         createdBy: 'admin',
         isActive: true
       };
@@ -144,9 +130,7 @@ const UserCreation = () => {
         firstName: '',
         lastName: '',
         phone: '',
-        role: 'user',
-        department: '',
-        position: ''
+        role: 'loan_officer'
       });
 
       // Optionally redirect to user management after a delay
@@ -325,43 +309,7 @@ const UserCreation = () => {
               </div>
             </div>
 
-            {/* Organization Details */}
-            <div className="form-section">
-              <h3>Organization Details</h3>
-              <div className="form-grid">
-                <div className="form-group">
-                  <label htmlFor="department">Department</label>
-                  <select
-                    id="department"
-                    name="department"
-                    value={formData.department}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Select department</option>
-                    {departments.map(dept => (
-                      <option key={dept} value={dept}>{dept}</option>
-                    ))}
-                  </select>
-                </div>
 
-                <div className="form-group">
-                  <label htmlFor="position">Position/Title</label>
-                  <input
-                    id="position"
-                    name="position"
-                    type="text"
-                    value={formData.position}
-                    onChange={handleInputChange}
-                    placeholder="Enter job position"
-                  />
-                </div>
-              </div>
-              
-              {/* Role information display */}
-              <div className="role-info">
-                <p><strong>User Role:</strong> Loan Officer (All users are created as loan officers)</p>
-              </div>
-            </div>
 
             {/* Form Actions */}
             <div className="form-actions">
