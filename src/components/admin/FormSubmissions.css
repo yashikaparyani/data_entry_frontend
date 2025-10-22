@@ -34,7 +34,7 @@
 
 .back-btn {
   background: #95a5a6;
-  color: white;
+  color: #1f2937;
   border: none;
   padding: 0.75rem 1rem;
   border-radius: 8px;
@@ -303,7 +303,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: white;
+  color: #1f2937;
 }
 
 .progress-container {
@@ -355,7 +355,7 @@
 
 .view-btn {
   background: #3498db;
-  color: white;
+  color: #1f2937;
 }
 
 .view-btn:hover {
@@ -365,7 +365,7 @@
 
 .download-btn {
   background: #95a5a6;
-  color: white;
+  color: #1f2937;
 }
 
 .download-btn:hover {

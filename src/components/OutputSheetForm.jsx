@@ -14,30 +14,20 @@ const OutputSheetForm = () => {
 
   // Auto-calculate fields when relevant data changes
   useEffect(() => {
-    console.log('🔢 Output Sheet Debug - Form data changed:', formData);
-    console.log('🔢 Output Sheet Debug - Available calculation formulas:', Object.keys(calculationFormulas));
-    
     const newCalculatedFields = {};
     
     // Calculate derived fields
     Object.entries(calculationFormulas).forEach(([fieldName, formula]) => {
       try {
-        console.log(`🔢 Output Sheet Debug - Calculating ${fieldName}...`);
         const calculatedValue = formula(formData);
-        console.log(`🔢 Output Sheet Debug - ${fieldName} result:`, calculatedValue);
-        
         if (!isNaN(calculatedValue) && calculatedValue !== null) {
           newCalculatedFields[fieldName] = calculatedValue;
-          console.log(`✅ Output Sheet Debug - ${fieldName} set to:`, calculatedValue);
-        } else {
-          console.log(`❌ Output Sheet Debug - ${fieldName} invalid result:`, calculatedValue);
         }
       } catch (error) {
-        console.error(`🚨 Error calculating ${fieldName}:`, error);
+        console.error(`Error calculating ${fieldName}:`, error);
       }
     });
     
-    console.log('🔢 Output Sheet Debug - Final calculated fields:', newCalculatedFields);
     setCalculatedFields(newCalculatedFields);
   }, [formData]);
 
@@ -68,12 +58,8 @@ const OutputSheetForm = () => {
 
     currentSection.fields.forEach(field => {
       if (field.required) {
-        // Check both form data and calculated fields
         const value = formData[field.name];
-        const calculatedValue = calculatedFields[field.name];
-        const effectiveValue = calculatedValue !== undefined ? calculatedValue : value;
-        
-        if (!effectiveValue && effectiveValue !== 0) {
+        if (!value && value !== 0) {
           stepErrors[field.name] = `${field.label} is required`;
           isValid = false;
         }

@@ -1,136 +1,193 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { API_BASE_URL } from '../../config/api';
 import './AdminDashboard.css';
 
-// Form configurations for navigation cards - moved outside component to prevent re-creation
-const formConfigs = [
-    {
-      key: 'user-form',
-      title: 'User Forms',
-      icon: '👤',
-      color: '#8BC34A',
-      description: 'User registration and basic information forms',
-      route: '/admin/forms/user-form'
+const AdminDashboard = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+  const [dashboardData, setDashboardData] = useState({
+    overview: {
+      totalUsers: 0,
+      totalSubmissions: 0,
+      completedForms: 0,
+      pendingForms: 0
     },
-    {
-      key: 'mse-assessment',
+    forms: {
+      standardForm: { submitted: 0, pending: 0, lastModified: null, submissions: [] },
+      mseAssessment: { submitted: 0, pending: 0, lastModified: null, submissions: [] },
+      cashFlowAnalysis: { submitted: 0, pending: 0, lastModified: null, submissions: [] },
+      expertScorecard: { submitted: 0, pending: 0, lastModified: null, submissions: [] },
+      financialAnalysis: { submitted: 0, pending: 0, lastModified: null, submissions: [] },
+      bankAnalysis: { submitted: 0, pending: 0, lastModified: null, submissions: [] },
+      creditAppMemo: { submitted: 0, pending: 0, lastModified: null, submissions: [] }
+    }
+  });
+  const [selectedSubmission, setSelectedSubmission] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const formConfigs = {
+    standardForm: {
+      title: 'Standard Form',
+      icon: '📋',
+      color: '#3498db',
+      description: 'Basic data entry forms'
+    },
+    mseAssessment: {
       title: 'MSE Credit Assessment',
-      icon: '🏢',
+      icon: '💼',
       color: '#9b59b6',
-      description: 'Micro, Small & Enterprise credit evaluation',
-      route: '/admin/forms/mse-assessment'
+      description: 'Micro, Small & Enterprise credit evaluation'
     },
-    {
-      key: 'financial-analysis',
-      title: 'Financial Analysis >$50K',
+    cashFlowAnalysis: {
+      title: 'Cash Flow Analysis',
       icon: '📊',
-      color: '#2ecc71',
-      description: 'Comprehensive financial analysis for loans above $50K',
-      route: '/admin/forms/financial-analysis'
+      color: '#e67e22',
+      description: 'Output sheet analysis and cash flow tracking'
     },
-    {
-      key: 'bank-analysis',
-      title: 'Bank Analysis >$50K',
-      icon: '🏦',
-      color: '#34495e',
-      description: 'Banking analysis and credit assessment',
-      route: '/admin/forms/bank-analysis'
-    },
-    {
-      key: 'expert-scorecard',
+    expertScorecard: {
       title: 'Expert Scorecard',
       icon: '🎯',
       color: '#e74c3c',
-      description: 'Expert assessment and scoring system',
-      route: '/admin/forms/expert-scorecard'
+      description: 'Expert assessment and scoring system'
     },
-    {
-      key: 'credit-app-memo',
+    financialAnalysis: {
+      title: 'Financial Analysis >$50K',
+      icon: '💼',
+      color: '#2ecc71',
+      description: 'Comprehensive financial analysis for loans above $50K'
+    },
+    bankAnalysis: {
+      title: 'Bank Analysis >$50K',
+      icon: '🏦',
+      color: '#34495e',
+      description: 'Banking analysis and credit assessment'
+    },
+    creditAppMemo: {
       title: 'Credit App Memo',
       icon: '📋',
       color: '#f39c12',
-      description: 'Credit application memorandum and approval workflow',
-      route: '/admin/forms/credit-app-memo'
-    },
-    {
-      key: 'output-sheet',
-      title: 'Output Sheet',
-      icon: '📄',
-      color: '#3498db',
-      description: 'Final output sheets and comprehensive reports',
-      route: '/admin/forms/output-sheet'
-    },
-    {
-      key: 'all-submissions',
-      title: 'All Submissions',
-      icon: '📊',
-      color: '#8BC34A',
-      description: 'View all form submissions across all form types',
-      route: '/admin/forms/all-submissions'
+      description: 'Credit application memorandum and approval workflow'
     }
-  ];
-
-const AdminDashboard = () => {
-  const navigate = useNavigate();
-  const [stats, setStats] = useState({
-    totalUsers: 0,
-    totalSubmissions: 0,
-    completedSubmissions: 0,
-    inProgressSubmissions: 0,
-    completionRate: 0
-  });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  };
 
   const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('adminToken');
       
-      if (!token) {
-        navigate('/admin/login');
-        return;
-      }
-
-      const response = await axios.get(`${API_BASE_URL}/api/admin/stats`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
+      // Mock data - Replace with actual API calls
+      const mockData = {
+        overview: {
+          totalUsers: 125,
+          totalSubmissions: 347,
+          completedForms: 298,
+          pendingForms: 49
+        },
+        forms: {
+          standardForm: {
+            submitted: 45,
+            pending: 12,
+            lastModified: new Date('2024-10-04T14:30:00'),
+            submissions: generateMockSubmissions('Standard Form', 45)
+          },
+          mseAssessment: {
+            submitted: 38,
+            pending: 8,
+            lastModified: new Date('2024-10-04T16:45:00'),
+            submissions: generateMockSubmissions('MSE Assessment', 38)
+          },
+          cashFlowAnalysis: {
+            submitted: 52,
+            pending: 6,
+            lastModified: new Date('2024-10-05T09:15:00'),
+            submissions: generateMockSubmissions('Cash Flow Analysis', 52)
+          },
+          expertScorecard: {
+            submitted: 29,
+            pending: 9,
+            lastModified: new Date('2024-10-03T11:20:00'),
+            submissions: generateMockSubmissions('Expert Scorecard', 29)
+          },
+          financialAnalysis: {
+            submitted: 67,
+            pending: 7,
+            lastModified: new Date('2024-10-04T13:50:00'),
+            submissions: generateMockSubmissions('Financial Analysis', 67)
+          },
+          bankAnalysis: {
+            submitted: 43,
+            pending: 4,
+            lastModified: new Date('2024-10-05T08:30:00'),
+            submissions: generateMockSubmissions('Bank Analysis', 43)
+          },
+          creditAppMemo: {
+            submitted: 24,
+            pending: 3,
+            lastModified: new Date('2024-10-04T17:10:00'),
+            submissions: generateMockSubmissions('Credit App Memo', 24)
+          }
         }
-      });
+      };
 
-      setStats(response.data.stats);
+      setDashboardData(mockData);
       setError('');
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
-      if (err.response?.status === 401) {
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('adminUser');
-        delete axios.defaults.headers.common['Authorization'];
-        navigate('/login');
-      } else {
-        const errorMessage = err.response?.data?.message || err.message || 'Failed to load dashboard data';
-        setError(`Error: ${errorMessage}`);
-        console.error('Full error details:', err.response?.data);
-      }
+      setError('Failed to load dashboard data');
     } finally {
       setLoading(false);
     }
-  }, [navigate]);
+  }, []);
+
+  // Generate mock submission data
+  function generateMockSubmissions(formType, count) {
+    const submissions = [];
+    const statuses = ['completed', 'in-progress', 'draft'];
+    
+    for (let i = 1; i <= count; i++) {
+      submissions.push({
+        id: `${formType.toLowerCase().replace(/\s+/g, '')}_${i}`,
+        userId: `user_${Math.floor(Math.random() * 100) + 1}`,
+        userName: `User ${Math.floor(Math.random() * 100) + 1}`,
+        status: statuses[Math.floor(Math.random() * statuses.length)],
+        submittedAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
+        lastModified: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
+        completionPercentage: Math.floor(Math.random() * 100) + 1,
+        formData: generateMockFormData(formType)
+      });
+    }
+    
+    return submissions.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+  }
+
+  function generateMockFormData(formType) {
+    // Generate relevant mock data based on form type
+    const baseData = {
+      'Standard Form': { name: 'John Doe', email: 'john@example.com', phone: '123-456-7890' },
+      'MSE Assessment': { businessName: 'ABC Corp', loanAmount: 50000, businessType: 'Retail' },
+      'Cash Flow Analysis': { revenue: 120000, expenses: 85000, netCashFlow: 35000 },
+      'Expert Scorecard': { creditScore: 750, riskCategory: 'Low', recommendation: 'Approved' },
+      'Financial Analysis': { totalAssets: 500000, totalLiabilities: 300000, netWorth: 200000 },
+      'Bank Analysis': { bankName: 'First National', accountType: 'Business', averageBalance: 75000 },
+      'Credit App Memo': { applicantName: 'Jane Smith', requestedAmount: 100000, approvalStatus: 'Pending' }
+    };
+    
+    return baseData[formType] || {};
+  }
 
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
     if (!token) {
-      navigate('/login');
+      navigate('/admin/login');
       return;
     }
-    
-    // Set default axios header for all requests
+
+    // Set axios default header
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     
-    fetchDashboardData();
-  }, [navigate, fetchDashboardData]);
+    fetchData();
+  }, [navigate, fetchData]);
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
@@ -139,54 +196,34 @@ const AdminDashboard = () => {
     navigate('/admin/login');
   };
 
-  const handleFormNavigation = (route) => {
-    navigate(route);
-  };
   if (loading) {
     return (
-      <div className="admin-loading">
+      <div className="loading-container">
         <div className="loading-spinner"></div>
         <p>Loading admin dashboard...</p>
       </div>
     );
   }
 
-  if (error) {
-    return (
-      <div className="admin-error">
-        <h2>Error Loading Dashboard</h2>
-        <p>{error}</p>
-        <button onClick={fetchDashboardData} className="retry-btn">
-          Retry
-        </button>
-      </div>
-    );
-  }
-
   return (
     <div className="admin-dashboard">
-      {/* Header Section */}
       <header className="admin-header">
         <div className="header-content">
-          <div className="header-left">
-            <h1>Admin Dashboard</h1>
-            <p>Manage all form submissions and user data</p>
-          </div>
-          <div className="header-actions">
-            <button onClick={fetchDashboardData} className="refresh-btn">
-              🔄 Refresh
+          <h1>Admin Dashboard</h1>
+          <div className="admin-actions">
+            <button onClick={fetchData} className="refresh-btn">
+              Refresh Data
             </button>
             <button onClick={handleLogout} className="logout-btn">
-              🚪 Logout
+              Logout
             </button>
           </div>
         </div>
       </header>
 
       <main className="admin-main">
-        {/* Statistics Cards */}
-        <section className="stats-section">
-          <h2>System Statistics</h2>
+        <div className="admin-content">
+          {/* Statistics Cards */}
           <div className="stats-grid">
             <div className="stat-card">
               <div className="stat-icon">👥</div>
@@ -228,88 +265,63 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
-        </section>
 
-        {/* Form Management Section */}
-        <section className="forms-section">
-          <h2>Form Management</h2>
-          <p>Click on any form type to view submissions and manage data</p>
-          
-          <div className="forms-grid">
-            {formConfigs.map((form) => (
-              <div
-                key={form.key}
-                className="form-card"
-                style={{ borderLeftColor: form.color }}
-                onClick={() => handleFormNavigation(form.route)}
-              >
-                <div className="form-card-header">
-                  <div className="form-icon" style={{ backgroundColor: form.color }}>
-                    {form.icon}
-                  </div>
-                  <div className="form-title">
-                    <h3>{form.title}</h3>
-                    <span className="form-type">{form.key.replace('-', ' ')}</span>
-                  </div>
-                </div>
-                
-                <div className="form-description">
-                  <p>{form.description}</p>
-                </div>
-
-                <div className="form-card-footer">
-                  <span className="view-submissions">View Submissions →</span>
-                </div>
-              </div>
-            ))}
+          {/* Recent Submissions */}
+          <div className="submissions-section">
+            <h2>Recent Submissions</h2>
+            <div className="submissions-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Form Name</th>
+                    <th>Progress</th>
+                    <th>Status</th>
+                    <th>Last Saved</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {submissions.length === 0 ? (
+                    <tr>
+                      <td colSpan="5" className="no-data">
+                        No submissions yet
+                      </td>
+                    </tr>
+                  ) : (
+                    submissions.map((submission) => (
+                      <tr key={submission._id}>
+                        <td>
+                          <div className="user-info">
+                            <strong>{submission.userId?.name || 'Unknown User'}</strong>
+                            <small>{submission.userId?.email || 'No email'}</small>
+                          </div>
+                        </td>
+                        <td>{submission.formName}</td>
+                        <td>
+                          <div className="progress-bar">
+                            <div 
+                              className="progress-fill" 
+                              style={{ width: `${submission.progress}%` }}
+                            ></div>
+                            <span>{submission.progress}%</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`status ${submission.isCompleted ? 'completed' : 'in-progress'}`}>
+                            {submission.isCompleted ? 'Completed' : 'In Progress'}
+                          </span>
+                        </td>
+                        <td>
+                          {new Date(submission.lastSaved).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </section>
-
-        {/* Quick Actions */}
-        <section className="quick-actions">
-          <h2>Quick Actions</h2>
-          <div className="actions-grid">
-            <button 
-              className="action-btn"
-              onClick={() => navigate('/admin/users')}
-            >
-              <span className="action-icon">👥</span>
-              <span className="action-text">Manage Users</span>
-            </button>
-
-            <button 
-              className="action-btn create-user-btn"
-              onClick={() => navigate('/admin/users/create')}
-            >
-              <span className="action-icon">➕</span>
-              <span className="action-text">Create New User</span>
-            </button>
-            
-            <button 
-              className="action-btn"
-              onClick={() => navigate('/admin/reports')}
-            >
-              <span className="action-icon">📊</span>
-              <span className="action-text">Generate Reports</span>
-            </button>
-            
-            <button 
-              className="action-btn"
-              onClick={() => navigate('/admin/settings')}
-            >
-              <span className="action-icon">⚙️</span>
-              <span className="action-text">System Settings</span>
-            </button>
-            
-            <button 
-              className="action-btn"
-              onClick={fetchDashboardData}
-            >
-              <span className="action-icon">🔄</span>
-              <span className="action-text">Refresh Data</span>
-            </button>
-          </div>
-        </section>
+        </div>
       </main>
     </div>
   );

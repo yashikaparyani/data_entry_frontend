@@ -1,11 +1,11 @@
-/* Form Navigation Styles - Minimal Hamburger Only */
+/* Form Navigation Styles - New Hamburger Layout */
 .form-navigation-bar {
-  background: var(--samvit-white);
-  border-bottom: 2px solid var(--samvit-primary-light);
-  padding: 0.75rem 0;
-  box-shadow: 0 2px 8px var(--samvit-shadow);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   position: relative;
-  z-index: 999;
+  z-index: 1000;
 }
 
 .nav-content {
@@ -13,9 +13,8 @@
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  gap: 1.5rem;
 }
 
 /* Hamburger Menu Button */
@@ -24,25 +23,23 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 45px;
-  height: 45px;
-  background: var(--samvit-primary);
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: 10px;
-  box-shadow: 0 2px 8px var(--samvit-shadow-medium);
+  padding: 8px;
 }
 
 .hamburger-menu:hover {
-  background: var(--samvit-primary-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--samvit-shadow-strong);
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
 }
 
 .hamburger-line {
-  width: 22px;
+  width: 24px;
   height: 3px;
   background: white;
   border-radius: 3px;
@@ -60,70 +57,6 @@
 
 .hamburger-menu.open .hamburger-line:nth-child(3) {
   transform: rotate(-45deg) translate(6px, -6px);
-}
-
-/* Current Form Name Display */
-.current-form-name {
-  flex: 1;
-}
-
-.current-form-name h2 {
-  color: var(--samvit-secondary);
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-  text-shadow: 0 1px 2px var(--samvit-shadow);
-}
-
-/* User Section - Right Side */
-.nav-user-section {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.welcome-text {
-  color: var(--samvit-gray-medium);
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.logout-btn {
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
-}
-
-.logout-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
-}
-
-/* Responsive Design for User Section */
-@media (max-width: 768px) {
-  .nav-content {
-    padding: 0 1rem;
-    gap: 1rem;
-  }
-  
-  .current-form-name h2 {
-    font-size: 1.2rem;
-  }
-  
-  .welcome-text {
-    display: none; /* Hide welcome text on mobile */
-  }
-  
-  .logout-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
 }
 
 /* App Branding */

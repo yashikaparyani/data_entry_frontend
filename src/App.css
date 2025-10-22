@@ -1,23 +1,3 @@
-/* Samvit Insights Global Theme */
-:root {
-  --samvit-primary: #8BC34A;
-  --samvit-primary-dark: #689F38;
-  --samvit-primary-light: #DCEDC8;
-  --samvit-secondary: #2c5530;
-  --samvit-white: #ffffff;
-  --samvit-gray-light: #f8f9fa;
-  --samvit-gray-medium: #6c757d;
-  --samvit-gray-dark: #495057;
-  --samvit-shadow: rgba(139, 195, 74, 0.1);
-  --samvit-shadow-medium: rgba(139, 195, 74, 0.2);
-  --samvit-shadow-strong: rgba(139, 195, 74, 0.3);
-  --samvit-border: rgba(139, 195, 74, 0.3);
-  --samvit-success: #4CAF50;
-  --samvit-warning: #FF9800;
-  --samvit-error: #F44336;
-  --samvit-info: #2196F3;
-}
-
 /* Global Styles */
 * {
   margin: 0;
@@ -26,11 +6,13 @@
 }
 
 body {
-  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #ffffff;
-  color: var(--samvit-secondary);
+  background-color: #f8fafc;
+  color: #1a202c;
   line-height: 1.6;
   width: 100vw;
   height: 100vh;
@@ -47,7 +29,6 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #ffffff;
 }
 
 /* Utility Classes */
@@ -73,17 +54,6 @@ body {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
-
-/* Global Input Styles - Samvit Insights */
-input[type="number"],
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-input[type="password"],
-select,
-textarea {
-  text-align: left !important;
 }
 
 /* Form Styles */

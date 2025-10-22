@@ -1,19 +1,18 @@
-/* Samvit MSE Credit Assessment Form Styles */
+/* MSE Credit Assessment Form Styles */
 .mse-form {
   width: 100%;
-  min-height: 100vh;
-  background: linear-gradient(135deg, var(--samvit-white) 0%, var(--samvit-gray-light) 100%);
+  height: 100vh;
+  background: #f8fafc;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding-top: 0;
 }
 
 .form-header {
-  background: var(--samvit-white);
-  border-bottom: 3px solid var(--samvit-primary);
-  padding: 1.5rem 0;
-  box-shadow: 0 4px 20px var(--samvit-shadow);
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 1rem 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .header-content {
@@ -27,11 +26,10 @@
 }
 
 .form-header h1 {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: var(--samvit-secondary);
+  color: #1a202c;
   margin: 0;
-  text-shadow: 0 1px 2px var(--samvit-shadow);
 }
 
 .user-info {
@@ -41,16 +39,15 @@
 }
 
 .user-info span {
-  color: var(--samvit-gray-medium);
-  font-weight: 600;
-  font-size: 1.1rem;
+  color: #4a5568;
+  font-weight: 500;
 }
 
 .logout-btn {
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  background: #e53e3e;
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 6px;
   font-size: 0.875rem;
   font-weight: 500;
@@ -103,10 +100,9 @@
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(135deg, var(--samvit-primary) 0%, var(--samvit-primary-dark) 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 4px;
   transition: width 0.3s ease;
-  box-shadow: 0 2px 8px var(--samvit-shadow-medium);
 }
 
 .progress-section p {
@@ -216,10 +212,10 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: var(--samvit-primary);
+  border-color: #667eea;
   background: white;
-  box-shadow: 0 0 0 3px var(--samvit-shadow-medium);
-  color: var(--samvit-secondary) !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  color: #1a202c !important;
 }
 
 .form-group textarea {
@@ -253,26 +249,6 @@
   margin: 0;
 }
 
-/* Checkbox Group - Samvit Green Theme */
-.checkbox-group {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-  padding: 1rem;
-  background: var(--samvit-white);
-  border: 2px solid var(--samvit-primary-light);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px var(--samvit-shadow);
-}
-
-.group-label {
-  font-weight: 600;
-  color: var(--samvit-secondary);
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
 .checkbox-label {
   display: flex;
   align-items: center;
@@ -280,26 +256,11 @@
   font-weight: 500;
   color: #4a5568;
   cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  background: #f8f9fa;
-}
-
-.checkbox-label:hover {
-  background: var(--samvit-primary-light);
-  color: var(--samvit-secondary);
 }
 
 .checkbox-label input[type="checkbox"] {
   width: auto;
   margin: 0;
-  accent-color: var(--samvit-primary);
-}
-
-.checkbox-label input[type="checkbox"]:checked + span {
-  color: var(--samvit-primary);
-  font-weight: 600;
 }
 
 /* Navigation Styles */
@@ -343,14 +304,13 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--samvit-primary) 0%, var(--samvit-primary-dark) 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  box-shadow: 0 4px 15px var(--samvit-shadow-medium);
 }
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px var(--samvit-shadow-strong);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
 }
 
 .btn-secondary {
@@ -365,12 +325,12 @@
 
 .btn-outline {
   background: white;
-  color: var(--samvit-primary);
-  border: 2px solid var(--samvit-primary);
+  color: #667eea;
+  border: 2px solid #667eea;
 }
 
 .btn-outline:hover:not(:disabled) {
-  background: var(--samvit-primary);
+  background: #667eea;
   color: white;
   transform: translateY(-2px);
 }
@@ -406,8 +366,8 @@
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid var(--samvit-primary-light);
-  border-top: 4px solid var(--samvit-primary);
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #667eea;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -437,17 +397,6 @@
   .form-fields {
     grid-template-columns: 1fr;
     gap: 1rem;
-  }
-  
-  .checkbox-group {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-    padding: 0.75rem;
-  }
-  
-  .checkbox-label {
-    font-size: 0.85rem;
-    padding: 0.4rem;
   }
   
   .form-navigation {
@@ -489,7 +438,7 @@
 
 /* Special Field Styling */
 .form-group input[type="number"] {
-  text-align: left !important;
+  text-align: right;
 }
 
 .form-group.currency::after {
@@ -505,15 +454,14 @@
 
 /* Section-specific styling */
 .form-step[data-step="3"] .form-group input[type="number"] {
-  /* Financial Information - left align numbers */
-  text-align: left !important;
+  /* Financial Information - right align numbers */
+  text-align: right;
   font-family: 'Monaco', 'Menlo', monospace;
 }
 
 .form-step[data-step="6"] {
   /* Business Operations - final step emphasis */
-  border: 2px solid var(--samvit-primary);
+  border: 2px solid #667eea;
   border-radius: 12px;
   padding: 1rem;
-  box-shadow: 0 4px 15px var(--samvit-shadow-medium);
 }

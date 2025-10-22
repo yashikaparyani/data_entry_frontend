@@ -73,7 +73,7 @@
 
 .export-btn {
   background: #27ae60;
-  color: white;
+  color: #1f2937;
 }
 
 .export-btn:hover {
@@ -83,7 +83,7 @@
 
 .refresh-btn {
   background: #3498db;
-  color: white;
+  color: #1f2937;
 }
 
 .refresh-btn:hover {
@@ -124,11 +124,11 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: white;
+  color: #1f2937;
 }
 
 .status-value {
-  color: white;
+  color: #1f2937;
   font-weight: 600;
 }
 
@@ -153,7 +153,7 @@
 }
 
 .progress-text {
-  color: white;
+  color: #1f2937;
   font-weight: 600;
   font-size: 0.875rem;
   min-width: 40px;
@@ -184,7 +184,7 @@
 
 .tab-btn:hover {
   background: rgba(255, 255, 255, 0.2);
-  color: white;
+  color: #1f2937;
 }
 
 .tab-btn.active {
@@ -345,7 +345,7 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  color: white;
+  color: #1f2937;
   flex-shrink: 0;
   position: relative;
   z-index: 1;
@@ -426,7 +426,7 @@
 }
 
 .detail-loading {
-  color: white;
+  color: #1f2937;
 }
 
 .detail-error {

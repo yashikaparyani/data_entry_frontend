@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import { mseFormConfig } from '../data/mseFormConfig';
 import FormNavigation from './FormNavigation';
 import axios from 'axios';
 import './MSECreditAssessment.css';
 
 const MSECreditAssessment = () => {
+  const { user, logout } = useAuth();
   const [formData, setFormData] = useState({});
   const [currentStep, setCurrentStep] = useState(1);
   const [totalSteps, setTotalSteps] = useState(mseFormConfig.totalSteps);
@@ -89,97 +91,6 @@ const MSECreditAssessment = () => {
         ...prev,
         [field]: value,
         averageDailySales: averageDaily.toFixed(2)
-      }));
-    }
-
-    // Auto-calculate total monthly purchases
-    if (['lastMonthPurchase5th', 'lastMonthPurchase15th', 'lastMonthPurchase25th', 'twoMonthsPurchase5th', 'twoMonthsPurchase15th', 'twoMonthsPurchase25th', 'threeMonthsPurchase5th', 'threeMonthsPurchase15th', 'threeMonthsPurchase25th'].includes(field)) {
-      const purchases = [
-        'lastMonthPurchase5th', 'lastMonthPurchase15th', 'lastMonthPurchase25th',
-        'twoMonthsPurchase5th', 'twoMonthsPurchase15th', 'twoMonthsPurchase25th',
-        'threeMonthsPurchase5th', 'threeMonthsPurchase15th', 'threeMonthsPurchase25th'
-      ];
-      
-      const updatedFormData = { ...formData, [field]: value };
-      const totalPurchases = purchases.reduce((sum, purchaseField) => {
-        return sum + parseFloat(updatedFormData[purchaseField] || 0);
-      }, 0);
-      
-      const averageDailyPurchases = totalPurchases / 9;
-      
-      setFormData(prev => ({
-        ...prev,
-        [field]: value,
-        averageDailyPurchases: averageDailyPurchases.toFixed(2)
-      }));
-    }
-
-    // Auto-calculate sales growth percentage
-    if (['salesMonthly', 'salesGrowth'].includes(field) || field.includes('Sales')) {
-      const currentSales = parseFloat(formData.salesMonthly || 0);
-      const lastMonthTotal = parseFloat(formData.lastMonthSales5th || 0) + 
-                            parseFloat(formData.lastMonthSales15th || 0) + 
-                            parseFloat(formData.lastMonthSales25th || 0);
-      
-      if (currentSales > 0 && lastMonthTotal > 0) {
-        const growthRate = ((currentSales - lastMonthTotal) / lastMonthTotal) * 100;
-        setFormData(prev => ({
-          ...prev,
-          [field]: value,
-          salesGrowth: growthRate.toFixed(2)
-        }));
-      }
-    }
-
-    // Auto-calculate debt-to-income ratio
-    if (['totalMonthlyIncome', 'monthlyDebtPayments', 'existingLoanEMI'].includes(field)) {
-      const totalIncome = parseFloat(field === 'totalMonthlyIncome' ? value : formData.totalMonthlyIncome || 0);
-      const debtPayments = parseFloat(field === 'monthlyDebtPayments' ? value : formData.monthlyDebtPayments || 0);
-      const loanEMI = parseFloat(field === 'existingLoanEMI' ? value : formData.existingLoanEMI || 0);
-      
-      const totalDebt = debtPayments + loanEMI;
-      const debtRatio = totalIncome > 0 ? (totalDebt / totalIncome) * 100 : 0;
-      
-      setFormData(prev => ({
-        ...prev,
-        [field]: value,
-        debtBurdenPercentage: debtRatio.toFixed(2)
-      }));
-    }
-
-    // Auto-calculate working capital requirement
-    if (['averageDailySales', 'averageDailyPurchases', 'workingDaysPerMonth'].includes(field)) {
-      const dailySales = parseFloat(field === 'averageDailySales' ? value : formData.averageDailySales || 0);
-      const dailyPurchases = parseFloat(field === 'averageDailyPurchases' ? value : formData.averageDailyPurchases || 0);
-      const workingDays = parseFloat(field === 'workingDaysPerMonth' ? value : formData.workingDaysPerMonth || 22);
-      
-      const monthlyRevenue = dailySales * workingDays;
-      const monthlyCosts = dailyPurchases * workingDays;
-      const workingCapital = monthlyCosts * 0.25; // 25% of monthly costs as working capital
-      const grossMargin = monthlyRevenue > 0 ? ((monthlyRevenue - monthlyCosts) / monthlyRevenue * 100) : 0;
-      
-      setFormData(prev => ({
-        ...prev,
-        [field]: value,
-        workingCapitalRequired: workingCapital.toFixed(2),
-        grossMarginPercentage: grossMargin.toFixed(2)
-      }));
-    }
-
-    // Auto-calculate repayment capacity
-    if (['totalMonthlyIncome', 'monthlyExpenses', 'familyExpenses'].includes(field)) {
-      const totalIncome = parseFloat(field === 'totalMonthlyIncome' ? value : formData.totalMonthlyIncome || 0);
-      const monthlyExp = parseFloat(field === 'monthlyExpenses' ? value : formData.monthlyExpenses || 0);
-      const familyExp = parseFloat(field === 'familyExpenses' ? value : formData.familyExpenses || 0);
-      
-      const totalExpenses = monthlyExp + familyExp;
-      const surplus = totalIncome - totalExpenses;
-      const safeRepayment = surplus * 0.7; // 70% of surplus as safe repayment capacity
-      
-      setFormData(prev => ({
-        ...prev,
-        [field]: value,
-        repaymentCapacity: Math.max(0, safeRepayment).toFixed(2)
       }));
     }
   };
@@ -393,29 +304,6 @@ const MSECreditAssessment = () => {
           </div>
         );
 
-      case 'checkbox-group':
-        return (
-          <div key={field.name} className="form-group">
-            <label className="group-label">
-              {field.label}
-              {field.required && <span className="required">*</span>}
-            </label>
-            <div className="checkbox-group">
-              {field.options.map((option) => (
-                <label key={option.name} className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    name={option.name}
-                    checked={formData[option.name] === true || formData[option.name] === 'true'}
-                    onChange={(e) => handleInputChange(option.name, e.target.checked)}
-                  />
-                  {option.label}
-                </label>
-              ))}
-            </div>
-          </div>
-        );
-
       case 'textarea':
         return (
           <div key={field.name} className="form-group">
@@ -472,6 +360,17 @@ const MSECreditAssessment = () => {
   return (
     <div className="mse-form">
       <FormNavigation />
+      <header className="form-header">
+        <div className="header-content">
+          <h1>MSE Credit Assessment (Excel Based)</h1>
+          <div className="user-info">
+            <span>Welcome, {user?.name}</span>
+            <button className="logout-btn" onClick={logout}>
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
 
       <main className="form-main">
         <div className="form-container">
