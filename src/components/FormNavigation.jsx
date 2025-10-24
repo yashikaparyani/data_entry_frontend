@@ -18,8 +18,25 @@ const FormNavigation = () => {
     setIsMenuOpen(false);
   };
 
+  // Get current form name based on URL
+  const getCurrentFormName = () => {
+    const path = location.pathname;
+    const formNames = {
+      '/form': 'Standard Form',
+      '/mse-assessment': 'MSE Credit Assessment Form v3.1',
+      '/output-analysis': 'Cash Flow Analysis',
+      '/expert-scorecard': 'Expert Scorecard',
+      '/financial-analysis': 'Financial Analysis > $50K',
+      '/bank-analysis': 'Bank Analysis > $50K',
+      '/credit-app-memo': 'Credit App Memo',
+      '/dashboard': 'User Dashboard'
+    };
+    return formNames[path] || 'Data Entry Portal';
+  };
+
   return (
     <>
+      {/* Navigation with hamburger menu and form name */}
       <div className="form-navigation-bar">
         <div className="nav-content">
           {/* Hamburger Menu Button */}
@@ -32,21 +49,18 @@ const FormNavigation = () => {
             <span className="hamburger-line"></span>
             <span className="hamburger-line"></span>
           </button>
-
-          {/* App Logo and Name */}
-          <div className="app-branding">
-            <div className="app-logo">
-              <span className="logo-icon">🏦</span>
-            </div>
-            <div className="app-name">
-              <h1>Credit Assessment Portal</h1>
-              <p>Data Entry & Analysis System</p>
-            </div>
+          
+          {/* Current Form Name */}
+          <div className="current-form-name">
+            <h2>{getCurrentFormName()}</h2>
           </div>
-
-          {/* User Welcome */}
-          <div className="nav-user">
-            <span>Welcome, {user?.name}</span>
+          
+          {/* User Info and Logout - Right Side */}
+          <div className="nav-user-section">
+            <span className="welcome-text">Welcome, {user?.name}</span>
+            <button className="logout-btn" onClick={() => window.location.href = '/login'}>
+              Logout
+            </button>
           </div>
         </div>
       </div>

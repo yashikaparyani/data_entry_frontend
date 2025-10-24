@@ -15,7 +15,6 @@ const UserForm = () => {
   const [totalSteps, setTotalSteps] = useState(formConfig.totalSteps);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState('');
   const [clientId, setClientId] = useState(null);
   const [activeFormId, setActiveFormId] = useState(formId); // Track current form ID
@@ -259,68 +258,6 @@ const UserForm = () => {
     }
   };
 
-  const submitForm = async () => {
-    // Validate all steps before submission
-    let allMissingFields = [];
-    
-    for (let step = 1; step <= totalSteps; step++) {
-      const stepFields = formConfig.steps[step - 1]?.fields || [];
-      const requiredFields = stepFields.filter(field => field.required);
-      const missingFields = requiredFields.filter(field => {
-        if (field.conditional && formData[field.conditional] !== field.conditionalValue) {
-          return false;
-        }
-        return !formData[field.name] || formData[field.name] === '';
-      });
-      allMissingFields = [...allMissingFields, ...missingFields];
-    }
-
-    if (allMissingFields.length > 0) {
-      const fieldNames = allMissingFields.map(field => field.label).join(', ');
-      setMessage(`Please complete all required fields before submitting: ${fieldNames}`);
-      return;
-    }
-
-    setSubmitting(true);
-    try {
-      if (user?.role === 'loan_officer' && (activeFormId || formId)) {
-        // Loan officer final submission
-        const formIdToSubmit = activeFormId || formId;
-        console.log('📨 Submitting loan officer form:', formIdToSubmit);
-        await axios.post(`/api/loan-officer/forms/${formIdToSubmit}/submit`, {
-          formData,
-          currentStep: totalSteps + 1,
-          completionPercentage: 100
-        }, {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        setMessage('Form submitted successfully!');
-        setTimeout(() => navigate('/loan-officer/dashboard'), 2000);
-      } else {
-        // Regular user submission
-        console.log('📨 Submitting regular user form');
-        await axios.post('/api/form/save', {
-          formName: 'User-Form',
-          responses: formData,
-          currentStep,
-          totalSteps: totalSteps,
-          isCompleted: true
-        });
-        setMessage('Form submitted successfully!');
-      }
-    } catch (error) {
-      console.error('💥 Submit error details:', {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        message: error.message
-      });
-      setMessage('Error submitting form: ' + (error.response?.data?.message || error.message));
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   if (loading) {
     return (
       <div className="loading-container">
@@ -463,29 +400,13 @@ const UserForm = () => {
               </button>
             </div>
 
-            {currentStep === totalSteps && !isLoanOfficer ? (
-              <button 
-                onClick={submitForm}
-                disabled={submitting}
-                className="nav-btn submit-btn"
-              >
-                {submitting ? 'Submitting...' : 'Submit Form ✓'}
-              </button>
-            ) : !isLoanOfficer ? (
-              <button 
-                onClick={nextStep}
-                className="nav-btn next-btn"
-              >
-                Next →
-              </button>
-            ) : (
-              <button 
-                onClick={nextStep}
-                className="nav-btn next-btn"
-              >
-                Next →
-              </button>
-            )}
+            <button 
+              onClick={nextStep}
+              disabled={currentStep === totalSteps}
+              className="nav-btn next-btn"
+            >
+              {currentStep === totalSteps ? 'Last Step' : 'Next →'}
+            </button>
           </div>
 
           {/* Step Summary */}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { API_BASE_URL } from '../../config/api';
 import './Auth.css';
 
 const Login = () => {
@@ -31,7 +32,7 @@ const Login = () => {
     if (formData.email === 'admin@dataentry.com' && formData.password === 'admin123') {
       // Admin login
       try {
-        const response = await fetch('http://localhost:5000/api/admin/login', {
+        const response = await fetch(`${API_BASE_URL}/api/admin/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -42,14 +43,28 @@ const Login = () => {
           }),
         });
 
-        const data = await response.json();
-
         if (response.ok) {
+          const data = await response.json();
           localStorage.setItem('adminToken', data.token);
-          localStorage.setItem('adminUser', JSON.stringify(data.admin));
-          navigate('/admin/dashboard');
+          localStorage.setItem('adminUser', JSON.stringify(data.user));
+          navigate('/admin');
         } else {
-          setError(data.message || 'Admin login failed');
+          // Handle non-200 responses
+          let errorMessage = 'Admin login failed';
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.message || errorMessage;
+          } catch {
+            // Response doesn't contain JSON, use status-based message
+            if (response.status === 404) {
+              errorMessage = 'Admin login endpoint not found. Please check server configuration.';
+            } else if (response.status === 401) {
+              errorMessage = 'Invalid admin credentials';
+            } else {
+              errorMessage = `Server error: ${response.status}`;
+            }
+          }
+          setError(errorMessage);
         }
       } catch (err) {
         console.error('Admin login error:', err);
@@ -60,7 +75,14 @@ const Login = () => {
       const result = await login(formData.email, formData.password);
       
       if (result.success) {
-        navigate('/dashboard');
+        // Check user role and redirect accordingly
+        const userRole = result.user?.role;
+        
+        if (userRole === 'loan_officer') {
+          navigate('/loan-officer/dashboard');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
         setError(result.message);
       }

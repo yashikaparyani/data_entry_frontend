@@ -33,7 +33,7 @@
 .back-btn {
   padding: 10px 20px;
   background: #6c63ff;
-  color: #1f2937;
+  color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -67,7 +67,7 @@
 .create-user-btn {
   padding: 0.75rem 1.5rem;
   background: linear-gradient(135deg, var(--samvit-primary) 0%, var(--samvit-primary-dark) 100%);
-  color: #1f2937;
+  color: white;
   border: none;
   border-radius: 8px;
   font-size: 1rem;
@@ -101,7 +101,7 @@
 
 .refresh-btn:hover {
   background: var(--samvit-primary);
-  color: #1f2937;
+  color: white;
   transform: translateY(-2px);
 }
 
@@ -126,7 +126,7 @@
 
 .excel-btn {
   background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-  color: #1f2937;
+  color: white;
 }
 
 .excel-btn:hover {
@@ -136,7 +136,7 @@
 
 .csv-btn {
   background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-  color: #1f2937;
+  color: white;
 }
 
 .csv-btn:hover {
@@ -159,7 +159,7 @@
   align-items: center;
   padding: 15px 25px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #1f2937;
+  color: white;
   border-radius: 10px;
   box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
@@ -242,7 +242,7 @@
 
 .users-table th {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #1f2937;
+  color: white;
   padding: 20px;
   text-align: left;
   font-weight: 600;
@@ -285,7 +285,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1f2937;
+  color: white;
   font-weight: bold;
   font-size: 1.2rem;
 }
@@ -384,7 +384,7 @@
 
 .view-btn {
   background: #3498db;
-  color: #1f2937;
+  color: white;
 }
 
 .view-btn:hover {
@@ -394,7 +394,7 @@
 
 .submissions-btn {
   background: #27ae60;
-  color: #1f2937;
+  color: white;
 }
 
 .submissions-btn:hover {
@@ -404,7 +404,7 @@
 
 .delete-btn {
   background: #e74c3c;
-  color: #1f2937;
+  color: white;
 }
 
 .delete-btn:hover {
@@ -449,7 +449,7 @@
 .retry-btn {
   padding: 12px 30px;
   background: #6c63ff;
-  color: #1f2937;
+  color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -597,7 +597,7 @@
 
 .cancel-btn {
   background: #6c757d;
-  color: #1f2937;
+  color: white;
 }
 
 .cancel-btn:hover:not(:disabled) {
@@ -607,7 +607,7 @@
 
 .confirm-delete-btn {
   background: #e74c3c;
-  color: #1f2937;
+  color: white;
 }
 
 .confirm-delete-btn:hover:not(:disabled) {

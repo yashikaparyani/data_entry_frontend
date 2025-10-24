@@ -34,7 +34,7 @@
 .back-btn {
   padding: 10px 20px;
   background: var(--samvit-primary, #28a745);
-  color: #1f2937;
+  color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -70,7 +70,7 @@
 .refresh-btn {
   padding: 10px 20px;
   background: #3498db;
-  color: #1f2937;
+  color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -108,7 +108,7 @@
 
 .excel-btn {
   background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-  color: #1f2937;
+  color: white;
 }
 
 .excel-btn:hover {
@@ -118,7 +118,7 @@
 
 .csv-btn {
   background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-  color: #1f2937;
+  color: white;
 }
 
 .csv-btn:hover {
@@ -138,7 +138,7 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
   border-radius: 12px;
-  color: #1f2937;
+  color: white;
   text-align: center;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
@@ -202,7 +202,7 @@
 
 .filter-btn.active {
   background: var(--samvit-primary, #28a745);
-  color: #1f2937;
+  color: white;
 }
 
 /* Submissions Content */
@@ -224,7 +224,7 @@
 
 .submissions-table th {
   background: var(--samvit-primary, #28a745);
-  color: #1f2937;
+  color: white;
   padding: 15px 20px;
   text-align: left;
   font-weight: 600;
@@ -339,7 +339,7 @@
 .view-details-btn {
   padding: 8px 15px;
   background: #3498db;
-  color: #1f2937;
+  color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
