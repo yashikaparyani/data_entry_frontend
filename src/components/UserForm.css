@@ -379,8 +379,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--samvit-gray-light);
-  color: var(--samvit-gray-medium);
+  background: #ffffff;
+  color: #1a202c;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -391,16 +391,16 @@
 }
 
 .compact-step.active .step-circle {
-  background: white;
-  color: var(--samvit-primary);
-  border-color: white;
-  box-shadow: 0 2px 8px var(--samvit-shadow-medium);
+  background: #10b981;
+  color: #ffffff;
+  border-color: #10b981;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
 .compact-step.completed .step-circle {
-  background: white;
-  color: var(--samvit-success);
-  border-color: white;
+  background: #10b981;
+  color: #ffffff;
+  border-color: #10b981;
 }
 
 .step-label {
