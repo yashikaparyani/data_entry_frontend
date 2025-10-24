@@ -195,9 +195,55 @@ const BankAnalysisForm = () => {
     );
   };
 
+  const completeFormAndRedirect = async () => {
+    const clientId = localStorage.getItem('activeClientId');
+    const formId = localStorage.getItem('activeFormId_bank_analysis');
+    
+    if (!clientId || !formId) {
+      alert('❌ No active client or form found.');
+      return;
+    }
+
+    try {
+      // Mark form as completed
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          formData,
+          calculatedFields: calculatedValues,
+          currentStep: bankAnalysisConfig.sections.length,
+          totalSteps: bankAnalysisConfig.sections.length,
+          isCompleted: true
+        })
+      });
+
+      if (response.ok) {
+        alert('✓ Bank Analysis form completed! Redirecting to Financial Analysis...');
+        // Redirect to next form
+        window.location.href = '/financial-analysis';
+      } else {
+        alert('❌ Error completing form');
+      }
+    } catch (error) {
+      console.error('Complete error:', error);
+      alert('❌ Error completing form');
+    }
+  };
+
   const handleNextSection = () => {
     if (validateSection(currentSection)) {
-      setCurrentSection(prev => Math.min(prev + 1, bankAnalysisConfig.sections.length - 1));
+      // Check if this is the last section
+      if (currentSection === bankAnalysisConfig.sections.length - 1) {
+        // All sections complete, mark as complete and redirect
+        completeFormAndRedirect();
+      } else {
+        // Move to next section within current form
+        setCurrentSection(prev => Math.min(prev + 1, bankAnalysisConfig.sections.length - 1));
+      }
     }
   };
 

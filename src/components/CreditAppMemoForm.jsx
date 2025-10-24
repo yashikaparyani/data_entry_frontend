@@ -71,9 +71,55 @@ const CreditAppMemoForm = () => {
     return Object.keys(errors).length === 0;
   };
 
+  const completeFormAndRedirect = async () => {
+    const clientId = localStorage.getItem('activeClientId');
+    const formId = localStorage.getItem('activeFormId_credit_app_memo');
+    
+    if (!clientId || !formId) {
+      alert('❌ No active client or form found.');
+      return;
+    }
+
+    try {
+      // Mark form as completed
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          formData,
+          calculatedValues,
+          currentStep: creditAppMemoConfig.sections.length,
+          totalSteps: creditAppMemoConfig.sections.length,
+          isCompleted: true
+        })
+      });
+
+      if (response.ok) {
+        alert('✓ Credit App Memo completed! Redirecting to Output Sheet...');
+        // Redirect to next form
+        window.location.href = '/output-analysis';
+      } else {
+        alert('❌ Error completing form');
+      }
+    } catch (error) {
+      console.error('Complete error:', error);
+      alert('❌ Error completing form');
+    }
+  };
+
   const handleNextSection = () => {
     if (validateSection(currentSection)) {
-      setCurrentSection(prev => Math.min(prev + 1, creditAppMemoConfig.sections.length - 1));
+      // Check if this is the last section
+      if (currentSection === creditAppMemoConfig.sections.length - 1) {
+        // All sections complete, mark as complete and redirect
+        completeFormAndRedirect();
+      } else {
+        // Move to next section within current form
+        setCurrentSection(prev => Math.min(prev + 1, creditAppMemoConfig.sections.length - 1));
+      }
     }
   };
 

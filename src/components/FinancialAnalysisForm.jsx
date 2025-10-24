@@ -165,13 +165,51 @@ const FinancialAnalysisForm = () => {
     setActiveSection(0);
   };
 
+  const completeFormAndRedirect = async () => {
+    const clientId = localStorage.getItem('activeClientId');
+    const formId = localStorage.getItem('activeFormId_financial_analysis');
+    
+    if (!clientId || !formId) {
+      alert('❌ No active client or form found.');
+      return;
+    }
+
+    try {
+      // Mark form as completed
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          formData,
+          calculatedFields: calculatedValues,
+          currentStep: financialAnalysisConfig.sections.length,
+          totalSteps: financialAnalysisConfig.sections.length,
+          isCompleted: true
+        })
+      });
+
+      if (response.ok) {
+        alert('✓ Financial Analysis form completed! Redirecting to Expert Scorecard...');
+        // Redirect to next form
+        window.location.href = '/expert-scorecard';
+      } else {
+        alert('❌ Error completing form');
+      }
+    } catch (error) {
+      console.error('Complete error:', error);
+      alert('❌ Error completing form');
+    }
+  };
+
   const nextSection = () => {
     if (validateSection(activeSection)) {
       // Check if this is the last section
       if (activeSection === financialAnalysisConfig.sections.length - 1) {
-        // All sections complete, redirect to next form (Expert Scorecard)
-        alert('✓ Financial Analysis form completed! Moving to Expert Scorecard...');
-        window.location.href = '/expert-scorecard';
+        // All sections complete, mark as complete and redirect
+        completeFormAndRedirect();
       } else {
         // Move to next section within current form
         setActiveSection(prev => Math.min(prev + 1, financialAnalysisConfig.sections.length - 1));

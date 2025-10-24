@@ -54,13 +54,16 @@ const ExpertScorecardForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const completeFormAndRedirect = async () => {
+    const clientId = localStorage.getItem('activeClientId');
+    const formId = localStorage.getItem('activeFormId_expert_scorecard');
     
-    if (validateForm()) {
-      setIsSubmitted(true);
-      
-      // Prepare submission data
+    if (!clientId || !formId) {
+      alert('❌ No active client or form found.');
+      return;
+    }
+
+    try {
       const submissionData = {
         ...formData,
         totalScore,
@@ -68,11 +71,42 @@ const ExpertScorecardForm = () => {
         timestamp: new Date().toISOString(),
         assessmentType: 'Expert Scorecard'
       };
-      
-      console.log('Expert Scorecard Submission:', submissionData);
-      
-      // Here you would typically send to backend
-      alert(`Expert Scorecard completed!\nTotal Score: ${totalScore}\nRisk Category: ${riskCategory.name}`);
+
+      // Mark form as completed
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          formData: submissionData,
+          currentStep: 1,
+          totalSteps: 1,
+          isCompleted: true
+        })
+      });
+
+      if (response.ok) {
+        alert(`✓ Expert Scorecard completed!\nTotal Score: ${totalScore}\nRisk Category: ${riskCategory.name}\n\nRedirecting to Credit App Memo...`);
+        // Redirect to next form
+        window.location.href = '/credit-app-memo';
+      } else {
+        alert('❌ Error completing form');
+      }
+    } catch (error) {
+      console.error('Complete error:', error);
+      alert('❌ Error completing form');
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (validateForm()) {
+      setIsSubmitted(true);
+      // Complete form and redirect to next
+      completeFormAndRedirect();
     }
   };
 

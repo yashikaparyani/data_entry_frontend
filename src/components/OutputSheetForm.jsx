@@ -101,9 +101,54 @@ const OutputSheetForm = () => {
   };
 
   // Navigation functions
+  const completeFormAndRedirect = async () => {
+    const clientId = localStorage.getItem('activeClientId');
+    const formId = localStorage.getItem('activeFormId_output_sheet');
+    
+    if (!clientId || !formId) {
+      alert('❌ No active client or form found.');
+      return;
+    }
+
+    try {
+      // Mark form as completed
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          formData: { ...formData, ...calculatedFields },
+          currentStep: totalSteps,
+          totalSteps: totalSteps,
+          isCompleted: true
+        })
+      });
+
+      if (response.ok) {
+        alert('✓ All 6 forms completed! You can now view the complete submission on dashboard.');
+        // Redirect to dashboard
+        window.location.href = '/loan-officer/dashboard';
+      } else {
+        alert('❌ Error completing form');
+      }
+    } catch (error) {
+      console.error('Complete error:', error);
+      alert('❌ Error completing form');
+    }
+  };
+
   const handleNext = () => {
     if (validateCurrentStep()) {
-      setCurrentStep(prev => Math.min(prev + 1, totalSteps));
+      // Check if this is the last step
+      if (currentStep === totalSteps) {
+        // All steps complete, mark as complete and redirect
+        completeFormAndRedirect();
+      } else {
+        // Move to next step within current form
+        setCurrentStep(prev => Math.min(prev + 1, totalSteps));
+      }
     }
   };
 

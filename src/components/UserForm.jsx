@@ -238,6 +238,41 @@ const UserForm = () => {
     }
   };
 
+  const completeFormAndRedirect = async () => {
+    const clientId = localStorage.getItem('activeClientId');
+    const formId = activeFormId || formId;
+    
+    if (!clientId || !formId) {
+      alert('❌ No active client or form found.');
+      return;
+    }
+
+    try {
+      // Mark form as completed
+      const response = await axios.put(`/api/loan-officer/forms/${formId}/save`, {
+        formData,
+        currentStep: totalSteps,
+        totalSteps: totalSteps,
+        completionPercentage: 100,
+        isCompleted: true
+      }, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      });
+
+      if (response.status === 200) {
+        setMessage('✓ Standard Form completed! Redirecting to Bank Analysis...');
+        setTimeout(() => {
+          window.location.href = '/bank-analysis';
+        }, 1500);
+      } else {
+        setMessage('❌ Error completing form');
+      }
+    } catch (error) {
+      console.error('Complete error:', error);
+      setMessage('❌ Error completing form');
+    }
+  };
+
   const nextStep = () => {
     const missingFields = validateCurrentStep();
     
@@ -250,6 +285,9 @@ const UserForm = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
       saveFormData();
+    } else if (currentStep === totalSteps) {
+      // Last step completed, mark as complete and redirect
+      completeFormAndRedirect();
     }
   };
 
