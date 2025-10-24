@@ -284,6 +284,46 @@ const UserForm = () => {
             </div>
           )}
           
+          {/* Form Tabs - Switch between different forms */}
+          <div className="form-tabs">
+            <button 
+              className="form-tab active"
+              onClick={() => navigate('/form')}
+            >
+              📝 Customer Details
+            </button>
+            <button 
+              className="form-tab"
+              onClick={() => navigate('/bank-analysis')}
+            >
+              🏦 Bank Analysis
+            </button>
+            <button 
+              className="form-tab"
+              onClick={() => navigate('/financial-analysis')}
+            >
+              📊 Financial Analysis
+            </button>
+            <button 
+              className="form-tab"
+              onClick={() => navigate('/expert-scorecard')}
+            >
+              ⭐ Expert Scorecard
+            </button>
+            <button 
+              className="form-tab"
+              onClick={() => navigate('/credit-app-memo')}
+            >
+              📄 Credit App Memo
+            </button>
+            <button 
+              className="form-tab"
+              onClick={() => navigate('/output-sheet')}
+            >
+              📋 Output Sheet
+            </button>
+          </div>
+          
           {/* Compact Step Indicators - Single Row */}
           <div className="compact-step-indicators">
             {formConfig.steps.map((step, index) => (
