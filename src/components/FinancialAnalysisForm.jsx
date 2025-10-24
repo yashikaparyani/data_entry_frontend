@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { financialAnalysisConfig, financialCalculations } from '../data/financialAnalysisConfig';
-import { FORM_SEQUENCE, getNextForm, isFormLocked } from '../config/formSequence';
+import { FORM_SEQUENCE, isFormLocked } from '../config/formSequence';
 import './FinancialAnalysisForm.css';
 
 const FinancialAnalysisForm = () => {
