@@ -2,24 +2,90 @@ import React, { useState, useEffect } from 'react';
 import { bankAnalysisConfig } from '../data/bankAnalysisConfig';
 import './BankAnalysisForm.css';
 import FormTabs from './FormTabs';
+import axios from 'axios';
 
 const BankAnalysisForm = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [formData, setFormData] = useState({});
   const [calculatedValues, setCalculatedValues] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
+  const [clientId, setClientId] = useState(null);
+  const [activeFormId, setActiveFormId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Initialize form data
+  // Initialize form - check for existing form or create new one
   useEffect(() => {
-    const initialData = {};
-    bankAnalysisConfig.sections.forEach(section => {
-      section.fields.forEach(field => {
-        if (field.type !== 'calculated') {
-          initialData[field.id] = '';
+    const initializeForm = async () => {
+      const storedClientId = localStorage.getItem('activeClientId');
+      
+      if (!storedClientId) {
+        alert('❌ No active client found. Please start from the Standard Form.');
+        window.location.href = '/loan-officer/dashboard';
+        return;
+      }
+      
+      setClientId(storedClientId);
+      
+      try {
+        // Check if form already exists for this client
+        const existingFormId = localStorage.getItem('activeFormId_bank_analysis');
+        
+        if (existingFormId) {
+          // Load existing form data
+          const response = await axios.get(`/api/loan-officer/forms/${existingFormId}`, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+          });
+          
+          const formDataFromServer = response.data.form.formData || {};
+          setFormData(formDataFromServer);
+          setActiveFormId(existingFormId);
+        } else {
+          // Create new form for this client (or get existing)
+          const formResponse = await axios.post(`/api/loan-officer/clients/${storedClientId}/forms`, {
+            formType: 'bank_analysis'
+          }, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+          });
+          
+          const newFormId = formResponse.data.form._id;
+          const existingFormData = formResponse.data.form.formData || {};
+          
+          setActiveFormId(newFormId);
+          localStorage.setItem('activeFormId_bank_analysis', newFormId);
+          
+          // If form has existing data, use it; otherwise initialize empty
+          if (Object.keys(existingFormData).length > 0) {
+            setFormData(existingFormData);
+          } else {
+            // Initialize empty form data
+            const initialData = {};
+            bankAnalysisConfig.sections.forEach(section => {
+              section.fields.forEach(field => {
+                if (field.type !== 'calculated') {
+                  initialData[field.id] = '';
+                }
+              });
+            });
+            setFormData(initialData);
+          }
         }
-      });
-    });
-    setFormData(initialData);
+      } catch (error) {
+        console.error('Error initializing form:', error);
+        console.error('Error details:', error.response?.data);
+        
+        const errorMessage = error.response?.data?.message || error.message || 'Unknown error';
+        alert(`❌ Error loading form: ${errorMessage}\n\nPlease try again or contact support.`);
+        
+        // Redirect back to dashboard on error
+        setTimeout(() => {
+          window.location.href = '/loan-officer/dashboard';
+        }, 2000);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    initializeForm();
   }, []);
 
   // Real-time calculations
@@ -196,32 +262,25 @@ const BankAnalysisForm = () => {
   };
 
   const completeFormAndRedirect = async () => {
-    const clientId = localStorage.getItem('activeClientId');
-    const formId = localStorage.getItem('activeFormId_bank_analysis');
-    
-    if (!clientId || !formId) {
+    if (!clientId || !activeFormId) {
       alert('❌ No active client or form found.');
       return;
     }
 
     try {
       // Mark form as completed
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          formData,
-          calculatedFields: calculatedValues,
-          currentStep: bankAnalysisConfig.sections.length,
-          totalSteps: bankAnalysisConfig.sections.length,
-          isCompleted: true
-        })
+      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
+        formData,
+        calculatedFields: calculatedValues,
+        currentStep: bankAnalysisConfig.sections.length,
+        totalSteps: bankAnalysisConfig.sections.length,
+        completionPercentage: 100,
+        isCompleted: true
+      }, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert('✓ Bank Analysis form completed! Redirecting to Financial Analysis...');
         // Redirect to next form
         window.location.href = '/financial-analysis';
@@ -413,64 +472,24 @@ const BankAnalysisForm = () => {
 
   const currentSectionData = bankAnalysisConfig.sections[currentSection];
 
+  if (loading) {
+    return (
+      <div className="bank-analysis-form">
+        <div className="form-header">
+          <h1 className="form-title">Loading...</h1>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bank-analysis-form">
+      {/* Form Tabs Navigation (centralized with lock functionality) */}
+      <FormTabs currentFormType="bank_analysis" />
+      
       <div className="form-header">
         <h1 className="form-title">{bankAnalysisConfig.title}</h1>
         <p className="form-description">{bankAnalysisConfig.description}</p>
-      </div>
-
-      {/* Form Tabs */}
-      <div className="form-tabs-container">
-        <div className="form-tabs">
-          <button 
-            className="form-tab"
-            onClick={() => window.location.href = '/form'}
-            type="button"
-          >
-            <span className="tab-icon">📝</span>
-            <span className="tab-text">Standard Form</span>
-          </button>
-          <button 
-            className="form-tab active"
-            type="button"
-          >
-            <span className="tab-icon">🏦</span>
-            <span className="tab-text">Bank Analysis</span>
-          </button>
-          <button 
-            className="form-tab"
-            onClick={() => window.location.href = '/financial-analysis'}
-            type="button"
-          >
-            <span className="tab-icon">📊</span>
-            <span className="tab-text">Financial Analysis</span>
-          </button>
-          <button 
-            className="form-tab"
-            onClick={() => window.location.href = '/expert-scorecard'}
-            type="button"
-          >
-            <span className="tab-icon">⭐</span>
-            <span className="tab-text">Expert Scorecard</span>
-          </button>
-          <button 
-            className="form-tab"
-            onClick={() => window.location.href = '/credit-app-memo'}
-            type="button"
-          >
-            <span className="tab-icon">📄</span>
-            <span className="tab-text">Credit Memo</span>
-          </button>
-          <button 
-            className="form-tab"
-            onClick={() => window.location.href = '/output-analysis'}
-            type="button"
-          >
-            <span className="tab-icon">📋</span>
-            <span className="tab-text">Output Sheet</span>
-          </button>
-        </div>
       </div>
 
       <div className="form-header">        

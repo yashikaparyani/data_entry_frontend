@@ -3,14 +3,82 @@ import { outputFormSections, calculationFormulas } from '../data/outputFormConfi
 import FormNavigation from './FormNavigation';
 import FormTabs from './FormTabs';
 import './OutputSheetForm.css';
+import axios from 'axios';
 
 const OutputSheetForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
   const [calculatedFields, setCalculatedFields] = useState({});
+  const [clientId, setClientId] = useState(null);
+  const [activeFormId, setActiveFormId] = useState(null);
+  const [loading, setLoading] = useState(true);
   
   const totalSteps = outputFormSections.length;
+
+  // Initialize form - check for existing form or create new one
+  useEffect(() => {
+    const initializeForm = async () => {
+      const storedClientId = localStorage.getItem('activeClientId');
+      
+      if (!storedClientId) {
+        alert('❌ No active client found. Please start from the Standard Form.');
+        window.location.href = '/loan-officer/dashboard';
+        return;
+      }
+      
+      setClientId(storedClientId);
+      
+      try {
+        // Check if form already exists for this client
+        const existingFormId = localStorage.getItem('activeFormId_output_sheet');
+        
+        if (existingFormId) {
+          // Load existing form data
+          const response = await axios.get(`/api/loan-officer/forms/${existingFormId}`, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+          });
+          
+          const formDataFromServer = response.data.form.formData || {};
+          setFormData(formDataFromServer);
+          setActiveFormId(existingFormId);
+        } else {
+          // Create new form for this client (or get existing)
+          const formResponse = await axios.post(`/api/loan-officer/clients/${storedClientId}/forms`, {
+            formType: 'output_sheet'
+          }, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+          });
+          
+          const newFormId = formResponse.data.form._id;
+          const existingFormData = formResponse.data.form.formData || {};
+          
+          setActiveFormId(newFormId);
+          localStorage.setItem('activeFormId_output_sheet', newFormId);
+          
+          // Use existing data if available
+          if (Object.keys(existingFormData).length > 0) {
+            setFormData(existingFormData);
+          }
+        }
+      } catch (error) {
+        console.error('Error initializing form:', error);
+        console.error('Error details:', error.response?.data);
+        
+        const errorMessage = error.response?.data?.message || error.message || 'Unknown error';
+        alert(`❌ Error loading form: ${errorMessage}\n\nPlease try again or contact support.`);
+        
+        // Redirect back to dashboard on error
+        setTimeout(() => {
+          window.location.href = '/loan-officer/dashboard';
+        }, 2000);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    initializeForm();
+  }, []);
 
   // Auto-calculate fields when relevant data changes
   useEffect(() => {
@@ -101,31 +169,24 @@ const OutputSheetForm = () => {
 
   // Navigation functions
   const completeFormAndRedirect = async () => {
-    const clientId = localStorage.getItem('activeClientId');
-    const formId = localStorage.getItem('activeFormId_output_sheet');
-    
-    if (!clientId || !formId) {
+    if (!clientId || !activeFormId) {
       alert('❌ No active client or form found.');
       return;
     }
 
     try {
       // Mark form as completed
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          formData: { ...formData, ...calculatedFields },
-          currentStep: totalSteps,
-          totalSteps: totalSteps,
-          isCompleted: true
-        })
+      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
+        formData: { ...formData, ...calculatedFields },
+        currentStep: totalSteps,
+        totalSteps: totalSteps,
+        completionPercentage: 100,
+        isCompleted: true
+      }, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert('✓ All 6 forms completed! You can now view the complete submission on dashboard.');
         // Redirect to dashboard
         window.location.href = '/loan-officer/dashboard';
@@ -220,6 +281,19 @@ const OutputSheetForm = () => {
 
   // Get current section
   const currentSection = outputFormSections[currentStep - 1];
+
+  if (loading) {
+    return (
+      <>
+        <FormNavigation />
+        <div className="output-sheet-form">
+          <div className="form-header">
+            <h2>Loading...</h2>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

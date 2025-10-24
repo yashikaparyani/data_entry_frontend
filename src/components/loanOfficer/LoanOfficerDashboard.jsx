@@ -64,14 +64,48 @@ const LoanOfficerDashboard = () => {
     navigate('/form'); // This will be the standard form
   };
 
-  const handleResumeForm = (clientId, form) => {
-    // Store active client and form IDs in localStorage
-    localStorage.setItem('activeClientId', clientId);
-    localStorage.setItem(`activeFormId_${form.formType}`, form._id);
+  const getNextIncompleteForm = (client) => {
+    // Form sequence order
+    const formSequence = [
+      'user_form',
+      'bank_analysis',
+      'financial_analysis',
+      'expert_scorecard',
+      'credit_app_memo',
+      'output_sheet'
+    ];
     
-    // Navigate to appropriate form based on formType
+    // Find first form that is not completed
+    for (const formType of formSequence) {
+      const existingForm = client.forms?.find(f => f.formType === formType);
+      
+      // If form doesn't exist or is not completed, return this form type
+      if (!existingForm || existingForm.status !== 'completed') {
+        return {
+          formType,
+          form: existingForm, // May be undefined if not created yet
+          shouldCreate: !existingForm // True if we need to create this form
+        };
+      }
+    }
+    
+    return null; // All forms completed
+  };
+
+  const handleResumeWork = (client) => {
+    const nextForm = getNextIncompleteForm(client);
+    
+    if (!nextForm) {
+      alert('All forms are completed for this client!');
+      return;
+    }
+    
+    // Store active client ID
+    localStorage.setItem('activeClientId', client._id);
+    
+    // Form routes mapping
     const formRoutes = {
-      'user_form': `/form/${form._id}`,
+      'user_form': '/form',
       'bank_analysis': '/bank-analysis',
       'financial_analysis': '/financial-analysis',
       'expert_scorecard': '/expert-scorecard',
@@ -79,8 +113,24 @@ const LoanOfficerDashboard = () => {
       'output_sheet': '/output-analysis'
     };
     
-    const route = formRoutes[form.formType] || `/form/${form._id}`;
-    navigate(route);
+    // If form exists, store its ID
+    if (nextForm.form) {
+      localStorage.setItem(`activeFormId_${nextForm.formType}`, nextForm.form._id);
+      
+      // For user_form, include form ID in URL
+      if (nextForm.formType === 'user_form') {
+        navigate(`/form/${nextForm.form._id}`);
+        return;
+      }
+    }
+    
+    // Navigate to the form route
+    const route = formRoutes[nextForm.formType];
+    if (route) {
+      navigate(route);
+    } else {
+      alert('Unknown form type');
+    }
   };
 
   const handleViewClient = () => {
@@ -248,14 +298,9 @@ const LoanOfficerDashboard = () => {
                           
                           {(formStatus.status === 'Incomplete' || formStatus.status === 'Partial Complete') && (
                             <button
-                              onClick={() => {
-                                const incompleteForm = client.forms?.find(f => f.status === 'in_progress' || f.status === 'draft');
-                                if (incompleteForm) {
-                                  handleResumeForm(client._id, incompleteForm);
-                                }
-                              }}
+                              onClick={() => handleResumeWork(client)}
                               className="btn-action btn-resume"
-                              title="Resume Form"
+                              title="Resume Work - Continue to next incomplete form"
                             >
                               ▶️ Resume
                             </button>

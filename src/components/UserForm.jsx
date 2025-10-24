@@ -239,17 +239,15 @@ const UserForm = () => {
   };
 
   const completeFormAndRedirect = async () => {
-    const clientId = localStorage.getItem('activeClientId');
-    const formId = activeFormId || formId;
-    
-    if (!clientId || !formId) {
+    // Use state variables instead of localStorage
+    if (!clientId || !activeFormId) {
       alert('❌ No active client or form found.');
       return;
     }
 
     try {
       // Mark form as completed
-      const response = await axios.put(`/api/loan-officer/forms/${formId}/save`, {
+      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
         formData,
         currentStep: totalSteps,
         totalSteps: totalSteps,
@@ -260,6 +258,9 @@ const UserForm = () => {
       });
 
       if (response.status === 200) {
+        // Store clientId in localStorage for next form
+        localStorage.setItem('activeClientId', clientId);
+        
         setMessage('✓ Standard Form completed! Redirecting to Bank Analysis...');
         setTimeout(() => {
           window.location.href = '/bank-analysis';

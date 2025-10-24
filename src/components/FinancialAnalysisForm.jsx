@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { financialAnalysisConfig, financialCalculations } from '../data/financialAnalysisConfig';
 import FormTabs from './FormTabs';
 import './FinancialAnalysisForm.css';
+import axios from 'axios';
 
 const FinancialAnalysisForm = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,71 @@ const FinancialAnalysisForm = () => {
   const [errors, setErrors] = useState({});
   const [activeSection, setActiveSection] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [clientId, setClientId] = useState(null);
+  const [activeFormId, setActiveFormId] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Initialize form - check for existing form or create new one
+  useEffect(() => {
+    const initializeForm = async () => {
+      const storedClientId = localStorage.getItem('activeClientId');
+      
+      if (!storedClientId) {
+        alert('❌ No active client found. Please start from the Standard Form.');
+        window.location.href = '/loan-officer/dashboard';
+        return;
+      }
+      
+      setClientId(storedClientId);
+      
+      try {
+        // Check if form already exists for this client
+        const existingFormId = localStorage.getItem('activeFormId_financial_analysis');
+        
+        if (existingFormId) {
+          // Load existing form data
+          const response = await axios.get(`/api/loan-officer/forms/${existingFormId}`, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+          });
+          
+          const formDataFromServer = response.data.form.formData || { loan_amount: 50000 };
+          setFormData(formDataFromServer);
+          setActiveFormId(existingFormId);
+        } else {
+          // Create new form for this client (or get existing)
+          const formResponse = await axios.post(`/api/loan-officer/clients/${storedClientId}/forms`, {
+            formType: 'financial_analysis'
+          }, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+          });
+          
+          const newFormId = formResponse.data.form._id;
+          const existingFormData = formResponse.data.form.formData || { loan_amount: 50000 };
+          
+          setActiveFormId(newFormId);
+          localStorage.setItem('activeFormId_financial_analysis', newFormId);
+          
+          // Use existing data or default
+          setFormData(existingFormData);
+        }
+      } catch (error) {
+        console.error('Error initializing form:', error);
+        console.error('Error details:', error.response?.data);
+        
+        const errorMessage = error.response?.data?.message || error.message || 'Unknown error';
+        alert(`❌ Error loading form: ${errorMessage}\n\nPlease try again or contact support.`);
+        
+        // Redirect back to dashboard on error
+        setTimeout(() => {
+          window.location.href = '/loan-officer/dashboard';
+        }, 2000);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    initializeForm();
+  }, []);
 
   // Calculate all financial metrics whenever form data changes
   useEffect(() => {
@@ -166,32 +232,25 @@ const FinancialAnalysisForm = () => {
   };
 
   const completeFormAndRedirect = async () => {
-    const clientId = localStorage.getItem('activeClientId');
-    const formId = localStorage.getItem('activeFormId_financial_analysis');
-    
-    if (!clientId || !formId) {
+    if (!clientId || !activeFormId) {
       alert('❌ No active client or form found.');
       return;
     }
 
     try {
       // Mark form as completed
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          formData,
-          calculatedFields: calculatedValues,
-          currentStep: financialAnalysisConfig.sections.length,
-          totalSteps: financialAnalysisConfig.sections.length,
-          isCompleted: true
-        })
+      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
+        formData,
+        calculatedFields: calculatedValues,
+        currentStep: financialAnalysisConfig.sections.length,
+        totalSteps: financialAnalysisConfig.sections.length,
+        completionPercentage: 100,
+        isCompleted: true
+      }, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert('✓ Financial Analysis form completed! Redirecting to Expert Scorecard...');
         // Redirect to next form
         window.location.href = '/expert-scorecard';
@@ -409,6 +468,16 @@ const FinancialAnalysisForm = () => {
   );
 
   const currentSection = financialAnalysisConfig.sections[activeSection];
+
+  if (loading) {
+    return (
+      <div className="financial-analysis-container">
+        <div className="form-header">
+          <h1>Loading...</h1>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="financial-analysis-container">

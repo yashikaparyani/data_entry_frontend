@@ -7,6 +7,7 @@ import {
 } from '../data/expertScorecardConfig';
 import './ExpertScorecardForm.css';
 import FormTabs from './FormTabs';
+import axios from 'axios';
 
 const ExpertScorecardForm = () => {
   const [formData, setFormData] = useState({});
@@ -14,6 +15,73 @@ const ExpertScorecardForm = () => {
   const [riskCategory, setRiskCategory] = useState(null);
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [clientId, setClientId] = useState(null);
+  const [activeFormId, setActiveFormId] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Initialize form - check for existing form or create new one
+  useEffect(() => {
+    const initializeForm = async () => {
+      const storedClientId = localStorage.getItem('activeClientId');
+      
+      if (!storedClientId) {
+        alert('❌ No active client found. Please start from the Standard Form.');
+        window.location.href = '/loan-officer/dashboard';
+        return;
+      }
+      
+      setClientId(storedClientId);
+      
+      try {
+        // Check if form already exists for this client
+        const existingFormId = localStorage.getItem('activeFormId_expert_scorecard');
+        
+        if (existingFormId) {
+          // Load existing form data
+          const response = await axios.get(`/api/loan-officer/forms/${existingFormId}`, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+          });
+          
+          const formDataFromServer = response.data.form.formData || {};
+          setFormData(formDataFromServer);
+          setActiveFormId(existingFormId);
+        } else {
+          // Create new form for this client (or get existing)
+          const formResponse = await axios.post(`/api/loan-officer/clients/${storedClientId}/forms`, {
+            formType: 'expert_scorecard'
+          }, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+          });
+          
+          const newFormId = formResponse.data.form._id;
+          const existingFormData = formResponse.data.form.formData || {};
+          
+          setActiveFormId(newFormId);
+          localStorage.setItem('activeFormId_expert_scorecard', newFormId);
+          
+          // Use existing data if available
+          if (Object.keys(existingFormData).length > 0) {
+            setFormData(existingFormData);
+          }
+        }
+      } catch (error) {
+        console.error('Error initializing form:', error);
+        console.error('Error details:', error.response?.data);
+        
+        const errorMessage = error.response?.data?.message || error.message || 'Unknown error';
+        alert(`❌ Error loading form: ${errorMessage}\n\nPlease try again or contact support.`);
+        
+        // Redirect back to dashboard on error
+        setTimeout(() => {
+          window.location.href = '/loan-officer/dashboard';
+        }, 2000);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    initializeForm();
+  }, []);
 
   // Get categorized parameters
   const { qualitative, quantitative, qualitativeWeight, quantitativeWeight } = getParametersByCategory();
@@ -55,10 +123,7 @@ const ExpertScorecardForm = () => {
   };
 
   const completeFormAndRedirect = async () => {
-    const clientId = localStorage.getItem('activeClientId');
-    const formId = localStorage.getItem('activeFormId_expert_scorecard');
-    
-    if (!clientId || !formId) {
+    if (!clientId || !activeFormId) {
       alert('❌ No active client or form found.');
       return;
     }
@@ -73,21 +138,17 @@ const ExpertScorecardForm = () => {
       };
 
       // Mark form as completed
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          formData: submissionData,
-          currentStep: 1,
-          totalSteps: 1,
-          isCompleted: true
-        })
+      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
+        formData: submissionData,
+        currentStep: 1,
+        totalSteps: 1,
+        completionPercentage: 100,
+        isCompleted: true
+      }, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert(`✓ Expert Scorecard completed!\nTotal Score: ${totalScore}\nRisk Category: ${riskCategory.name}\n\nRedirecting to Credit App Memo...`);
         // Redirect to next form
         window.location.href = '/credit-app-memo';
@@ -157,6 +218,16 @@ const ExpertScorecardForm = () => {
       ))}
     </div>
   );
+
+  if (loading) {
+    return (
+      <div className="expert-scorecard-container">
+        <div className="scorecard-header">
+          <h1>Loading...</h1>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="expert-scorecard-container">

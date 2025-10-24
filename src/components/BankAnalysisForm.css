@@ -9,7 +9,7 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: #f5f7fa;
   min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -17,27 +17,22 @@
 /* Form Header */
 .form-header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
   background: white;
   padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .form-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #2c3e50;
-  margin: 0 0 1rem 0;
-  background: linear-gradient(135deg, var(--samvit-primary) 0%, var(--samvit-primary-dark) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin: 0 0 0.5rem 0;
 }
 
 .form-description {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #5a6c7d;
   margin: 0;
   line-height: 1.6;
@@ -48,9 +43,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  margin-top: 2rem;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
   flex-wrap: wrap;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
 }
 
 .progress-step {
@@ -59,17 +57,17 @@
   align-items: center;
   gap: 0.5rem;
   position: relative;
-  min-width: 120px;
+  min-width: 100px;
 }
 
 .progress-step:not(:last-child)::after {
   content: '';
   position: absolute;
   top: 15px;
-  left: calc(100% + 1rem);
-  width: 2rem;
+  left: calc(100% + 0.75rem);
+  width: 1.5rem;
   height: 2px;
-  background: #e1e8ed;
+  background: #dee2e6;
   z-index: 1;
 }
 
@@ -78,11 +76,11 @@
 }
 
 .step-number {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: #e1e8ed;
-  color: #7f8c8d;
+  background: #e9ecef;
+  color: #495057;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,7 +94,8 @@
 .progress-step.active .step-number {
   background: #3498db;
   color: white;
-  transform: scale(1.1);
+  transform: scale(1.15);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
 }
 
 .progress-step.completed .step-number {
@@ -105,8 +104,8 @@
 }
 
 .step-label {
-  font-size: 0.85rem;
-  color: #7f8c8d;
+  font-size: 0.8rem;
+  color: #6c757d;
   font-weight: 500;
   text-align: center;
 }
@@ -123,32 +122,33 @@
 /* Form Content */
 .form-content {
   background: white;
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Section Container */
 .section-container {
-  padding: 2.5rem;
+  padding: 2rem;
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
 }
 
 .section-title {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 600;
   color: #2c3e50;
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.5rem 0;
 }
 
 .section-description {
-  font-size: 1rem;
-  color: #5a6c7d;
+  font-size: 0.95rem;
+  color: #6c757d;
   margin: 0;
   line-height: 1.5;
 }
@@ -230,27 +230,28 @@
 
 /* Calculated Fields */
 .calculated-field {
-  background: linear-gradient(135deg, var(--samvit-primary) 0%, var(--samvit-primary-dark) 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  padding: 1.25rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
 }
 
 .calculated-label {
   color: white !important;
-  font-size: 1rem;
-  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
 }
 
 .calculated-value {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
   text-align: center;
-  padding: 0.5rem;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  backdrop-filter: blur(10px);
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  color: white;
 }
 
 /* Balance Grid */
@@ -290,11 +291,12 @@
 }
 
 .header-cell {
-  background: linear-gradient(135deg, var(--samvit-primary) 0%, var(--samvit-primary-dark) 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   text-align: center;
+  padding: 0.75rem;
 }
 
 .date-cell {
@@ -415,21 +417,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 15px;
-  padding: 2rem 2.5rem;
-  background: #f8f9fa;
-  border-top: 1px solid #e9ecef;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: white;
+  border-top: 2px solid #e9ecef;
 }
 
 .nav-button {
-  padding: 0.875rem 2rem;
+  padding: 0.75rem 1.75rem;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 140px;
+  min-width: 130px;
 }
 
 .prev-button {
@@ -440,55 +442,57 @@
 .prev-button:hover:not(:disabled) {
   background: #5a6268;
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(108, 117, 125, 0.2);
 }
 
 .prev-button:disabled {
   background: #e9ecef;
-  color: #6c757d;
+  color: #adb5bd;
   cursor: not-allowed;
 }
 
 .save-button {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: #10b981;
   color: white;
 }
 
 .save-button:hover {
-  background: linear-gradient(135deg, #059669, #047857);
+  background: #059669;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
 }
 
 .next-button {
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  background: #007bff;
   color: white;
 }
 
 .next-button:hover {
+  background: #0056b3;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
 }
 
 .submit-button {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  background: #28a745;
   color: white;
 }
 
 .submit-button:hover {
+  background: #218838;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
 }
 
 .section-info {
   text-align: center;
   font-weight: 600;
   color: #495057;
-  font-size: 0.95rem;
-  margin-top: 10px;
-  padding: 10px;
-  background: white;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
   border-radius: 6px;
-  border: 1px solid #e9ecef;
 }
 
 /* Calculation Summary */

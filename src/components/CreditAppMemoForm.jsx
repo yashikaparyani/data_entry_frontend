@@ -2,24 +2,90 @@ import React, { useState, useEffect } from 'react';
 import { creditAppMemoConfig } from '../data/creditAppMemoConfig';
 import './CreditAppMemoForm.css';
 import FormTabs from './FormTabs';
+import axios from 'axios';
 
 const CreditAppMemoForm = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [formData, setFormData] = useState({});
   const [calculatedValues, setCalculatedValues] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
+  const [clientId, setClientId] = useState(null);
+  const [activeFormId, setActiveFormId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Initialize form data
+  // Initialize form - check for existing form or create new one
   useEffect(() => {
-    const initialData = {};
-    creditAppMemoConfig.sections.forEach(section => {
-      section.fields.forEach(field => {
-        if (field.type !== 'calculated') {
-          initialData[field.id] = '';
+    const initializeForm = async () => {
+      const storedClientId = localStorage.getItem('activeClientId');
+      
+      if (!storedClientId) {
+        alert('❌ No active client found. Please start from the Standard Form.');
+        window.location.href = '/loan-officer/dashboard';
+        return;
+      }
+      
+      setClientId(storedClientId);
+      
+      try {
+        // Check if form already exists for this client
+        const existingFormId = localStorage.getItem('activeFormId_credit_app_memo');
+        
+        if (existingFormId) {
+          // Load existing form data
+          const response = await axios.get(`/api/loan-officer/forms/${existingFormId}`, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+          });
+          
+          const formDataFromServer = response.data.form.formData || {};
+          setFormData(formDataFromServer);
+          setActiveFormId(existingFormId);
+        } else {
+          // Create new form for this client (or get existing)
+          const formResponse = await axios.post(`/api/loan-officer/clients/${storedClientId}/forms`, {
+            formType: 'credit_app_memo'
+          }, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+          });
+          
+          const newFormId = formResponse.data.form._id;
+          const existingFormData = formResponse.data.form.formData || {};
+          
+          setActiveFormId(newFormId);
+          localStorage.setItem('activeFormId_credit_app_memo', newFormId);
+          
+          // If form has existing data, use it; otherwise initialize empty
+          if (Object.keys(existingFormData).length > 0) {
+            setFormData(existingFormData);
+          } else {
+            // Initialize empty form data
+            const initialData = {};
+            creditAppMemoConfig.sections.forEach(section => {
+              section.fields.forEach(field => {
+                if (field.type !== 'calculated') {
+                  initialData[field.id] = '';
+                }
+              });
+            });
+            setFormData(initialData);
+          }
         }
-      });
-    });
-    setFormData(initialData);
+      } catch (error) {
+        console.error('Error initializing form:', error);
+        console.error('Error details:', error.response?.data);
+        
+        const errorMessage = error.response?.data?.message || error.message || 'Unknown error';
+        alert(`❌ Error loading form: ${errorMessage}\n\nPlease try again or contact support.`);
+        
+        // Redirect back to dashboard on error
+        setTimeout(() => {
+          window.location.href = '/loan-officer/dashboard';
+        }, 2000);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    initializeForm();
   }, []);
 
   // Real-time calculations
@@ -72,32 +138,25 @@ const CreditAppMemoForm = () => {
   };
 
   const completeFormAndRedirect = async () => {
-    const clientId = localStorage.getItem('activeClientId');
-    const formId = localStorage.getItem('activeFormId_credit_app_memo');
-    
-    if (!clientId || !formId) {
+    if (!clientId || !activeFormId) {
       alert('❌ No active client or form found.');
       return;
     }
 
     try {
       // Mark form as completed
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          formData,
-          calculatedValues,
-          currentStep: creditAppMemoConfig.sections.length,
-          totalSteps: creditAppMemoConfig.sections.length,
-          isCompleted: true
-        })
+      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
+        formData,
+        calculatedValues,
+        currentStep: creditAppMemoConfig.sections.length,
+        totalSteps: creditAppMemoConfig.sections.length,
+        completionPercentage: 100,
+        isCompleted: true
+      }, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert('✓ Credit App Memo completed! Redirecting to Output Sheet...');
         // Redirect to next form
         window.location.href = '/output-analysis';
@@ -263,6 +322,16 @@ const CreditAppMemoForm = () => {
       </div>
     );
   };
+
+  if (loading) {
+    return (
+      <div className="credit-app-memo-form">
+        <div className="form-header">
+          <h1 className="form-title">Loading...</h1>
+        </div>
+      </div>
+    );
+  }
 
   const currentSectionData = creditAppMemoConfig.sections[currentSection];
 
