@@ -474,23 +474,13 @@ const FinancialAnalysisForm = () => {
             💾 Save Progress
           </button>
           
-          {activeSection < financialAnalysisConfig.sections.length - 1 ? (
-            <button
-              type="button"
-              onClick={nextSection}
-              className="btn-primary"
-            >
-              Next →
-            </button>
-          ) : (
-            <button
-              type="submit"
-              className="btn-submit"
-              disabled={isSubmitted}
-            >
-              {isSubmitted ? 'Analysis Submitted ✓' : 'Submit Final'}
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={nextSection}
+            className="btn-primary"
+          >
+            Next →
+          </button>
         </div>
         
         <div className="section-counter-info">

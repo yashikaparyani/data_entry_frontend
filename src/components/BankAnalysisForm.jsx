@@ -412,7 +412,6 @@ const BankAnalysisForm = () => {
   };
 
   const currentSectionData = bankAnalysisConfig.sections[currentSection];
-  const isLastSection = currentSection === bankAnalysisConfig.sections.length - 1;
 
   return (
     <div className="bank-analysis-form">
@@ -526,19 +525,13 @@ const BankAnalysisForm = () => {
             💾 Save Progress
           </button>
           
-          {!isLastSection ? (
-            <button
-              type="button"
-              onClick={handleNextSection}
-              className="nav-button next-button"
-            >
-              Next →
-            </button>
-          ) : (
-            <button type="submit" className="nav-button submit-button">
-              Submit Final
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handleNextSection}
+            className="nav-button next-button"
+          >
+            Next →
+          </button>
         </div>
         
         <div className="section-info">

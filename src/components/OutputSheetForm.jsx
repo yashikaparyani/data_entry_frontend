@@ -8,7 +8,6 @@ const OutputSheetForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [calculatedFields, setCalculatedFields] = useState({});
   
   const totalSteps = outputFormSections.length;
@@ -158,41 +157,6 @@ const OutputSheetForm = () => {
 
   const handleStepClick = (step) => {
     setCurrentStep(step);
-  };
-
-  // Submit form
-  const handleSubmit = async () => {
-    if (!validateCurrentStep()) return;
-
-    setIsSubmitting(true);
-    
-    try {
-      const submitData = {
-        ...formData,
-        ...calculatedFields,
-        timestamp: new Date().toISOString(),
-        formType: 'output_sheet_analysis'
-      };
-
-      // API call would go here
-      console.log('Submitting Output Sheet Analysis:', submitData);
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      alert('Output Sheet Analysis submitted successfully!');
-      
-      // Reset form
-      setFormData({});
-      setCurrentStep(1);
-      setErrors({});
-      
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('Error submitting form. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
   };
 
   // Render form field
@@ -346,24 +310,13 @@ const OutputSheetForm = () => {
           <span>Step {currentStep} of {totalSteps}</span>
         </div>
 
-        {currentStep < totalSteps ? (
-          <button
-            type="button"
-            onClick={handleNext}
-            className="nav-button next-button"
-          >
-            Next →
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-            className="nav-button submit-button"
-          >
-            {isSubmitting ? 'Submitting...' : 'Submit Analysis'}
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={handleNext}
+          className="nav-button next-button"
+        >
+          Next →
+        </button>
       </div>
 
       {/* Form summary */}

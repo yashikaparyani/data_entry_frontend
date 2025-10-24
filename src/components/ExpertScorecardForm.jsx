@@ -279,9 +279,8 @@ const ExpertScorecardForm = () => {
           <button 
             type="submit" 
             className="btn-primary"
-            disabled={isSubmitted}
           >
-            {isSubmitted ? 'Assessment Submitted' : 'Submit Assessment'}
+            Next →
           </button>
         </div>
       </form>

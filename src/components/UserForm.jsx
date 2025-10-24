@@ -444,10 +444,9 @@ const UserForm = () => {
 
             <button 
               onClick={nextStep}
-              disabled={currentStep === totalSteps}
               className="nav-btn next-btn"
             >
-              {currentStep === totalSteps ? 'Last Step' : 'Next →'}
+              Next →
             </button>
           </div>
 

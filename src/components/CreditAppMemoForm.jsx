@@ -265,7 +265,6 @@ const CreditAppMemoForm = () => {
   };
 
   const currentSectionData = creditAppMemoConfig.sections[currentSection];
-  const isLastSection = currentSection === creditAppMemoConfig.sections.length - 1;
 
   // Separate calculated fields for display
   const inputFields = currentSectionData.fields.filter(field => field.type !== 'calculated');
@@ -332,19 +331,13 @@ const CreditAppMemoForm = () => {
             Previous
           </button>
           
-          {!isLastSection ? (
-            <button
-              type="button"
-              onClick={handleNextSection}
-              className="nav-button next-button"
-            >
-              Next Section
-            </button>
-          ) : (
-            <button type="submit" className="nav-button submit-button">
-              Submit Credit Application
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handleNextSection}
+            className="nav-button next-button"
+          >
+            Next →
+          </button>
         </div>
       </form>
 
