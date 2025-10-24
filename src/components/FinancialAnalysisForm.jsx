@@ -395,28 +395,6 @@ const FinancialAnalysisForm = () => {
         <div className="currency-indicator">Currency: {financialAnalysisConfig.currency}</div>
       </div>
 
-      {/* Progress Indicator */}
-      <div className="progress-container">
-        <div className="progress-bar">
-          <div 
-            className="progress-fill"
-            style={{ width: `${((activeSection + 1) / financialAnalysisConfig.sections.length) * 100}%` }}
-          ></div>
-        </div>
-        <div className="section-indicators">
-          {financialAnalysisConfig.sections.map((section, index) => (
-            <div
-              key={index}
-              className={`section-indicator ${index === activeSection ? 'active' : ''} ${index < activeSection ? 'completed' : ''}`}
-              onClick={() => setActiveSection(index)}
-            >
-              <div className="indicator-icon">{section.icon}</div>
-              <div className="indicator-label">{section.title}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
       <form onSubmit={handleSubmit} className="financial-form">
         {/* Current Section */}
         <div className="form-section active">
