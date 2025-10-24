@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { formConfig } from '../data/formConfig';
 import FormNavigation from './FormNavigation';
+import FormTabs from './FormTabs';
 import axios from 'axios';
 import './UserForm.css';
 
@@ -284,53 +285,8 @@ const UserForm = () => {
             </div>
           )}
           
-          {/* Form Tabs - Switch between different forms */}
-          <div className="form-tabs-container">
-            <div className="form-tabs">
-              <button 
-                className="form-tab active"
-                onClick={() => navigate('/form')}
-              >
-                <span className="tab-icon">📝</span>
-                <span className="tab-text">Standard Form</span>
-              </button>
-              <button 
-                className="form-tab"
-                onClick={() => navigate('/bank-analysis')}
-              >
-                <span className="tab-icon">🏦</span>
-                <span className="tab-text">Bank Analysis</span>
-              </button>
-              <button 
-                className="form-tab"
-                onClick={() => navigate('/financial-analysis')}
-              >
-                <span className="tab-icon">📊</span>
-                <span className="tab-text">Financial Analysis</span>
-              </button>
-              <button 
-                className="form-tab"
-                onClick={() => navigate('/expert-scorecard')}
-              >
-                <span className="tab-icon">⭐</span>
-                <span className="tab-text">Expert Scorecard</span>
-              </button>
-              <button 
-                className="form-tab"
-                onClick={() => navigate('/credit-app-memo')}
-              >
-                <span className="tab-icon">📄</span>
-                <span className="tab-text">Credit Memo</span>
-              </button>
-              <button 
-                className="form-tab"
-                onClick={() => navigate('/output-analysis')}
-              >
-                <span className="tab-icon">📋</span>
-                <span className="tab-text">Output Sheet</span>
-              </button>
-            </div>
-          </div>
+          {/* Form Tabs - centralized component */}
+          <FormTabs currentFormType={"user_form"} />
           
           {/* Compact Step Indicators - Single Row */}
           <div className="compact-step-indicators">

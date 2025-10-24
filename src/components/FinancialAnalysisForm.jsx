@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { financialAnalysisConfig, financialCalculations } from '../data/financialAnalysisConfig';
-import { FORM_SEQUENCE, isFormLocked } from '../config/formSequence';
+import FormTabs from './FormTabs';
 import './FinancialAnalysisForm.css';
 
 const FinancialAnalysisForm = () => {
@@ -11,32 +11,6 @@ const FinancialAnalysisForm = () => {
   const [errors, setErrors] = useState({});
   const [activeSection, setActiveSection] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [completedForms, setCompletedForms] = useState([]);
-
-  // Fetch completed forms on component mount
-  useEffect(() => {
-    const fetchCompletedForms = async () => {
-      const clientId = localStorage.getItem('activeClientId');
-      if (!clientId) return;
-
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/clients/${clientId}/completed-forms`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          setCompletedForms(data.completedForms || []);
-        }
-      } catch (error) {
-        console.error('Error fetching completed forms:', error);
-      }
-    };
-
-    fetchCompletedForms();
-  }, []);
 
   // Calculate all financial metrics whenever form data changes
   useEffect(() => {
@@ -400,37 +374,8 @@ const FinancialAnalysisForm = () => {
 
   return (
     <div className="financial-analysis-container">
-      {/* Form Tabs Navigation */}
-      <div className="form-tabs-container">
-        <div className="form-tabs">
-          {FORM_SEQUENCE.map((form) => {
-            const isLocked = isFormLocked(form.formType, completedForms);
-            const isActive = form.formType === 'financial_analysis';
-            const isCompleted = completedForms.includes(form.formType);
-            
-            return (
-              <button 
-                key={form.id}
-                type="button"
-                className={`form-tab ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''} ${isCompleted ? 'completed' : ''}`}
-                onClick={() => {
-                  if (!isLocked) {
-                    window.location.href = form.route;
-                  } else {
-                    alert(`🔒 ${form.name} is locked. Please complete the previous form first.`);
-                  }
-                }}
-                disabled={isLocked}
-                title={isLocked ? `Complete ${FORM_SEQUENCE[form.id - 2]?.name} first` : form.name}
-              >
-                <span className="tab-icon">{isLocked ? '�' : form.icon}</span>
-                <span className="tab-text">{form.name}</span>
-                {isCompleted && <span className="check-mark">✓</span>}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      {/* Form Tabs Navigation (centralized) */}
+      <FormTabs currentFormType="financial_analysis" />
 
       {/* Header */}
       <div className="form-header">

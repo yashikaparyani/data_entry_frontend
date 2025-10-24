@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { bankAnalysisConfig } from '../data/bankAnalysisConfig';
 import './BankAnalysisForm.css';
+import FormTabs from './FormTabs';
 
 const BankAnalysisForm = () => {
   const [currentSection, setCurrentSection] = useState(0);
@@ -80,7 +81,7 @@ const BankAnalysisForm = () => {
   const saveProgress = async () => {
     const clientId = localStorage.getItem('activeClientId');
     const formId = localStorage.getItem('activeFormId_bank_analysis');
-    
+
     if (!clientId || !formId) {
       alert('❌ No active client or form found. Please start from dashboard.');
       return;
@@ -112,58 +113,23 @@ const BankAnalysisForm = () => {
     }
   };
 
-  const handleNextSection = () => {
-    if (validateSection(currentSection)) {
-      setCurrentSection(prev => Math.min(prev + 1, bankAnalysisConfig.sections.length - 1));
-    }
-  };
+    const formatValue = (value, format) => {
+      if (value === null || value === undefined || isNaN(value)) return '0';
 
-  const handlePrevSection = () => {
-    setCurrentSection(prev => Math.max(prev - 1, 0));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Validate all sections
-    let isValid = true;
-    for (let i = 0; i < bankAnalysisConfig.sections.length; i++) {
-      if (!validateSection(i)) {
-        isValid = false;
-        setCurrentSection(i);
-        break;
+      switch (format) {
+        case 'currency':
+          return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD'
+          }).format(value);
+        case 'percentage':
+          return `${Number(value).toFixed(2)}%`;
+        case 'score':
+          return `${Number(value).toFixed(1)}/100`;
+        default:
+          return Number(value).toFixed(2);
       }
-    }
-    
-    if (isValid) {
-      const submissionData = {
-        ...formData,
-        calculatedValues,
-        submittedAt: new Date().toISOString()
-      };
-      
-      console.log('Bank Analysis Form Submitted:', submissionData);
-      alert('Bank Analysis form submitted successfully!');
-    }
-  };
-
-  const formatValue = (value, format) => {
-    if (value === null || value === undefined || isNaN(value)) return '0';
-    
-    switch (format) {
-      case 'currency':
-        return new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD'
-        }).format(value);
-      case 'percentage':
-        return `${Number(value).toFixed(2)}%`;
-      case 'score':
-        return `${Number(value).toFixed(1)}/100`;
-      default:
-        return Number(value).toFixed(2);
-    }
-  };
+    };
 
   const renderField = (field) => {
     const value = field.type === 'calculated' ? calculatedValues[field.id] : formData[field.id];
@@ -227,6 +193,40 @@ const BankAnalysisForm = () => {
         )}
       </div>
     );
+  };
+
+  const handleNextSection = () => {
+    if (validateSection(currentSection)) {
+      setCurrentSection(prev => Math.min(prev + 1, bankAnalysisConfig.sections.length - 1));
+    }
+  };
+
+  const handlePrevSection = () => {
+    setCurrentSection(prev => Math.max(prev - 1, 0));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Validate all sections
+    let isValid = true;
+    for (let i = 0; i < bankAnalysisConfig.sections.length; i++) {
+      if (!validateSection(i)) {
+        isValid = false;
+        setCurrentSection(i);
+        break;
+      }
+    }
+
+    if (isValid) {
+      const submissionData = {
+        ...formData,
+        calculatedValues,
+        submittedAt: new Date().toISOString()
+      };
+
+      console.log('Bank Analysis Form Submitted:', submissionData);
+      alert('Bank Analysis form submitted successfully!');
+    }
   };
 
   const renderBalanceGrid = () => {
