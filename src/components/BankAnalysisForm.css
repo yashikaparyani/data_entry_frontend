@@ -1,46 +1,85 @@
 /* Import Common Radio Styles */
 @import './common-radio-styles.css';
 
-/* Bank Analysis Form Styles */
+/* Bank Analysis Form Styles - Blue Glassmorphism Theme */
 .bank-analysis-form {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
   min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  overflow: hidden;
+  background-attachment: fixed;
+}
+
+/* Animated background pattern */
+.bank-analysis-form::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: backgroundMove 20s linear infinite;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Form Header */
 .form-header {
   text-align: center;
   margin-bottom: 2.5rem;
-  background: white;
-  padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+.form-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #2563eb, #1d4ed8);
+  border-radius: 20px 20px 0 0;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
 
 .form-title {
-  font-size: 2.5rem;
+  font-size: 2.75rem;
   font-weight: 700;
-  color: #2c3e50;
   margin: 0 0 1rem 0;
-  background: linear-gradient(135deg, var(--samvit-primary) 0%, var(--samvit-primary-dark) 100%);
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .form-description {
-  font-size: 1.1rem;
-  color: #5a6c7d;
+  font-size: 1.15rem;
+  color: #475569;
   margin: 0;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
-/* Section Progress */
+/* Section Progress - Modern Glassmorphism */
 .section-progress {
   display: flex;
   justify-content: center;
@@ -48,13 +87,15 @@
   gap: 2rem;
   margin-top: 2rem;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
 }
 
 .progress-step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   position: relative;
   min-width: 120px;
 }
@@ -62,90 +103,109 @@
 .progress-step:not(:last-child)::after {
   content: '';
   position: absolute;
-  top: 15px;
+  top: 20px;
   left: calc(100% + 1rem);
   width: 2rem;
-  height: 2px;
-  background: #e1e8ed;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.3);
   z-index: 1;
+  border-radius: 2px;
 }
 
 .progress-step.completed:not(:last-child)::after {
-  background: #27ae60;
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
 }
 
 .step-number {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: #e1e8ed;
-  color: #7f8c8d;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 2;
   position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .progress-step.active .step-number {
-  background: #3498db;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
-  transform: scale(1.1);
+  transform: scale(1.2) rotate(360deg);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
 }
 
 .progress-step.completed .step-number {
-  background: #27ae60;
+  background: linear-gradient(135deg, #10b981, #059669);
   color: white;
+  transform: scale(1.05);
+}
+
+.progress-step.completed .step-number::after {
+  content: '✓';
+  position: absolute;
+  font-size: 1.2rem;
 }
 
 .step-label {
-  font-size: 0.85rem;
-  color: #7f8c8d;
-  font-weight: 500;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
   text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .progress-step.active .step-label {
-  color: #3498db;
-  font-weight: 600;
+  color: white;
+  font-weight: 700;
 }
 
 .progress-step.completed .step-label {
-  color: #27ae60;
+  color: rgba(255, 255, 255, 0.95);
 }
 
-/* Form Content */
+/* Form Content - Glassmorphic Card */
 .form-content {
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
 /* Section Container */
 .section-container {
-  padding: 2.5rem;
+  padding: 3rem;
 }
 
 .section-header {
   text-align: center;
   margin-bottom: 2.5rem;
+  position: relative;
 }
 
 .section-title {
-  font-size: 2rem;
-  font-weight: 600;
-  color: #2c3e50;
+  font-size: 2.25rem;
+  font-weight: 700;
   margin: 0 0 1rem 0;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .section-description {
-  font-size: 1rem;
-  color: #5a6c7d;
+  font-size: 1.05rem;
+  color: #64748b;
   margin: 0;
   line-height: 1.5;
 }
@@ -182,18 +242,23 @@
 }
 
 .form-input {
-  padding: 0.75rem 1rem;
-  border: 2px solid #e1e8ed;
-  border-radius: 8px;
+  padding: 14px 18px;
+  border: 2px solid rgba(59, 130, 246, 0.2);
+  border-radius: 10px;
   font-size: 1rem;
-  transition: all 0.3s ease;
-  background: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  border-color: #3b82f6;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2),
+              0 0 0 4px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
 }
 
 .form-select {
@@ -210,19 +275,22 @@
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #7f8c8d;
+  color: #64748b;
+  font-weight: 600;
   pointer-events: none;
 }
 
 /* Field Errors */
 .field-error .form-input {
-  border-color: #e74c3c;
+  border-color: #ef4444;
+  background: rgba(254, 226, 226, 0.5);
 }
 
 .error-message {
-  color: #e74c3c;
-  font-size: 0.85rem;
-  font-weight: 500;
+  color: #dc2626;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 4px;
 }
 
 /* Calculated Fields */
@@ -418,50 +486,74 @@
 }
 
 .nav-button {
-  padding: 0.875rem 2rem;
+  padding: 14px 32px;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-width: 140px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.nav-button:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .prev-button {
-  background: #6c757d;
+  background: linear-gradient(135deg, #64748b, #475569);
   color: white;
 }
 
 .prev-button:hover:not(:disabled) {
-  background: #5a6268;
-  transform: translateY(-2px);
+  transform: translateX(-4px);
+  box-shadow: 0 8px 24px rgba(100, 116, 139, 0.4);
 }
 
 .prev-button:disabled {
-  background: #e9ecef;
-  color: #6c757d;
+  background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+  opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
 .next-button {
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
 }
 
 .next-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  transform: translateX(4px);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.5);
 }
 
 .submit-button {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  background: linear-gradient(135deg, #10b981, #059669);
   color: white;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
 }
 
 .submit-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
 }
 
 /* Calculation Summary */

@@ -1,37 +1,81 @@
 /* Import Common Radio Styles */
 @import './common-radio-styles.css';
 
-/* Output Sheet Form Styles */
+/* Output Sheet Form Styles - Rose/Pink Glassmorphism Theme */
 .output-sheet-form {
   width: 100%;
   min-height: 100vh;
   margin: 0;
   padding: 2rem;
-  background: #ffffff;
+  background: linear-gradient(135deg, #ec4899 0%, #f43f5e 50%, #e11d48 100%);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  overflow: hidden;
+  background-attachment: fixed;
+}
+
+/* Animated hearts/dots pattern */
+.output-sheet-form::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle, rgba(255, 255, 255, 0.1) 2px, transparent 2px);
+  background-size: 30px 30px;
+  animation: floatPattern 15s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes floatPattern {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(30px); }
 }
 
 .form-header {
   text-align: center;
   margin-bottom: 3rem;
-  padding: 2rem;
-  background: #000000;
-  border-radius: 12px;
-  color: white !important;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+.form-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ec4899, #f43f5e, #e11d48);
+  border-radius: 20px 20px 0 0;
+  animation: shimmer 3s ease-in-out infinite;
 }
 
 .form-header h2 {
   margin: 0 0 1rem 0;
-  font-size: 2.2rem;
-  font-weight: 600;
-  color: rgb(7, 94, 7) !important;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ec4899, #f43f5e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .form-header p {
   margin: 0;
   font-size: 1.1rem;
-  opacity: 0.9;
-  color: rgb(7, 94, 7) !important;
+  color: #475569;
+  opacity: 0.95;
+  line-height: 1.7;
 }
 
 /* Progress Indicator */

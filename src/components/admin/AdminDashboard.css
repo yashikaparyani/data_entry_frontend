@@ -6,6 +6,23 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  color: #1a202c !important; /* Override global white text */
+}
+
+/* Force dark text on all descendants */
+.admin-dashboard * {
+  color: #1a202c;
+}
+
+/* But keep white text in header */
+.admin-header,
+.admin-header * {
+  color: rgb(8, 8, 8);
+}
+
+/* And keep specific colors for buttons and labels */
+.stat-content p {
+  color: #4a5568 !important;
 }
 
 .admin-header {
@@ -29,6 +46,14 @@
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0;
+  color: rgb(11, 10, 10); /* Ensure white text on dark header */
+}
+
+.admin-header p,
+.admin-header .subtitle {
+  color: #020202; /* Light gray for subtitle on dark header */
+  margin: 0.25rem 0 0 0;
+  font-size: 0.9rem;
 }
 
 .admin-actions {
@@ -39,7 +64,7 @@
 
 .refresh-btn {
   background: #4299e1;
-  color: white;
+  color: rgb(3, 3, 3);
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -75,12 +100,17 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+  color: #1a202c; /* Ensure dark text */
 }
 
 .admin-content {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+.admin-content h2 {
+  color: #1a202c !important; /* Force dark headings */
 }
 
 /* Statistics Grid */
@@ -111,6 +141,11 @@
   align-items: center;
   gap: 1rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: #1a202c !important; /* Ensure dark text on white background */
+}
+
+.stat-card * {
+  color: inherit !important; /* Force all children to inherit dark color */
 }
 
 .stat-card:hover {
@@ -129,18 +164,24 @@
   border-radius: 12px;
 }
 
+.stat-content {
+  flex: 1;
+}
+
 .stat-content h3 {
   font-size: 2rem;
   font-weight: 700;
-  color: #1a202c;
+  color: #1a202c !important; /* Force dark text */
   margin: 0 0 0.25rem 0;
+  line-height: 1.2;
 }
 
 .stat-content p {
-  color: #718096;
+  color: #4a5568 !important; /* Force dark gray text */
   font-size: 0.875rem;
   font-weight: 500;
   margin: 0;
+  line-height: 1.2;
 }
 
 /* Submissions Section */

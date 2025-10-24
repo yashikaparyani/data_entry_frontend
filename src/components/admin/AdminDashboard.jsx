@@ -3,8 +3,43 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './AdminDashboard.css';
 
+// Helper functions moved outside component
+function generateMockSubmissions(formType, count) {
+  const submissions = [];
+  const statuses = ['completed', 'in-progress', 'draft'];
+  
+  for (let i = 1; i <= count; i++) {
+    submissions.push({
+      id: `${formType.toLowerCase().replace(/\s+/g, '')}_${i}`,
+      userId: `user_${Math.floor(Math.random() * 100) + 1}`,
+      userName: `User ${Math.floor(Math.random() * 100) + 1}`,
+      status: statuses[Math.floor(Math.random() * statuses.length)],
+      submittedAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
+      lastModified: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
+      completionPercentage: Math.floor(Math.random() * 100) + 1,
+      formData: generateMockFormData(formType)
+    });
+  }
+  
+  return submissions.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+}
+
+function generateMockFormData(formType) {
+  // Generate relevant mock data based on form type
+  const baseData = {
+    'Standard Form': { name: 'John Doe', email: 'john@example.com', phone: '123-456-7890' },
+    'MSE Assessment': { businessName: 'ABC Corp', loanAmount: 50000, businessType: 'Retail' },
+    'Cash Flow Analysis': { revenue: 120000, expenses: 85000, netCashFlow: 35000 },
+    'Expert Scorecard': { creditScore: 750, riskCategory: 'Low', recommendation: 'Approved' },
+    'Financial Analysis': { totalAssets: 500000, totalLiabilities: 300000, netWorth: 200000 },
+    'Bank Analysis': { bankName: 'First National', accountType: 'Business', averageBalance: 75000 },
+    'Credit App Memo': { applicantName: 'Jane Smith', requestedAmount: 100000, approvalStatus: 'Pending' }
+  };
+  
+  return baseData[formType] || {};
+}
+
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('overview');
   const [dashboardData, setDashboardData] = useState({
     overview: {
       totalUsers: 0,
@@ -22,55 +57,8 @@ const AdminDashboard = () => {
       creditAppMemo: { submitted: 0, pending: 0, lastModified: null, submissions: [] }
     }
   });
-  const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  const formConfigs = {
-    standardForm: {
-      title: 'Standard Form',
-      icon: '📋',
-      color: '#3498db',
-      description: 'Basic data entry forms'
-    },
-    mseAssessment: {
-      title: 'MSE Credit Assessment',
-      icon: '💼',
-      color: '#9b59b6',
-      description: 'Micro, Small & Enterprise credit evaluation'
-    },
-    cashFlowAnalysis: {
-      title: 'Cash Flow Analysis',
-      icon: '📊',
-      color: '#e67e22',
-      description: 'Output sheet analysis and cash flow tracking'
-    },
-    expertScorecard: {
-      title: 'Expert Scorecard',
-      icon: '🎯',
-      color: '#e74c3c',
-      description: 'Expert assessment and scoring system'
-    },
-    financialAnalysis: {
-      title: 'Financial Analysis >$50K',
-      icon: '💼',
-      color: '#2ecc71',
-      description: 'Comprehensive financial analysis for loans above $50K'
-    },
-    bankAnalysis: {
-      title: 'Bank Analysis >$50K',
-      icon: '🏦',
-      color: '#34495e',
-      description: 'Banking analysis and credit assessment'
-    },
-    creditAppMemo: {
-      title: 'Credit App Memo',
-      icon: '📋',
-      color: '#f39c12',
-      description: 'Credit application memorandum and approval workflow'
-    }
-  };
 
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -131,50 +119,12 @@ const AdminDashboard = () => {
       };
 
       setDashboardData(mockData);
-      setError('');
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
-      setError('Failed to load dashboard data');
     } finally {
       setLoading(false);
     }
   }, []);
-
-  // Generate mock submission data
-  function generateMockSubmissions(formType, count) {
-    const submissions = [];
-    const statuses = ['completed', 'in-progress', 'draft'];
-    
-    for (let i = 1; i <= count; i++) {
-      submissions.push({
-        id: `${formType.toLowerCase().replace(/\s+/g, '')}_${i}`,
-        userId: `user_${Math.floor(Math.random() * 100) + 1}`,
-        userName: `User ${Math.floor(Math.random() * 100) + 1}`,
-        status: statuses[Math.floor(Math.random() * statuses.length)],
-        submittedAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
-        lastModified: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
-        completionPercentage: Math.floor(Math.random() * 100) + 1,
-        formData: generateMockFormData(formType)
-      });
-    }
-    
-    return submissions.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
-  }
-
-  function generateMockFormData(formType) {
-    // Generate relevant mock data based on form type
-    const baseData = {
-      'Standard Form': { name: 'John Doe', email: 'john@example.com', phone: '123-456-7890' },
-      'MSE Assessment': { businessName: 'ABC Corp', loanAmount: 50000, businessType: 'Retail' },
-      'Cash Flow Analysis': { revenue: 120000, expenses: 85000, netCashFlow: 35000 },
-      'Expert Scorecard': { creditScore: 750, riskCategory: 'Low', recommendation: 'Approved' },
-      'Financial Analysis': { totalAssets: 500000, totalLiabilities: 300000, netWorth: 200000 },
-      'Bank Analysis': { bankName: 'First National', accountType: 'Business', averageBalance: 75000 },
-      'Credit App Memo': { applicantName: 'Jane Smith', requestedAmount: 100000, approvalStatus: 'Pending' }
-    };
-    
-    return baseData[formType] || {};
-  }
 
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
@@ -186,8 +136,8 @@ const AdminDashboard = () => {
     // Set axios default header
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     
-    fetchData();
-  }, [navigate, fetchData]);
+    fetchDashboardData();
+  }, [navigate, fetchDashboardData]);
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
@@ -195,6 +145,23 @@ const AdminDashboard = () => {
     delete axios.defaults.headers.common['Authorization'];
     navigate('/admin/login');
   };
+
+  // Extract stats and submissions from dashboardData
+  const stats = {
+    totalUsers: dashboardData.overview.totalUsers,
+    totalSubmissions: dashboardData.overview.totalSubmissions,
+    completedSubmissions: dashboardData.overview.completedForms,
+    inProgressSubmissions: dashboardData.overview.pendingForms,
+    completionRate: dashboardData.overview.totalSubmissions > 0 
+      ? Math.round((dashboardData.overview.completedForms / dashboardData.overview.totalSubmissions) * 100)
+      : 0
+  };
+
+  // Get all submissions from all forms
+  const submissions = Object.values(dashboardData.forms)
+    .flatMap(form => form.submissions)
+    .sort((a, b) => new Date(b.lastModified) - new Date(a.lastModified))
+    .slice(0, 10); // Show only 10 most recent
 
   if (loading) {
     return (
@@ -211,7 +178,7 @@ const AdminDashboard = () => {
         <div className="header-content">
           <h1>Admin Dashboard</h1>
           <div className="admin-actions">
-            <button onClick={fetchData} className="refresh-btn">
+            <button onClick={fetchDashboardData} className="refresh-btn">
               Refresh Data
             </button>
             <button onClick={handleLogout} className="logout-btn">
