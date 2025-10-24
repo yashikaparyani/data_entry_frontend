@@ -125,6 +125,64 @@ const ExpertScorecardForm = () => {
 
   return (
     <div className="expert-scorecard-container">
+      {/* Form Tabs Navigation */}
+      <div className="form-tabs-container">
+        <div className="form-tabs">
+          <button 
+            type="button"
+            className="form-tab" 
+            onClick={() => window.location.href = '/dashboard'}
+          >
+            <span className="tab-icon">📋</span>
+            <span className="tab-text">Standard Form</span>
+          </button>
+          
+          <button 
+            type="button"
+            className="form-tab" 
+            onClick={() => window.location.href = '/bank-analysis'}
+          >
+            <span className="tab-icon">🏦</span>
+            <span className="tab-text">Bank Analysis</span>
+          </button>
+          
+          <button 
+            type="button"
+            className="form-tab" 
+            onClick={() => window.location.href = '/financial-analysis'}
+          >
+            <span className="tab-icon">💰</span>
+            <span className="tab-text">Financial Analysis</span>
+          </button>
+          
+          <button 
+            type="button"
+            className="form-tab active"
+          >
+            <span className="tab-icon">⭐</span>
+            <span className="tab-text">Expert Scorecard</span>
+          </button>
+          
+          <button 
+            type="button"
+            className="form-tab" 
+            onClick={() => window.location.href = '/credit-app-memo'}
+          >
+            <span className="tab-icon">📝</span>
+            <span className="tab-text">Credit Memo</span>
+          </button>
+          
+          <button 
+            type="button"
+            className="form-tab" 
+            onClick={() => window.location.href = '/output-analysis'}
+          >
+            <span className="tab-icon">📊</span>
+            <span className="tab-text">Output Sheet</span>
+          </button>
+        </div>
+      </div>
+
       <div className="scorecard-header">
         <h1>{expertScorecardConfig.title}</h1>
         <p className="scorecard-description">{expertScorecardConfig.description}</p>

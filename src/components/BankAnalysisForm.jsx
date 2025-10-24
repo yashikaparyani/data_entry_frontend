@@ -338,7 +338,62 @@ const BankAnalysisForm = () => {
       <div className="form-header">
         <h1 className="form-title">{bankAnalysisConfig.title}</h1>
         <p className="form-description">{bankAnalysisConfig.description}</p>
-        
+      </div>
+
+      {/* Form Tabs */}
+      <div className="form-tabs-container">
+        <div className="form-tabs">
+          <button 
+            className="form-tab"
+            onClick={() => window.location.href = '/form'}
+            type="button"
+          >
+            <span className="tab-icon">📝</span>
+            <span className="tab-text">Standard Form</span>
+          </button>
+          <button 
+            className="form-tab active"
+            type="button"
+          >
+            <span className="tab-icon">🏦</span>
+            <span className="tab-text">Bank Analysis</span>
+          </button>
+          <button 
+            className="form-tab"
+            onClick={() => window.location.href = '/financial-analysis'}
+            type="button"
+          >
+            <span className="tab-icon">📊</span>
+            <span className="tab-text">Financial Analysis</span>
+          </button>
+          <button 
+            className="form-tab"
+            onClick={() => window.location.href = '/expert-scorecard'}
+            type="button"
+          >
+            <span className="tab-icon">⭐</span>
+            <span className="tab-text">Expert Scorecard</span>
+          </button>
+          <button 
+            className="form-tab"
+            onClick={() => window.location.href = '/credit-app-memo'}
+            type="button"
+          >
+            <span className="tab-icon">📄</span>
+            <span className="tab-text">Credit Memo</span>
+          </button>
+          <button 
+            className="form-tab"
+            onClick={() => window.location.href = '/output-analysis'}
+            type="button"
+          >
+            <span className="tab-icon">📋</span>
+            <span className="tab-text">Output Sheet</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="form-header">        
         <div className="section-progress">
           {bankAnalysisConfig.sections.map((section, index) => (
             <div

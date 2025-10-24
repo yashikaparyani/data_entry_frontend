@@ -1,6 +1,9 @@
 /* Import Common Radio Styles */
 @import './common-radio-styles.css';
 
+/* Import Common Form Tabs Styles */
+@import './form-tabs-common.css';
+
 /* Financial Analysis Form Styles */
 .financial-analysis-container {
   max-width: 1400px;

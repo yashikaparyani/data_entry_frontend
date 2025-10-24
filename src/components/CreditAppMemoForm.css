@@ -1,6 +1,9 @@
 /* Import Common Radio Styles */
 @import './common-radio-styles.css';
 
+/* Import Common Form Tabs Styles */
+@import './form-tabs-common.css';
+
 /* Credit App Memo Form Styles */
 .credit-app-memo-form {
   max-width: 1200px;

@@ -215,6 +215,64 @@ const OutputSheetForm = () => {
     <>
       <FormNavigation />
       <div className="output-sheet-form">
+        {/* Form Tabs Navigation */}
+        <div className="form-tabs-container">
+          <div className="form-tabs">
+            <button 
+              type="button"
+              className="form-tab" 
+              onClick={() => window.location.href = '/dashboard'}
+            >
+              <span className="tab-icon">📋</span>
+              <span className="tab-text">Standard Form</span>
+            </button>
+            
+            <button 
+              type="button"
+              className="form-tab" 
+              onClick={() => window.location.href = '/bank-analysis'}
+            >
+              <span className="tab-icon">🏦</span>
+              <span className="tab-text">Bank Analysis</span>
+            </button>
+            
+            <button 
+              type="button"
+              className="form-tab" 
+              onClick={() => window.location.href = '/financial-analysis'}
+            >
+              <span className="tab-icon">💰</span>
+              <span className="tab-text">Financial Analysis</span>
+            </button>
+            
+            <button 
+              type="button"
+              className="form-tab" 
+              onClick={() => window.location.href = '/expert-scorecard'}
+            >
+              <span className="tab-icon">⭐</span>
+              <span className="tab-text">Expert Scorecard</span>
+            </button>
+            
+            <button 
+              type="button"
+              className="form-tab" 
+              onClick={() => window.location.href = '/credit-app-memo'}
+            >
+              <span className="tab-icon">📝</span>
+              <span className="tab-text">Credit Memo</span>
+            </button>
+            
+            <button 
+              type="button"
+              className="form-tab active"
+            >
+              <span className="tab-icon">📊</span>
+              <span className="tab-text">Output Sheet</span>
+            </button>
+          </div>
+        </div>
+
         <div className="form-header">
         <h2>Output Sheet Analysis - Cash Flow & Loan Calculations</h2>
         <p>Complete the cash flow analysis to determine loan eligibility and repayment capacity</p>

@@ -285,43 +285,51 @@ const UserForm = () => {
           )}
           
           {/* Form Tabs - Switch between different forms */}
-          <div className="form-tabs">
-            <button 
-              className="form-tab active"
-              onClick={() => navigate('/form')}
-            >
-              📝 Customer Details
-            </button>
-            <button 
-              className="form-tab"
-              onClick={() => navigate('/bank-analysis')}
-            >
-              🏦 Bank Analysis
-            </button>
-            <button 
-              className="form-tab"
-              onClick={() => navigate('/financial-analysis')}
-            >
-              📊 Financial Analysis
-            </button>
-            <button 
-              className="form-tab"
-              onClick={() => navigate('/expert-scorecard')}
-            >
-              ⭐ Expert Scorecard
-            </button>
-            <button 
-              className="form-tab"
-              onClick={() => navigate('/credit-app-memo')}
-            >
-              📄 Credit App Memo
-            </button>
-            <button 
-              className="form-tab"
-              onClick={() => navigate('/output-sheet')}
-            >
-              📋 Output Sheet
-            </button>
+          <div className="form-tabs-container">
+            <div className="form-tabs">
+              <button 
+                className="form-tab active"
+                onClick={() => navigate('/form')}
+              >
+                <span className="tab-icon">📝</span>
+                <span className="tab-text">Standard Form</span>
+              </button>
+              <button 
+                className="form-tab"
+                onClick={() => navigate('/bank-analysis')}
+              >
+                <span className="tab-icon">🏦</span>
+                <span className="tab-text">Bank Analysis</span>
+              </button>
+              <button 
+                className="form-tab"
+                onClick={() => navigate('/financial-analysis')}
+              >
+                <span className="tab-icon">📊</span>
+                <span className="tab-text">Financial Analysis</span>
+              </button>
+              <button 
+                className="form-tab"
+                onClick={() => navigate('/expert-scorecard')}
+              >
+                <span className="tab-icon">⭐</span>
+                <span className="tab-text">Expert Scorecard</span>
+              </button>
+              <button 
+                className="form-tab"
+                onClick={() => navigate('/credit-app-memo')}
+              >
+                <span className="tab-icon">📄</span>
+                <span className="tab-text">Credit Memo</span>
+              </button>
+              <button 
+                className="form-tab"
+                onClick={() => navigate('/output-analysis')}
+              >
+                <span className="tab-icon">📋</span>
+                <span className="tab-text">Output Sheet</span>
+              </button>
+            </div>
           </div>
           
           {/* Compact Step Indicators - Single Row */}
