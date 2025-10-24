@@ -395,6 +395,23 @@ const FinancialAnalysisForm = () => {
         <div className="currency-indicator">Currency: {financialAnalysisConfig.currency}</div>
       </div>
 
+      {/* Section Navigation Tabs - Single Line */}
+      <div className="section-tabs-container">
+        <div className="section-tabs">
+          {financialAnalysisConfig.sections.map((section, index) => (
+            <button
+              key={index}
+              type="button"
+              className={`section-tab ${index === activeSection ? 'active' : ''} ${index < activeSection ? 'completed' : ''}`}
+              onClick={() => setActiveSection(index)}
+            >
+              <span className="tab-icon">{section.icon}</span>
+              <span className="tab-label">{section.title}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       <form onSubmit={handleSubmit} className="financial-form">
         {/* Current Section */}
         <div className="form-section active">
