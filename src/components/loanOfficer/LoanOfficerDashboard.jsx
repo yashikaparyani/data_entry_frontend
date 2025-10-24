@@ -64,9 +64,23 @@ const LoanOfficerDashboard = () => {
     navigate('/form'); // This will be the standard form
   };
 
-  const handleResumeForm = (clientId, formId) => {
-    // Navigate to specific form with formId for resume
-    navigate(`/form/${formId}`);
+  const handleResumeForm = (clientId, form) => {
+    // Store active client and form IDs in localStorage
+    localStorage.setItem('activeClientId', clientId);
+    localStorage.setItem(`activeFormId_${form.formType}`, form._id);
+    
+    // Navigate to appropriate form based on formType
+    const formRoutes = {
+      'user_form': `/form/${form._id}`,
+      'bank_analysis': '/bank-analysis',
+      'financial_analysis': '/financial-analysis',
+      'expert_scorecard': '/expert-scorecard',
+      'credit_app_memo': '/credit-app-memo',
+      'output_sheet': '/output-analysis'
+    };
+    
+    const route = formRoutes[form.formType] || `/form/${form._id}`;
+    navigate(route);
   };
 
   const handleViewClient = () => {
@@ -91,21 +105,35 @@ const LoanOfficerDashboard = () => {
   };
 
   const getFormStatus = (client) => {
+    // All 6 required forms
+    const requiredForms = [
+      'user_form',
+      'bank_analysis',
+      'financial_analysis',
+      'expert_scorecard',
+      'credit_app_memo',
+      'output_sheet'
+    ];
+    
     if (!client.forms || client.forms.length === 0) {
-      return { status: 'No Forms', color: '#6c757d' };
+      return { status: 'No Forms', color: '#6c757d', completedCount: 0, totalCount: 6 };
     }
     
-    const hasIncomplete = client.forms.some(form => form.status === 'in_progress' || form.status === 'draft');
-    const hasComplete = client.forms.some(form => form.status === 'completed');
+    // Count completed and total forms
+    const completedForms = client.forms.filter(f => f.status === 'completed');
+    const completedCount = completedForms.length;
     
-    if (hasIncomplete && hasComplete) {
-      return { status: 'Partial Complete', color: '#ffc107' };
-    } else if (hasIncomplete) {
-      return { status: 'Incomplete', color: '#dc3545' };
-    } else if (hasComplete) {
-      return { status: 'Complete', color: '#28a745' };
+    // Check if all 6 forms are completed
+    const allFormsCompleted = requiredForms.every(formType => 
+      client.forms.some(f => f.formType === formType && f.status === 'completed')
+    );
+    
+    if (allFormsCompleted) {
+      return { status: 'Complete', color: '#28a745', completedCount: 6, totalCount: 6 };
+    } else if (completedCount > 0) {
+      return { status: 'Partial Complete', color: '#ffc107', completedCount, totalCount: 6 };
     } else {
-      return { status: 'No Forms', color: '#6c757d' };
+      return { status: 'Incomplete', color: '#dc3545', completedCount: 0, totalCount: 6 };
     }
   };
 
@@ -199,7 +227,7 @@ const LoanOfficerDashboard = () => {
                         <span 
                           className={`status-badge status-${formStatus.status.toLowerCase().replace(' ', '-')}`}
                         >
-                          {formStatus.status}
+                          {formStatus.status} ({formStatus.completedCount}/{formStatus.totalCount})
                         </span>
                       </td>
                       <td className="date-cell">
@@ -223,7 +251,7 @@ const LoanOfficerDashboard = () => {
                               onClick={() => {
                                 const incompleteForm = client.forms?.find(f => f.status === 'in_progress' || f.status === 'draft');
                                 if (incompleteForm) {
-                                  handleResumeForm(client._id, incompleteForm._id);
+                                  handleResumeForm(client._id, incompleteForm);
                                 }
                               }}
                               className="btn-action btn-resume"

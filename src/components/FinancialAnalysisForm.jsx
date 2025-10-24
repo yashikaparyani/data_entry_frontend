@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { financialAnalysisConfig, financialCalculations } from '../data/financialAnalysisConfig';
+import { FORM_SEQUENCE, getNextForm, isFormLocked } from '../config/formSequence';
 import './FinancialAnalysisForm.css';
 
 const FinancialAnalysisForm = () => {
@@ -10,6 +11,32 @@ const FinancialAnalysisForm = () => {
   const [errors, setErrors] = useState({});
   const [activeSection, setActiveSection] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [completedForms, setCompletedForms] = useState([]);
+
+  // Fetch completed forms on component mount
+  useEffect(() => {
+    const fetchCompletedForms = async () => {
+      const clientId = localStorage.getItem('activeClientId');
+      if (!clientId) return;
+
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/clients/${clientId}/completed-forms`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setCompletedForms(data.completedForms || []);
+        }
+      } catch (error) {
+        console.error('Error fetching completed forms:', error);
+      }
+    };
+
+    fetchCompletedForms();
+  }, []);
 
   // Calculate all financial metrics whenever form data changes
   useEffect(() => {
@@ -122,16 +149,39 @@ const FinancialAnalysisForm = () => {
     }
   };
 
-  const saveProgress = () => {
-    // Save form data to localStorage
-    const progressData = {
-      formData,
-      calculatedValues,
-      activeSection,
-      timestamp: new Date().toISOString()
-    };
-    localStorage.setItem('financialAnalysisProgress', JSON.stringify(progressData));
-    alert('✓ Progress saved successfully!');
+  const saveProgress = async () => {
+    const clientId = localStorage.getItem('activeClientId');
+    const formId = localStorage.getItem('activeFormId_financial_analysis');
+    
+    if (!clientId || !formId) {
+      alert('❌ No active client or form found. Please start from dashboard.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          formData,
+          calculatedFields: calculatedValues,
+          currentStep: activeSection + 1,
+          totalSteps: financialAnalysisConfig.sections.length
+        })
+      });
+
+      if (response.ok) {
+        alert('✓ Progress saved successfully!');
+      } else {
+        alert('❌ Error saving progress');
+      }
+    } catch (error) {
+      console.error('Save error:', error);
+      alert('❌ Error saving progress');
+    }
   };
 
   const resetForm = () => {
@@ -143,7 +193,15 @@ const FinancialAnalysisForm = () => {
 
   const nextSection = () => {
     if (validateSection(activeSection)) {
-      setActiveSection(prev => Math.min(prev + 1, financialAnalysisConfig.sections.length - 1));
+      // Check if this is the last section
+      if (activeSection === financialAnalysisConfig.sections.length - 1) {
+        // All sections complete, redirect to next form (Expert Scorecard)
+        alert('✓ Financial Analysis form completed! Moving to Expert Scorecard...');
+        window.location.href = '/expert-scorecard';
+      } else {
+        // Move to next section within current form
+        setActiveSection(prev => Math.min(prev + 1, financialAnalysisConfig.sections.length - 1));
+      }
     }
   };
 
@@ -345,58 +403,32 @@ const FinancialAnalysisForm = () => {
       {/* Form Tabs Navigation */}
       <div className="form-tabs-container">
         <div className="form-tabs">
-          <button 
-            type="button"
-            className="form-tab" 
-            onClick={() => window.location.href = '/dashboard'}
-          >
-            <span className="tab-icon">📋</span>
-            <span className="tab-text">Standard Form</span>
-          </button>
-          
-          <button 
-            type="button"
-            className="form-tab" 
-            onClick={() => window.location.href = '/bank-analysis'}
-          >
-            <span className="tab-icon">🏦</span>
-            <span className="tab-text">Bank Analysis</span>
-          </button>
-          
-          <button 
-            type="button"
-            className="form-tab active"
-          >
-            <span className="tab-icon">💰</span>
-            <span className="tab-text">Financial Analysis</span>
-          </button>
-          
-          <button 
-            type="button"
-            className="form-tab" 
-            onClick={() => window.location.href = '/expert-scorecard'}
-          >
-            <span className="tab-icon">⭐</span>
-            <span className="tab-text">Expert Scorecard</span>
-          </button>
-          
-          <button 
-            type="button"
-            className="form-tab" 
-            onClick={() => window.location.href = '/credit-app-memo'}
-          >
-            <span className="tab-icon">📝</span>
-            <span className="tab-text">Credit Memo</span>
-          </button>
-          
-          <button 
-            type="button"
-            className="form-tab" 
-            onClick={() => window.location.href = '/output-analysis'}
-          >
-            <span className="tab-icon">📊</span>
-            <span className="tab-text">Output Sheet</span>
-          </button>
+          {FORM_SEQUENCE.map((form) => {
+            const isLocked = isFormLocked(form.formType, completedForms);
+            const isActive = form.formType === 'financial_analysis';
+            const isCompleted = completedForms.includes(form.formType);
+            
+            return (
+              <button 
+                key={form.id}
+                type="button"
+                className={`form-tab ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''} ${isCompleted ? 'completed' : ''}`}
+                onClick={() => {
+                  if (!isLocked) {
+                    window.location.href = form.route;
+                  } else {
+                    alert(`🔒 ${form.name} is locked. Please complete the previous form first.`);
+                  }
+                }}
+                disabled={isLocked}
+                title={isLocked ? `Complete ${FORM_SEQUENCE[form.id - 2]?.name} first` : form.name}
+              >
+                <span className="tab-icon">{isLocked ? '�' : form.icon}</span>
+                <span className="tab-text">{form.name}</span>
+                {isCompleted && <span className="check-mark">✓</span>}
+              </button>
+            );
+          })}
         </div>
       </div>
 

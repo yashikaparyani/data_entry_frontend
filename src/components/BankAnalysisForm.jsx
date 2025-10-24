@@ -77,15 +77,39 @@ const BankAnalysisForm = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const saveProgress = () => {
-    const progressData = {
-      formData,
-      calculatedValues,
-      currentSection,
-      timestamp: new Date().toISOString()
-    };
-    localStorage.setItem('bankAnalysisProgress', JSON.stringify(progressData));
-    alert('✓ Progress saved successfully!');
+  const saveProgress = async () => {
+    const clientId = localStorage.getItem('activeClientId');
+    const formId = localStorage.getItem('activeFormId_bank_analysis');
+    
+    if (!clientId || !formId) {
+      alert('❌ No active client or form found. Please start from dashboard.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          formData,
+          calculatedFields: calculatedValues,
+          currentStep: currentSection + 1,
+          totalSteps: bankAnalysisConfig.sections.length
+        })
+      });
+
+      if (response.ok) {
+        alert('✓ Progress saved successfully!');
+      } else {
+        alert('❌ Error saving progress');
+      }
+    } catch (error) {
+      console.error('Save error:', error);
+      alert('❌ Error saving progress');
+    }
   };
 
   const handleNextSection = () => {

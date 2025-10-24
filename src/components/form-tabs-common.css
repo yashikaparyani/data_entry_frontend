@@ -120,6 +120,50 @@
   left: 100%;
 }
 
+/* Locked Tab */
+.form-tab.locked {
+  background: #f3f4f6;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-tab.locked:hover {
+  transform: none;
+  box-shadow: none;
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+}
+
+.form-tab.locked .tab-icon {
+  opacity: 0.5;
+}
+
+/* Completed Tab */
+.form-tab.completed {
+  background: #d1fae5;
+  border-color: #10b981;
+  color: #065f46;
+}
+
+.form-tab.completed .check-mark {
+  background: #10b981;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+}
+
+.form-tab.completed:hover {
+  background: #a7f3d0;
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .form-tabs-container {
