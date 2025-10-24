@@ -122,6 +122,18 @@ const FinancialAnalysisForm = () => {
     }
   };
 
+  const saveProgress = () => {
+    // Save form data to localStorage
+    const progressData = {
+      formData,
+      calculatedValues,
+      activeSection,
+      timestamp: new Date().toISOString()
+    };
+    localStorage.setItem('financialAnalysisProgress', JSON.stringify(progressData));
+    alert('✓ Progress saved successfully!');
+  };
+
   const resetForm = () => {
     setFormData({ loan_amount: 50000 });
     setErrors({});
@@ -436,14 +448,16 @@ const FinancialAnalysisForm = () => {
             disabled={activeSection === 0}
             className="btn-secondary"
           >
-            ← Previous Section
+            ← Previous
           </button>
           
-          <div className="nav-center">
-            <span className="section-counter">
-              Section {activeSection + 1} of {financialAnalysisConfig.sections.length}
-            </span>
-          </div>
+          <button
+            type="button"
+            onClick={saveProgress}
+            className="btn-save-progress"
+          >
+            💾 Save Progress
+          </button>
           
           {activeSection < financialAnalysisConfig.sections.length - 1 ? (
             <button
@@ -451,7 +465,7 @@ const FinancialAnalysisForm = () => {
               onClick={nextSection}
               className="btn-primary"
             >
-              Next Section →
+              Next →
             </button>
           ) : (
             <button
@@ -459,9 +473,13 @@ const FinancialAnalysisForm = () => {
               className="btn-submit"
               disabled={isSubmitted}
             >
-              {isSubmitted ? 'Analysis Submitted ✓' : 'Submit Financial Analysis'}
+              {isSubmitted ? 'Analysis Submitted ✓' : 'Submit Final'}
             </button>
           )}
+        </div>
+        
+        <div className="section-counter-info">
+          Section {activeSection + 1} of {financialAnalysisConfig.sections.length}
         </div>
       </form>
 

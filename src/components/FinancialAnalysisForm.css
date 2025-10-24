@@ -410,6 +410,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 15px;
   padding: 25px;
   border-top: 2px solid #e9ecef;
   margin-top: 30px;
@@ -417,14 +418,16 @@
   border-radius: 8px;
 }
 
-.nav-center {
+.section-counter-info {
   text-align: center;
-}
-
-.section-counter {
   font-weight: 600;
   color: #495057;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  margin-top: 10px;
+  padding: 10px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
 }
 
 /* Button Styles */
@@ -473,6 +476,27 @@
 .btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-save-progress {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-save-progress:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
 }
 
 .btn-reset {
@@ -615,8 +639,16 @@
   
   .form-navigation {
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
     padding: 15px;
+  }
+  
+  .btn-primary,
+  .btn-secondary,
+  .btn-save-progress,
+  .btn-submit {
+    width: 100%;
+    justify-content: center;
   }
   
   .form-actions {

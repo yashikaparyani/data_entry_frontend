@@ -77,6 +77,17 @@ const BankAnalysisForm = () => {
     return Object.keys(errors).length === 0;
   };
 
+  const saveProgress = () => {
+    const progressData = {
+      formData,
+      calculatedValues,
+      currentSection,
+      timestamp: new Date().toISOString()
+    };
+    localStorage.setItem('bankAnalysisProgress', JSON.stringify(progressData));
+    alert('✓ Progress saved successfully!');
+  };
+
   const handleNextSection = () => {
     if (validateSection(currentSection)) {
       setCurrentSection(prev => Math.min(prev + 1, bankAnalysisConfig.sections.length - 1));
@@ -434,7 +445,15 @@ const BankAnalysisForm = () => {
             disabled={currentSection === 0}
             className="nav-button prev-button"
           >
-            Previous
+            ← Previous
+          </button>
+          
+          <button
+            type="button"
+            onClick={saveProgress}
+            className="nav-button save-button"
+          >
+            💾 Save Progress
           </button>
           
           {!isLastSection ? (
@@ -443,13 +462,17 @@ const BankAnalysisForm = () => {
               onClick={handleNextSection}
               className="nav-button next-button"
             >
-              Next Section
+              Next →
             </button>
           ) : (
             <button type="submit" className="nav-button submit-button">
-              Submit Bank Analysis
+              Submit Final
             </button>
           )}
+        </div>
+        
+        <div className="section-info">
+          Section {currentSection + 1} of {bankAnalysisConfig.sections.length}
         </div>
       </form>
 

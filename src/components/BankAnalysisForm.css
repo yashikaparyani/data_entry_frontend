@@ -415,6 +415,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 15px;
   padding: 2rem 2.5rem;
   background: #f8f9fa;
   border-top: 1px solid #e9ecef;
@@ -447,6 +448,17 @@
   cursor: not-allowed;
 }
 
+.save-button {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.save-button:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
 .next-button {
   background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
   color: white;
@@ -465,6 +477,18 @@
 .submit-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.section-info {
+  text-align: center;
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.95rem;
+  margin-top: 10px;
+  padding: 10px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
 }
 
 /* Calculation Summary */
