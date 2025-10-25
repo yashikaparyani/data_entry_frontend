@@ -20,6 +20,7 @@ import UserSubmissions from './components/admin/UserSubmissions';
 import LoanOfficerClients from './components/admin/LoanOfficerClients';
 import ClientFormsDetail from './components/admin/ClientFormsDetail';
 import LoanOfficerDashboard from './components/loanOfficer/LoanOfficerDashboard';
+import LoanOfficerClientForms from './components/loanOfficer/LoanOfficerClientForms';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
@@ -57,6 +58,16 @@ function App() {
               element={
                 <LoanOfficerRoute>
                   <LoanOfficerDashboard />
+                </LoanOfficerRoute>
+              } 
+            />
+            
+            {/* Loan Officer - View Client Forms */}
+            <Route 
+              path="/loan-officer/clients/:clientId/forms" 
+              element={
+                <LoanOfficerRoute>
+                  <LoanOfficerClientForms />
                 </LoanOfficerRoute>
               } 
             />
