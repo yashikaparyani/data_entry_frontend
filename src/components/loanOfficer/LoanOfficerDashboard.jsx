@@ -147,10 +147,9 @@ const LoanOfficerDashboard = () => {
     }
   };
 
-  const handleViewClient = () => {
-    // Navigate to client detail view (you can implement a detail page later)
-    alert('View client details - Feature coming soon!');
-    // navigate(`/loan-officer/clients/${clientId}`);
+  const handleViewClient = (client) => {
+    // Navigate to client forms detail view
+    navigate(`/loan-officer/clients/${client._id}/forms`);
   };
 
   const handleDeleteClient = async (clientId, clientName) => {
@@ -303,7 +302,7 @@ const LoanOfficerDashboard = () => {
                       <td className="actions-cell">
                         <div className="action-buttons">
                           <button
-                            onClick={() => handleViewClient()}
+                            onClick={() => handleViewClient(client)}
                             className="btn-action btn-view"
                             title="View Details"
                           >

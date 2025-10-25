@@ -326,8 +326,16 @@ const UserManagement = () => {
                     <td className="actions">
                       <button 
                         className="view-btn"
-                        onClick={() => navigate(`/admin/users/${user._id}`)}
-                        title="View user details"
+                        onClick={() => {
+                          // If user is loan officer, show their clients
+                          // Otherwise show user details
+                          if (user.role === 'loan_officer') {
+                            navigate(`/admin/users/${user._id}/clients`);
+                          } else {
+                            navigate(`/admin/users/${user._id}`);
+                          }
+                        }}
+                        title={user.role === 'loan_officer' ? 'View loan officer clients' : 'View user details'}
                       >
                         👁️ View
                       </button>

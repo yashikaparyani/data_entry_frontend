@@ -17,7 +17,10 @@ import SubmissionDetail from './components/admin/SubmissionDetail';
 import UserManagement from './components/admin/UserManagement';
 import UserCreation from './components/admin/UserCreation';
 import UserSubmissions from './components/admin/UserSubmissions';
+import LoanOfficerClients from './components/admin/LoanOfficerClients';
+import ClientFormsDetail from './components/admin/ClientFormsDetail';
 import LoanOfficerDashboard from './components/loanOfficer/LoanOfficerDashboard';
+import LoanOfficerClientForms from './components/loanOfficer/LoanOfficerClientForms';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
@@ -55,6 +58,16 @@ function App() {
               element={
                 <LoanOfficerRoute>
                   <LoanOfficerDashboard />
+                </LoanOfficerRoute>
+              } 
+            />
+            
+            {/* Loan Officer - View Client Forms */}
+            <Route 
+              path="/loan-officer/clients/:clientId/forms" 
+              element={
+                <LoanOfficerRoute>
+                  <LoanOfficerClientForms />
                 </LoanOfficerRoute>
               } 
             />
@@ -190,6 +203,26 @@ function App() {
               element={
                 <AdminRoute>
                   <UserSubmissions />
+                </AdminRoute>
+              } 
+            />
+            
+            {/* Admin Loan Officer Clients Route */}
+            <Route 
+              path="/admin/users/:userId/clients" 
+              element={
+                <AdminRoute>
+                  <LoanOfficerClients />
+                </AdminRoute>
+              } 
+            />
+            
+            {/* Admin Client Forms Detail Route */}
+            <Route 
+              path="/admin/clients/:clientId/forms" 
+              element={
+                <AdminRoute>
+                  <ClientFormsDetail />
                 </AdminRoute>
               } 
             />

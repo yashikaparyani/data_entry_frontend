@@ -310,6 +310,53 @@ const AdminDashboard = () => {
             </button>
           </div>
         </section>
+
+        {/* Loan Officer Statistics */}
+        {stats.loanOfficerStats && stats.loanOfficerStats.length > 0 && (
+          <section className="loan-officer-section">
+            <h2>Loan Officer Performance</h2>
+            <p>Overview of client forms processed by each loan officer</p>
+            
+            <div className="loan-officers-grid">
+              {stats.loanOfficerStats.map((officer) => (
+                <div
+                  key={officer.id}
+                  className="officer-card"
+                  onClick={() => navigate(`/admin/users/${officer.id}/clients`)}
+                >
+                  <div className="officer-header">
+                    <div className="officer-avatar">
+                      {officer.name?.charAt(0)?.toUpperCase() || 'LO'}
+                    </div>
+                    <div className="officer-info">
+                      <h3>{officer.name}</h3>
+                      <span className="officer-email">{officer.email}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="officer-stats">
+                    <div className="officer-stat">
+                      <span className="stat-number">{officer.clientCount}</span>
+                      <span className="stat-description">Clients</span>
+                    </div>
+                    <div className="officer-stat">
+                      <span className="stat-number">{officer.totalForms}</span>
+                      <span className="stat-description">Total Forms</span>
+                    </div>
+                    <div className="officer-stat">
+                      <span className="stat-number">{officer.completedForms}</span>
+                      <span className="stat-description">Completed</span>
+                    </div>
+                  </div>
+
+                  <div className="officer-footer">
+                    <span className="view-details">View Clients →</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );
