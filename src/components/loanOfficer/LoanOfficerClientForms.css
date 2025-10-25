@@ -462,6 +462,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 12px;
+  color: black
 }
 
 .form-data-item {
@@ -471,17 +472,18 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
+  color:black;
 }
 
 .form-data-key {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(10, 9, 9, 0.7);
   font-size: 12px;
   text-transform: capitalize;
   font-weight: 600;
 }
 
 .form-data-value {
-  color: white;
+  color: rgb(7, 7, 7);
   font-size: 14px;
   word-break: break-word;
 }
