@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AuthProvider from './contexts/AuthContext';
+import { FormProgressProvider } from './contexts/FormProgressContext';
 import Header from './components/Header';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
@@ -39,13 +40,14 @@ const LoanOfficerRoute = ({ children }) => {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <div className="App">
-          <Header />
-          <Routes>
-            {/* Authentication Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+      <FormProgressProvider>
+        <Router>
+          <div className="App">
+            <Header />
+            <Routes>
+              {/* Authentication Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
             
             {/* Loan Officer Dashboard */}
             <Route 
@@ -219,6 +221,7 @@ function App() {
           </Routes>
         </div>
       </Router>
+      </FormProgressProvider>
     </AuthProvider>
   );
 }

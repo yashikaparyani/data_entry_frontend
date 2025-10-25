@@ -60,6 +60,18 @@ const LoanOfficerDashboard = () => {
   };
 
   const handleNewForm = () => {
+    // Clear all form-related localStorage before creating new client
+    console.log('🆕 Creating new client - clearing all previous data');
+    localStorage.removeItem('activeClientId');
+    localStorage.removeItem('activeFormId');
+    localStorage.removeItem('activeFormId_user_form');
+    localStorage.removeItem('activeFormId_mse_assessment');
+    localStorage.removeItem('activeFormId_output_sheet');
+    localStorage.removeItem('activeFormId_expert_scorecard');
+    localStorage.removeItem('activeFormId_financial_analysis');
+    localStorage.removeItem('activeFormId_bank_analysis');
+    localStorage.removeItem('activeFormId_credit_app_memo');
+    
     // Redirect to standard form for new client
     navigate('/form'); // This will be the standard form
   };

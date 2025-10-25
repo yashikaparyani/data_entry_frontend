@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { mseFormConfig } from '../data/mseFormConfig';
 import FormNavigation from './FormNavigation';
+import FormTabs from './FormTabs';
 import axios from 'axios';
 import './MSECreditAssessment.css';
 

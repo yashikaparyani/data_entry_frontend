@@ -7,6 +7,8 @@
   padding: 1rem;
   margin-bottom: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Form Tabs - Single Line with Scroll */
@@ -19,6 +21,15 @@
   scrollbar-width: thin;
   scrollbar-color: #10b981 #f0fdf4;
   -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Loading State */
+.loading-tabs {
+  padding: 1rem;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.9rem;
 }
 
 /* Custom Scrollbar for Chrome/Safari */
@@ -169,6 +180,7 @@
   .form-tabs-container {
     padding: 0.75rem;
     margin-bottom: 1.5rem;
+    border-radius: 12px;
   }
   
   .form-tabs {
@@ -177,15 +189,49 @@
   }
   
   .form-tab {
-    font-size: 0.85rem;
-    padding: 0.875rem 1.5rem;
+    font-size: 0.8rem;
+    padding: 0.75rem 1.25rem;
+    min-width: auto;
   }
   
   .tab-icon {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   
   .tab-text {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    display: none; /* Hide text on very small screens, show only icons */
+  }
+
+  /* Show text on tablets */
+  @media (min-width: 480px) {
+    .tab-text {
+      display: inline;
+    }
+  }
+}
+
+/* Tablet Responsive */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .form-tab {
+    font-size: 0.9rem;
+    padding: 0.9rem 1.5rem;
+  }
+  
+  .tab-icon {
+    font-size: 1.15rem;
+  }
+  
+  .tab-text {
+    font-size: 0.9rem;
+  }
+}
+
+/* Large Screen */
+@media (min-width: 1400px) {
+  .form-tabs-container {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }

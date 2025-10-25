@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { bankAnalysisConfig } from '../data/bankAnalysisConfig';
 import './BankAnalysisForm.css';
-import FormTabs from './FormTabs';
 import axios from 'axios';
+import FormTabs from './FormTabs';
 
 const BankAnalysisForm = () => {
   const [currentSection, setCurrentSection] = useState(0);

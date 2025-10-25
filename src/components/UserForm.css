@@ -339,12 +339,14 @@
 .compact-step-indicators {
   display: flex;
   justify-content: space-between;
+  gap: 0.5rem;
   margin-bottom: 2rem;
   padding: 1.5rem 1rem;
   background: var(--samvit-white);
   border-radius: 12px;
   border: 2px solid var(--samvit-primary-light);
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: visible;
   box-shadow: 0 4px 12px var(--samvit-shadow);
   width: 100%;
   box-sizing: border-box;
@@ -355,15 +357,13 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.8rem 0.4rem;
+  padding: 0.8rem 0.5rem;
   border-radius: 10px;
   transition: all 0.3s ease;
-  min-width: 100px;
-  max-width: 140px;
+  min-width: 120px;
+  flex: 1 1 auto;
   text-align: center;
-  flex: 1;
   overflow: visible;
-  white-space: normal;
 }
 
 .compact-step.active {
@@ -391,6 +391,7 @@
   font-size: 1rem;
   border: 3px solid var(--samvit-border);
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .compact-step.active .step-circle {
@@ -409,14 +410,20 @@
 .step-label {
   font-size: 0.85rem;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.3;
   text-align: center;
   color: inherit;
   word-wrap: break-word;
-  hyphens: auto;
-  max-width: 100%;
   overflow-wrap: break-word;
+  hyphens: auto;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: visible;
 }
+
 
 /* Step Summary */
 .step-summary {
@@ -535,12 +542,12 @@
   .compact-step-indicators {
     padding: 1rem 0.5rem;
     margin-bottom: 1.5rem;
+    gap: 0.3rem;
   }
   
   .compact-step {
-    min-width: 70px;
-    max-width: 85px;
-    padding: 0.5rem 0.2rem;
+    min-width: 80px;
+    padding: 0.6rem 0.3rem;
   }
   
   .step-circle {
@@ -551,9 +558,24 @@
   
   .step-label {
     font-size: 0.7rem;
-    line-height: 1.1;
-    overflow: visible;
-    white-space: normal;
+    line-height: 1.2;
+  }
+}
+
+@media (max-width: 480px) {
+  .compact-step-indicators {
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 0.8rem 0.5rem;
+  }
+  
+  .compact-step {
+    min-width: 90px;
+    flex: 0 0 auto;
+  }
+  
+  .step-label {
+    font-size: 0.65rem;
   }
 }
 

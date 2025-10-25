@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { formConfig } from '../data/formConfig';
-import FormNavigation from './FormNavigation';
 import FormTabs from './FormTabs';
+import FormNavigation from './FormNavigation';
+import { completeFormAndNavigate, saveFormProgress } from '../utils/formHelpers';
 import axios from 'axios';
 import './UserForm.css';
 
@@ -25,8 +26,18 @@ const UserForm = () => {
   useEffect(() => {
     if (user?.role === 'loan_officer') {
       setIsLoanOfficer(true);
+      
+      // Check if this is a new form (no formId in URL and no activeClientId)
+      const storedClientId = localStorage.getItem('activeClientId');
+      if (!formId && !storedClientId) {
+        console.log('🆕 New client form detected - clearing all previous data');
+        setFormData({});
+        setCurrentStep(1);
+        setClientId(null);
+        setActiveFormId(null);
+      }
     }
-  }, [user]);
+  }, [user, formId]);
 
   const fetchFormData = useCallback(async () => {
     // Skip fetch if user is not authenticated
@@ -39,6 +50,18 @@ const UserForm = () => {
     // Check user role directly from user object
     const isUserLoanOfficer = user?.role === 'loan_officer';
     console.log('🔍 UserForm Debug - User role:', user?.role, 'isLoanOfficer:', isUserLoanOfficer, 'formId:', formId);
+    
+    // For loan officer without formId - this is a NEW CLIENT form
+    if (isUserLoanOfficer && !formId) {
+      console.log('🆕 New client form - initializing empty form');
+      setFormData({});
+      setCurrentStep(1);
+      setTotalSteps(formConfig.totalSteps);
+      setClientId(null);
+      setActiveFormId(null);
+      setLoading(false);
+      return;
+    }
     
     try {
       if (isUserLoanOfficer && formId) {
@@ -73,12 +96,6 @@ const UserForm = () => {
         const data = response.data.formData;
         setFormData(data.responses || {});
         setCurrentStep(data.currentStep || 1);
-        setTotalSteps(formConfig.totalSteps);
-      } else {
-        // New form for loan officer - initialize empty
-        console.log('✨ Initializing new loan officer form');
-        setFormData({});
-        setCurrentStep(1);
         setTotalSteps(formConfig.totalSteps);
       }
     } catch (error) {
@@ -186,31 +203,19 @@ const UserForm = () => {
           setActiveFormId(newFormId);
           console.log('✅ Form created with ID:', newFormId);
           
-          // Save the form data using PUT method
+          // Save the form data using helper function
           console.log('💾 Saving form data for form:', newFormId);
-          await axios.put(`/api/loan-officer/forms/${newFormId}/save`, {
-            formData,
-            currentStep,
-            completionPercentage: Math.round((currentStep / totalSteps) * 100)
-          }, {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-          });
+          await saveFormProgress(newFormId, formData);
           
           // Update URL to include formId for future saves
           window.history.replaceState(null, '', `/form/${newFormId}`);
           console.log('🔄 Updated URL with formId:', newFormId);
           
         } else if (activeFormId || formId) {
-          // Update existing form using PUT method
+          // Update existing form using helper function
           const currentFormId = activeFormId || formId;
           console.log('📝 Updating existing form:', currentFormId);
-          await axios.put(`/api/loan-officer/forms/${currentFormId}/save`, {
-            formData,
-            currentStep,
-            completionPercentage: Math.round((currentStep / totalSteps) * 100)
-          }, {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-          });
+          await saveFormProgress(currentFormId, formData);
         }
         setMessage('Form saved successfully!');
       } else {
@@ -246,31 +251,31 @@ const UserForm = () => {
     }
 
     try {
-      // Mark form as completed
-      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
-        formData,
-        currentStep: totalSteps,
-        totalSteps: totalSteps,
-        completionPercentage: 100,
-        isCompleted: true
-      }, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      });
+      setSaving(true);
+      setMessage('✓ Completing Standard Form...');
 
-      if (response.status === 200) {
-        // Store clientId in localStorage for next form
-        localStorage.setItem('activeClientId', clientId);
-        
-        setMessage('✓ Standard Form completed! Redirecting to Bank Analysis...');
-        setTimeout(() => {
-          window.location.href = '/bank-analysis';
-        }, 1500);
-      } else {
-        setMessage('❌ Error completing form');
-      }
+      // Use helper function to complete and navigate
+      await completeFormAndNavigate(
+        'user_form',
+        activeFormId,
+        formData,
+        (nextForm) => {
+          if (nextForm) {
+            setMessage(`✓ Standard Form completed! Redirecting to ${nextForm.name}...`);
+          } else {
+            setMessage('✓ All forms completed! Redirecting to dashboard...');
+          }
+        },
+        (error) => {
+          console.error('Complete error:', error);
+          setMessage('❌ Error completing form: ' + (error.response?.data?.message || error.message));
+          setSaving(false);
+        }
+      );
     } catch (error) {
       console.error('Complete error:', error);
       setMessage('❌ Error completing form');
+      setSaving(false);
     }
   };
 

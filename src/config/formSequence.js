@@ -10,18 +10,18 @@ export const FORM_SEQUENCE = [
   },
   {
     id: 2,
-    name: 'Bank Analysis',
-    formType: 'bank_analysis',
-    route: '/bank-analysis',
-    icon: '🏦',
+    name: 'MSE Assessment',
+    formType: 'mse_assessment',
+    route: '/mse-assessment',
+    icon: '📝',
     hasSections: true
   },
   {
     id: 3,
-    name: 'Financial Analysis',
-    formType: 'financial_analysis',
-    route: '/financial-analysis',
-    icon: '💰',
+    name: 'Output Sheet',
+    formType: 'output_sheet',
+    route: '/output-analysis',
+    icon: '�',
     hasSections: true
   },
   {
@@ -34,18 +34,26 @@ export const FORM_SEQUENCE = [
   },
   {
     id: 5,
-    name: 'Credit App Memo',
-    formType: 'credit_app_memo',
-    route: '/credit-app-memo',
-    icon: '📝',
+    name: 'Financial Analysis',
+    formType: 'financial_analysis',
+    route: '/financial-analysis',
+    icon: '�',
     hasSections: true
   },
   {
     id: 6,
-    name: 'Output Sheet',
-    formType: 'output_sheet',
-    route: '/output-analysis',
-    icon: '📊',
+    name: 'Bank Analysis',
+    formType: 'bank_analysis',
+    route: '/bank-analysis',
+    icon: '🏦',
+    hasSections: true
+  },
+  {
+    id: 7,
+    name: 'Credit App Memo',
+    formType: 'credit_app_memo',
+    route: '/credit-app-memo',
+    icon: '�',
     hasSections: true
   }
 ];

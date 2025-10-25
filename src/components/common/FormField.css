@@ -1,0 +1,174 @@
+/* Form Field Styles */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.field-label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.required-indicator {
+  color: #e74c3c;
+  font-weight: 700;
+}
+
+.calculated-badge {
+  background: #27ae60;
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Input Styles */
+.form-input {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-input:disabled,
+.form-input.calculated {
+  background: #f8f9fa;
+  color: #27ae60;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.form-input.error {
+  border-color: #e74c3c;
+}
+
+/* Textarea */
+textarea.form-input {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Radio Group */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.radio-label:hover {
+  border-color: #3498db;
+  background: #f0f8ff;
+}
+
+.radio-label input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #3498db;
+}
+
+.radio-label input[type="radio"]:checked + .radio-text {
+  font-weight: 600;
+  color: #3498db;
+}
+
+.radio-text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #2c3e50;
+}
+
+/* Checkbox */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #3498db;
+}
+
+.checkbox-text {
+  font-size: 0.95rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+/* Error Message */
+.error-message {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.error-message::before {
+  content: '⚠️';
+}
+
+/* Help Text */
+.help-text {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* Calculation Note */
+.calculation-note {
+  color: #27ae60;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-field {
+    margin-bottom: 1rem;
+  }
+  
+  .field-label {
+    font-size: 0.9rem;
+  }
+  
+  .form-input {
+    padding: 0.65rem 0.85rem;
+    font-size: 0.95rem;
+  }
+}

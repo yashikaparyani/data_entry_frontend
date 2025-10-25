@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { outputFormSections, calculationFormulas } from '../data/outputFormConfig';
-import FormNavigation from './FormNavigation';
 import FormTabs from './FormTabs';
 import './OutputSheetForm.css';
 import axios from 'axios';
@@ -284,25 +283,21 @@ const OutputSheetForm = () => {
 
   if (loading) {
     return (
-      <>
-        <FormNavigation />
-        <div className="output-sheet-form">
-          <div className="form-header">
-            <h2>Loading...</h2>
-          </div>
+      <div className="output-sheet-form">
+        <FormTabs currentFormType="output_sheet" />
+        <div className="form-header">
+          <h2>Loading...</h2>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
-      <FormNavigation />
-      <div className="output-sheet-form">
-        {/* Form Tabs Navigation (centralized) */}
-        <FormTabs currentFormType="output_sheet" />
+    <div className="output-sheet-form">
+      {/* Form Tabs Navigation (centralized) */}
+      <FormTabs currentFormType="output_sheet" />
 
-        <div className="form-header">
+      <div className="form-header">
         <h2>Output Sheet Analysis - Cash Flow & Loan Calculations</h2>
         <p>Complete the cash flow analysis to determine loan eligibility and repayment capacity</p>
       </div>
@@ -420,8 +415,7 @@ const OutputSheetForm = () => {
           })}
         </div>
       </div>
-      </div>
-    </>
+    </div>
   );
 };
 

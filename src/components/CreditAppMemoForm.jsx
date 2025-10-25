@@ -4,6 +4,8 @@ import './CreditAppMemoForm.css';
 import FormTabs from './FormTabs';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const CreditAppMemoForm = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [formData, setFormData] = useState({});
@@ -32,7 +34,7 @@ const CreditAppMemoForm = () => {
         
         if (existingFormId) {
           // Load existing form data
-          const response = await axios.get(`/api/loan-officer/forms/${existingFormId}`, {
+          const response = await axios.get(`${API_URL}/api/loan-officer/forms/${existingFormId}`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
           });
           
@@ -41,11 +43,14 @@ const CreditAppMemoForm = () => {
           setActiveFormId(existingFormId);
         } else {
           // Create new form for this client (or get existing)
-          const formResponse = await axios.post(`/api/loan-officer/clients/${storedClientId}/forms`, {
+          console.log('🆕 Creating new credit_app_memo form for client:', storedClientId);
+          const formResponse = await axios.post(`${API_URL}/api/loan-officer/clients/${storedClientId}/forms`, {
             formType: 'credit_app_memo'
           }, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
           });
+          
+          console.log('✅ Form response:', formResponse.data);
           
           const newFormId = formResponse.data.form._id;
           const existingFormData = formResponse.data.form.formData || {};
@@ -70,16 +75,15 @@ const CreditAppMemoForm = () => {
           }
         }
       } catch (error) {
-        console.error('Error initializing form:', error);
-        console.error('Error details:', error.response?.data);
+        console.error('❌ Error initializing form:', error);
+        console.error('Error response:', error.response?.data);
+        console.error('Error status:', error.response?.status);
         
         const errorMessage = error.response?.data?.message || error.message || 'Unknown error';
-        alert(`❌ Error loading form: ${errorMessage}\n\nPlease try again or contact support.`);
+        alert(`❌ Error loading Credit App Memo form: ${errorMessage}\n\nPlease check:\n1. Previous forms are completed\n2. Client ID is valid\n3. Backend server is running`);
         
-        // Redirect back to dashboard on error
-        setTimeout(() => {
-          window.location.href = '/loan-officer/dashboard';
-        }, 2000);
+        // Don't redirect immediately, let user see the error
+        console.log('ClientId:', storedClientId);
       } finally {
         setLoading(false);
       }
