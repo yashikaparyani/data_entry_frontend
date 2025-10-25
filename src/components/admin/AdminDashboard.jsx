@@ -285,21 +285,21 @@ const AdminDashboard = () => {
               <span className="action-text">Create New User</span>
             </button>
             
-            <button 
+            {/* <button 
               className="action-btn"
               onClick={() => navigate('/admin/reports')}
             >
               <span className="action-icon">📊</span>
               <span className="action-text">Generate Reports</span>
-            </button>
+            </button> */}
             
-            <button 
+            {/* <button 
               className="action-btn"
               onClick={() => navigate('/admin/settings')}
             >
               <span className="action-icon">⚙️</span>
               <span className="action-text">System Settings</span>
-            </button>
+            </button> */}
             
             <button 
               className="action-btn"
