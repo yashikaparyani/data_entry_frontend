@@ -46,11 +46,28 @@
   margin: 0 0 0.5rem 0;
 }
 
+.form-subtitle {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+  font-style: italic;
+}
+
 .form-description {
   font-size: 1rem;
   color: #5a6c7d;
   margin: 0;
   line-height: 1.6;
+}
+
+/* Form Progress Section */
+.form-progress-section {
+  margin-bottom: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* Section Progress */
@@ -166,6 +183,25 @@
   color: #6c757d;
   margin: 0;
   line-height: 1.5;
+}
+
+/* Section Note */
+.section-note {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-left: 4px solid #ffc107;
+  border-radius: 8px;
+  color: #856404;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.section-note strong {
+  color: #856404;
+  font-weight: 700;
 }
 
 /* Section Content */

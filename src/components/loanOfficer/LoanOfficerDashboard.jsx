@@ -77,14 +77,15 @@ const LoanOfficerDashboard = () => {
   };
 
   const getNextIncompleteForm = (client) => {
-    // Form sequence order
+    // Use the proper form sequence from config
     const formSequence = [
       'user_form',
-      'bank_analysis',
-      'financial_analysis',
+      'mse_assessment',
+      'output_sheet',
       'expert_scorecard',
-      'credit_app_memo',
-      'output_sheet'
+      'financial_analysis',
+      'bank_analysis',
+      'credit_app_memo'
     ];
     
     // Find first form that is not completed
@@ -115,17 +116,18 @@ const LoanOfficerDashboard = () => {
     // Store active client ID
     localStorage.setItem('activeClientId', client._id);
     
-    // Form routes mapping
+    // Form routes mapping - all 7 forms
     const formRoutes = {
       'user_form': '/form',
-      'bank_analysis': '/bank-analysis',
-      'financial_analysis': '/financial-analysis',
+      'mse_assessment': '/mse-assessment',
+      'output_sheet': '/output-analysis',
       'expert_scorecard': '/expert-scorecard',
-      'credit_app_memo': '/credit-app-memo',
-      'output_sheet': '/output-analysis'
+      'financial_analysis': '/financial-analysis',
+      'bank_analysis': '/bank-analysis',
+      'credit_app_memo': '/credit-app-memo'
     };
     
-    // If form exists, store its ID
+    // If form exists, store its ID for all form types
     if (nextForm.form) {
       localStorage.setItem(`activeFormId_${nextForm.formType}`, nextForm.form._id);
       

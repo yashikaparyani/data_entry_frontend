@@ -3,6 +3,7 @@ import { bankAnalysisConfig } from '../data/bankAnalysisConfig';
 import './BankAnalysisForm.css';
 import axios from 'axios';
 import FormTabs from './FormTabs';
+import FormNavigation from './FormNavigation';
 
 const BankAnalysisForm = () => {
   const [currentSection, setCurrentSection] = useState(0);
@@ -484,15 +485,19 @@ const BankAnalysisForm = () => {
 
   return (
     <div className="bank-analysis-form">
+      {/* Form Navigation Header */}
+      <FormNavigation />
+      
       {/* Form Tabs Navigation (centralized with lock functionality) */}
       <FormTabs currentFormType="bank_analysis" />
       
       <div className="form-header">
         <h1 className="form-title">{bankAnalysisConfig.title}</h1>
+        <p className="form-subtitle">(All figures in $)</p>
         <p className="form-description">{bankAnalysisConfig.description}</p>
       </div>
 
-      <div className="form-header">        
+      <div className="form-progress-section">        
         <div className="section-progress">
           {bankAnalysisConfig.sections.map((section, index) => (
             <div
@@ -511,6 +516,19 @@ const BankAnalysisForm = () => {
           <div className="section-header">
             <h2 className="section-title">{currentSectionData.title}</h2>
             <p className="section-description">{currentSectionData.description}</p>
+            
+            {/* Add specific notes for each section */}
+            {currentSectionData.id === 'monthly-balances' && (
+              <div className="section-note">
+                <strong>Note:</strong> Please input end of day balances for the last 6 months from the operating bank accounts for specific dates to understand average bank balance for the period.
+              </div>
+            )}
+            
+            {currentSectionData.id === 'banking-credits' && (
+              <div className="section-note">
+                <strong>Note:</strong> Please input end of month credit balances including bank transfers, cash deposit but excluding contra entries.
+              </div>
+            )}
           </div>
 
           <div className="section-content">

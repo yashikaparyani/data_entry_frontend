@@ -125,7 +125,21 @@ export const formConfig = {
         { name: 'bank2Name', label: 'Bank 2 - Bank Name', type: 'text', required: false },
         { name: 'bank2AccountType', label: 'Bank 2 - Account Type', type: 'select', required: false, options: ['Savings', 'Current', 'Fixed Deposit', 'Others'] },
         { name: 'bank2AccountOwner', label: 'Bank 2 - Account Owner', type: 'select', required: false, options: ['Applicant', 'Co-applicant', 'Joint'] },
-        { name: 'bank2Balance', label: 'Bank 2 - Bank Balance including Fixed Deposit (USD)', type: 'number', required: false }
+        { name: 'bank2Balance', label: 'Bank 2 - Bank Balance including Fixed Deposit (USD)', type: 'number', required: false },
+        
+        // Motor Vehicles
+        { name: 'motorVehicle1Registration', label: 'Motor Vehicle 1 - Registration Number', type: 'text', required: false },
+        { name: 'motorVehicle1Type', label: 'Motor Vehicle 1 - Type of Vehicle', type: 'select', required: false, options: ['Car', 'Motorcycle', 'Truck', 'Van', 'Bus', 'Others'] },
+        { name: 'motorVehicle1Model', label: 'Motor Vehicle 1 - Model', type: 'text', required: false },
+        { name: 'motorVehicle1Year', label: 'Motor Vehicle 1 - Year of Manufacture', type: 'number', required: false },
+        { name: 'motorVehicle1OwnedBy', label: 'Motor Vehicle 1 - Owned by', type: 'select', required: false, options: ['Applicant', 'Co-applicant', 'Joint', 'Others'] },
+        { name: 'motorVehicle1Value', label: 'Motor Vehicle 1 - Market Value (USD)', type: 'number', required: false },
+        
+        // Other Investments
+        { name: 'otherInvestment1Type', label: 'Other Investment 1 - Type of Investment', type: 'select', required: false, options: ['Stocks', 'Bonds', 'Mutual Funds', 'Gold', 'Jewelry', 'Others'] },
+        { name: 'otherInvestment1Description', label: 'Other Investment 1 - Description', type: 'text', required: false },
+        { name: 'otherInvestment1OwnedBy', label: 'Other Investment 1 - Owned by', type: 'select', required: false, options: ['Applicant', 'Co-applicant', 'Joint', 'Others'] },
+        { name: 'otherInvestment1Value', label: 'Other Investment 1 - Current Value (USD)', type: 'number', required: false }
       ]
     },
     {
@@ -167,7 +181,44 @@ export const formConfig = {
         { name: 'customerLoan3ToBeClosed', label: 'Customer Loan 3 - Loan to be Closed (Yes/No)', type: 'radio', required: false, options: ['Yes', 'No'] },
         { name: 'customerLoan3Obligate', label: 'Customer Loan 3 - Obligate', type: 'number', required: false },
         { name: 'customerLoan3PreviousObligation', label: 'Customer Loan 3 - Previous Loan Obligation', type: 'number', required: false },
-        { name: 'customerLoan3EverOverdue', label: 'Customer Loan 3 - Ever Overdue', type: 'radio', required: false, options: ['Yes', 'No'] }
+        { name: 'customerLoan3EverOverdue', label: 'Customer Loan 3 - Ever Overdue', type: 'radio', required: false, options: ['Yes', 'No'] },
+        
+        // Co-applicant/Guarantor Loans
+        { name: 'coApplicantLoan1Institution', label: 'Co-applicant/Guarantor Loan 1 - Name Of Institution', type: 'text', required: false },
+        { name: 'coApplicantLoan1Amount', label: 'Co-applicant/Guarantor Loan 1 - Loan amount', type: 'number', required: false },
+        { name: 'coApplicantLoan1EMI', label: 'Co-applicant/Guarantor Loan 1 - EMI', type: 'number', required: false },
+        { name: 'coApplicantLoan1Outstanding', label: 'Co-applicant/Guarantor Loan 1 - Loan Outstanding', type: 'number', required: false },
+        { name: 'coApplicantLoan1Tenor', label: 'Co-applicant/Guarantor Loan 1 - Tenor', type: 'number', required: false },
+        { name: 'coApplicantLoan1PaidTenor', label: 'Co-applicant/Guarantor Loan 1 - Paid Tenor', type: 'number', required: false },
+        { name: 'coApplicantLoan1BalanceTenor', label: 'Co-applicant/Guarantor Loan 1 - Balance Tenor', type: 'number', required: false },
+        { name: 'coApplicantLoan1ToBeClosed', label: 'Co-applicant/Guarantor Loan 1 - Loan to be Closed (Yes/No)', type: 'radio', required: false, options: ['Yes', 'No'] },
+        { name: 'coApplicantLoan1Obligate', label: 'Co-applicant/Guarantor Loan 1 - Obligate', type: 'number', required: false },
+        { name: 'coApplicantLoan1PreviousObligation', label: 'Co-applicant/Guarantor Loan 1 - Previous Loan Obligation', type: 'number', required: false },
+        { name: 'coApplicantLoan1EverOverdue', label: 'Co-applicant/Guarantor Loan 1 - Ever Overdue', type: 'radio', required: false, options: ['Yes', 'No'] },
+        
+        { name: 'coApplicantLoan2Institution', label: 'Co-applicant/Guarantor Loan 2 - Name Of Institution', type: 'text', required: false },
+        { name: 'coApplicantLoan2Amount', label: 'Co-applicant/Guarantor Loan 2 - Loan amount', type: 'number', required: false },
+        { name: 'coApplicantLoan2EMI', label: 'Co-applicant/Guarantor Loan 2 - EMI', type: 'number', required: false },
+        { name: 'coApplicantLoan2Outstanding', label: 'Co-applicant/Guarantor Loan 2 - Loan Outstanding', type: 'number', required: false },
+        { name: 'coApplicantLoan2Tenor', label: 'Co-applicant/Guarantor Loan 2 - Tenor', type: 'number', required: false },
+        { name: 'coApplicantLoan2PaidTenor', label: 'Co-applicant/Guarantor Loan 2 - Paid Tenor', type: 'number', required: false },
+        { name: 'coApplicantLoan2BalanceTenor', label: 'Co-applicant/Guarantor Loan 2 - Balance Tenor', type: 'number', required: false },
+        { name: 'coApplicantLoan2ToBeClosed', label: 'Co-applicant/Guarantor Loan 2 - Loan to be Closed (Yes/No)', type: 'radio', required: false, options: ['Yes', 'No'] },
+        { name: 'coApplicantLoan2Obligate', label: 'Co-applicant/Guarantor Loan 2 - Obligate', type: 'number', required: false },
+        { name: 'coApplicantLoan2PreviousObligation', label: 'Co-applicant/Guarantor Loan 2 - Previous Loan Obligation', type: 'number', required: false },
+        { name: 'coApplicantLoan2EverOverdue', label: 'Co-applicant/Guarantor Loan 2 - Ever Overdue', type: 'radio', required: false, options: ['Yes', 'No'] },
+        
+        { name: 'coApplicantLoan3Institution', label: 'Co-applicant/Guarantor Loan 3 - Name Of Institution', type: 'text', required: false },
+        { name: 'coApplicantLoan3Amount', label: 'Co-applicant/Guarantor Loan 3 - Loan amount', type: 'number', required: false },
+        { name: 'coApplicantLoan3EMI', label: 'Co-applicant/Guarantor Loan 3 - EMI', type: 'number', required: false },
+        { name: 'coApplicantLoan3Outstanding', label: 'Co-applicant/Guarantor Loan 3 - Loan Outstanding', type: 'number', required: false },
+        { name: 'coApplicantLoan3Tenor', label: 'Co-applicant/Guarantor Loan 3 - Tenor', type: 'number', required: false },
+        { name: 'coApplicantLoan3PaidTenor', label: 'Co-applicant/Guarantor Loan 3 - Paid Tenor', type: 'number', required: false },
+        { name: 'coApplicantLoan3BalanceTenor', label: 'Co-applicant/Guarantor Loan 3 - Balance Tenor', type: 'number', required: false },
+        { name: 'coApplicantLoan3ToBeClosed', label: 'Co-applicant/Guarantor Loan 3 - Loan to be Closed (Yes/No)', type: 'radio', required: false, options: ['Yes', 'No'] },
+        { name: 'coApplicantLoan3Obligate', label: 'Co-applicant/Guarantor Loan 3 - Obligate', type: 'number', required: false },
+        { name: 'coApplicantLoan3PreviousObligation', label: 'Co-applicant/Guarantor Loan 3 - Previous Loan Obligation', type: 'number', required: false },
+        { name: 'coApplicantLoan3EverOverdue', label: 'Co-applicant/Guarantor Loan 3 - Ever Overdue', type: 'radio', required: false, options: ['Yes', 'No'] }
       ]
     },
     {
@@ -187,6 +238,19 @@ export const formConfig = {
         { name: 'supplier1Timeliness', label: 'Supplier 1 - Payment Timeliness', type: 'select', required: false, options: ['On or Before Time', 'Late', 'Very Late'] },
         { name: 'supplier1Feedback', label: 'Supplier 1 - Supplier Feedback on Customer', type: 'select', required: false, options: ['Positive', 'Negative', 'Neutral'] },
         
+        // Supplier Verification 2
+        { name: 'supplier2Name', label: 'Supplier 2 - Name of the Supplier', type: 'text', required: false },
+        { name: 'supplier2Location', label: 'Supplier 2 - Location', type: 'text', required: false },
+        { name: 'supplier2Years', label: 'Supplier 2 - Number of Years supplying to the Customer', type: 'number', required: false },
+        { name: 'supplier2Frequency', label: 'Supplier 2 - Supply Frequency', type: 'select', required: false, options: ['Daily', 'Weekly', 'Fortnightly', 'Monthly', 'Quarterly', 'Yearly'] },
+        { name: 'supplier2Product', label: 'Supplier 2 - Type of product/service supplied', type: 'text', required: false },
+        { name: 'supplier2Amount', label: 'Supplier 2 - Average Supply Amount (USD)', type: 'number', required: false },
+        { name: 'supplier2PaymentTerms', label: 'Supplier 2 - Payment Terms', type: 'select', required: false, options: ['Cash', 'Credit'] },
+        { name: 'supplier2PaymentMode', label: 'Supplier 2 - Payment Mode', type: 'text', required: false },
+        { name: 'supplier2CreditDays', label: 'Supplier 2 - If Credit then how many days credit', type: 'number', required: false, conditional: 'supplier2PaymentTerms', conditionalValue: 'Credit' },
+        { name: 'supplier2Timeliness', label: 'Supplier 2 - Payment Timeliness', type: 'select', required: false, options: ['On or Before Time', 'Late', 'Very Late'] },
+        { name: 'supplier2Feedback', label: 'Supplier 2 - Supplier Feedback on Customer', type: 'select', required: false, options: ['Positive', 'Negative', 'Neutral'] },
+        
         // Buyer Verification 1
         { name: 'buyer1Name', label: 'Buyer 1 - Name of the Buyer', type: 'text', required: false },
         { name: 'buyer1Mobile', label: 'Buyer 1 - Mobile Number', type: 'tel', required: false },
@@ -199,6 +263,19 @@ export const formConfig = {
         { name: 'buyer1Quality', label: 'Buyer 1 - Product/Service Quality', type: 'select', required: false, options: ['Excellent', 'Good', 'Average', 'Poor'] },
         { name: 'buyer1CreditDays', label: 'Buyer 1 - If Credit then how many days credit', type: 'number', required: false, conditional: 'buyer1PaymentTerms', conditionalValue: 'Credit' },
         { name: 'buyer1Feedback', label: 'Buyer 1 - Buyer Feedback on Customer', type: 'select', required: false, options: ['Positive', 'Negative', 'Neutral'] },
+        
+        // Buyer Verification 2
+        { name: 'buyer2Name', label: 'Buyer 2 - Name of the Buyer', type: 'text', required: false },
+        { name: 'buyer2Mobile', label: 'Buyer 2 - Mobile Number', type: 'tel', required: false },
+        { name: 'buyer2Location', label: 'Buyer 2 - Location', type: 'text', required: false },
+        { name: 'buyer2Years', label: 'Buyer 2 - Number of Years purchasing from the Customer', type: 'number', required: false },
+        { name: 'buyer2Frequency', label: 'Buyer 2 - Purchase Frequency', type: 'select', required: false, options: ['Daily', 'Weekly', 'Fortnightly', 'Monthly', 'Quarterly', 'Yearly'] },
+        { name: 'buyer2Amount', label: 'Buyer 2 - Average Purchase Amount (USD)', type: 'number', required: false },
+        { name: 'buyer2PaymentTerms', label: 'Buyer 2 - Payment Terms', type: 'select', required: false, options: ['Cash', 'Credit'] },
+        { name: 'buyer2PaymentMode', label: 'Buyer 2 - Payment Mode', type: 'text', required: false },
+        { name: 'buyer2Quality', label: 'Buyer 2 - Product/Service Quality', type: 'select', required: false, options: ['Excellent', 'Good', 'Average', 'Poor'] },
+        { name: 'buyer2CreditDays', label: 'Buyer 2 - If Credit then how many days credit', type: 'number', required: false, conditional: 'buyer2PaymentTerms', conditionalValue: 'Credit' },
+        { name: 'buyer2Feedback', label: 'Buyer 2 - Buyer Feedback on Customer', type: 'select', required: false, options: ['Positive', 'Negative', 'Neutral'] },
         
         // Personal Reference
         { name: 'personalRefName', label: 'Personal Reference - Name of the Person', type: 'text', required: false },

@@ -1,28 +1,75 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { mseFormConfig } from '../data/mseFormConfig';
 import FormNavigation from './FormNavigation';
 import FormTabs from './FormTabs';
+import { completeFormAndNavigate } from '../utils/formHelpers';
 import axios from 'axios';
 import './MSECreditAssessment.css';
 
 const MSECreditAssessment = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  // const { formId } = useParams(); // For resume functionality - not used yet
   const [formData, setFormData] = useState({});
   const [currentStep, setCurrentStep] = useState(1);
   const [totalSteps, setTotalSteps] = useState(mseFormConfig.totalSteps);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
+  const [_clientId, setClientId] = useState(null);
+  const [activeFormId, setActiveFormId] = useState(null);
 
   useEffect(() => {
     fetchFormData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchFormData = async () => {
     try {
-      const response = await axios.get('/api/form/data/MSE-Credit-Assessment-Excel');
-      const data = response.data.formData;
-      setFormData(data.responses || {});
-      setCurrentStep(data.currentStep || 1);
+      // Check if this is loan officer workflow
+      const isLoanOfficer = user?.role === 'loan_officer';
+      const storedClientId = localStorage.getItem('activeClientId');
+      const storedFormId = localStorage.getItem('activeFormId_mse_assessment');
+
+      if (isLoanOfficer && storedClientId) {
+        console.log('🔍 MSE Assessment - Loan Officer mode');
+        setClientId(storedClientId);
+
+        // If form exists, load it
+        if (storedFormId) {
+          console.log('📋 Loading existing MSE form:', storedFormId);
+          const response = await axios.get(`/api/loan-officer/forms/${storedFormId}`, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+          });
+          const data = response.data.form;
+          setFormData(data.formData || {});
+          setCurrentStep(data.currentStep || 1);
+          setActiveFormId(storedFormId);
+          console.log('✅ MSE form loaded with saved data');
+        } else {
+          // Create new form for this client
+          console.log('🆕 Creating new MSE Assessment form for client:', storedClientId);
+          const formResponse = await axios.post(
+            `/api/loan-officer/clients/${storedClientId}/forms`,
+            { formType: 'mse_assessment' },
+            { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } }
+          );
+          const newFormId = formResponse.data.form._id;
+          localStorage.setItem('activeFormId_mse_assessment', newFormId);
+          setActiveFormId(newFormId);
+          console.log('✅ New MSE form created:', newFormId);
+        }
+      } else {
+        // Regular user workflow
+        console.log('👤 MSE Assessment - Regular user mode');
+        const response = await axios.get('/api/form/data/MSE-Credit-Assessment-Excel');
+        const data = response.data.formData;
+        setFormData(data.responses || {});
+        setCurrentStep(data.currentStep || 1);
+      }
+      
       setTotalSteps(mseFormConfig.totalSteps);
     } catch (error) {
       console.error('Error fetching form data:', error);
@@ -190,13 +237,31 @@ const MSECreditAssessment = () => {
     setMessage('');
 
     try {
-      await axios.post('/api/form/save', {
-        formName: 'MSE-Credit-Assessment-Excel',
-        responses: formData,
-        currentStep,
-        totalSteps: mseFormConfig.totalSteps,
-        isCompleted: currentStep === mseFormConfig.totalSteps
-      });
+      const isLoanOfficer = user?.role === 'loan_officer';
+      
+      if (isLoanOfficer && activeFormId) {
+        // Loan officer - save using form ID
+        console.log('💾 Saving MSE form (Loan Officer):', activeFormId);
+        await axios.put(
+          `/api/loan-officer/forms/${activeFormId}/save`,
+          {
+            formData,
+            currentStep,
+            totalSteps: mseFormConfig.totalSteps,
+            status: 'in_progress'
+          },
+          { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } }
+        );
+      } else {
+        // Regular user - save using old API
+        await axios.post('/api/form/save', {
+          formName: 'MSE-Credit-Assessment-Excel',
+          responses: formData,
+          currentStep,
+          totalSteps: mseFormConfig.totalSteps,
+          isCompleted: currentStep === mseFormConfig.totalSteps
+        });
+      }
 
       setMessage('Form data saved successfully!');
       setTimeout(() => setMessage(''), 3000);
@@ -232,7 +297,7 @@ const MSECreditAssessment = () => {
     return [...missingFields, ...customValidationErrors];
   };
 
-  const nextStep = () => {
+  const nextStep = async () => {
     const missingFields = validateCurrentStep();
     
     if (missingFields.length > 0) {
@@ -242,43 +307,70 @@ const MSECreditAssessment = () => {
     }
 
     if (currentStep < mseFormConfig.totalSteps) {
+      // Move to next step within form
       setCurrentStep(prev => prev + 1);
       saveFormData();
+    } else {
+      // Last step - complete form and navigate to next form
+      await completeAndNavigateToNextForm();
+    }
+  };
+
+  const completeAndNavigateToNextForm = async () => {
+    setSaving(true);
+    setMessage('✓ Completing MSE Assessment...');
+    
+    try {
+      const storedClientId = localStorage.getItem('activeClientId');
+      const formId = activeFormId || localStorage.getItem('activeFormId_mse_assessment');
+      
+      if (!storedClientId || !formId) {
+        setMessage('❌ Missing client or form information');
+        setSaving(false);
+        return;
+      }
+
+      // Use helper function to complete and navigate
+      await completeFormAndNavigate(
+        'mse_assessment',
+        formId,
+        formData,
+        (nextForm) => {
+          if (nextForm) {
+            setMessage(`✓ MSE Assessment completed! Redirecting to ${nextForm.name}...`);
+          } else {
+            setMessage('✓ All forms completed! Redirecting to dashboard...');
+          }
+        },
+        (error) => {
+          console.error('Complete error:', error);
+          setMessage('❌ Error completing form: ' + (error.response?.data?.message || error.message));
+          setSaving(false);
+        }
+      );
+    } catch (error) {
+      console.error('Complete error:', error);
+      setMessage('❌ Error completing form');
+      setSaving(false);
     }
   };
 
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
+    } else {
+      // If on first step, go back to previous form (User Form)
+      goToPreviousForm();
     }
   };
 
-  const submitForm = async () => {
-    const missingFields = validateCurrentStep();
-    
-    if (missingFields.length > 0) {
-      const fieldNames = missingFields.map(field => field.label || field.message).join(', ');
-      setMessage(`Please resolve the following: ${fieldNames}`);
-      return;
-    }
-
-    setSaving(true);
-    try {
-      await axios.post('/api/form/submit', {
-        formName: 'MSE-Credit-Assessment-Excel',
-        responses: formData,
-        currentStep,
-        totalSteps: mseFormConfig.totalSteps,
-        isCompleted: true,
-        submittedAt: new Date().toISOString()
-      });
-
-      setMessage('MSE Credit Assessment submitted successfully!');
-    } catch (error) {
-      setMessage('Error submitting form');
-      console.error('Submit error:', error);
-    } finally {
-      setSaving(false);
+  const goToPreviousForm = () => {
+    // Navigate back to User Form (previous form in sequence)
+    const clientId = localStorage.getItem('activeClientId');
+    if (clientId) {
+      navigate('/form');
+    } else {
+      navigate('/loan-officer/dashboard');
     }
   };
 
@@ -476,6 +568,9 @@ const MSECreditAssessment = () => {
 
       <main className="form-main">
         <div className="form-container">
+          {/* Form Tabs */}
+          <FormTabs currentFormType="mse_assessment" />
+          
           <div className="progress-section">
             <div className="progress-bar">
               <div 
@@ -507,15 +602,13 @@ const MSECreditAssessment = () => {
 
           <div className="form-navigation">
             <div className="nav-left">
-              {currentStep > 1 && (
-                <button 
-                  type="button" 
-                  className="btn btn-secondary" 
-                  onClick={prevStep}
-                >
-                  Previous
-                </button>
-              )}
+              <button 
+                type="button" 
+                className="btn btn-secondary" 
+                onClick={prevStep}
+              >
+                {currentStep > 1 ? 'Previous Step' : '← Back to Customer Details'}
+              </button>
             </div>
             
             <div className="nav-center">
@@ -530,24 +623,14 @@ const MSECreditAssessment = () => {
             </div>
             
             <div className="nav-right">
-              {currentStep < totalSteps ? (
-                <button 
-                  type="button" 
-                  className="btn btn-primary" 
-                  onClick={nextStep}
-                >
-                  Next
-                </button>
-              ) : (
-                <button 
-                  type="button" 
-                  className="btn btn-success" 
-                  onClick={submitForm}
-                  disabled={saving}
-                >
-                  {saving ? 'Submitting...' : 'Submit Assessment'}
-                </button>
-              )}
+              <button 
+                type="button" 
+                className="btn btn-primary" 
+                onClick={nextStep}
+                disabled={saving}
+              >
+                {saving ? 'Processing...' : (currentStep < totalSteps ? 'Next' : 'Complete & Next Form →')}
+              </button>
             </div>
           </div>
         </div>

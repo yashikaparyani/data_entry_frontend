@@ -54,6 +54,14 @@ export const financialAnalysisConfig = {
           category: "input",
           helpText: "Additional business income for 2024"
         },
+        { 
+          name: "other_business_income_2023", 
+          label: "Other Business Income (2023)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Additional business income for 2023"
+        },
 
         // Cost of Goods Sold
         { 
@@ -67,6 +75,14 @@ export const financialAnalysisConfig = {
         { 
           name: "purchases_2024", 
           label: "Purchases (2024)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Cost of raw materials and goods purchased"
+        },
+        { 
+          name: "purchases_2023", 
+          label: "Purchases (2023)", 
           type: "currency", 
           required: true, 
           category: "input",
@@ -89,6 +105,14 @@ export const financialAnalysisConfig = {
           helpText: "Direct manufacturing expenses including wages"
         },
         { 
+          name: "direct_expenses_2023", 
+          label: "Direct Expenses - Wages, Overheads (2023)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Direct manufacturing expenses including wages"
+        },
+        { 
           name: "stock_changes_2025", 
           label: "Changes in Stock - Closing minus Opening (2025)", 
           type: "currency", 
@@ -99,6 +123,14 @@ export const financialAnalysisConfig = {
         { 
           name: "stock_changes_2024", 
           label: "Changes in Stock - Closing minus Opening (2024)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Inventory changes (positive for increase, negative for decrease)"
+        },
+        { 
+          name: "stock_changes_2023", 
+          label: "Changes in Stock - Closing minus Opening (2023)", 
           type: "currency", 
           required: false, 
           category: "input",
@@ -123,6 +155,14 @@ export const financialAnalysisConfig = {
           helpText: "Administrative and general business expenses"
         },
         { 
+          name: "admin_expenses_2023", 
+          label: "General & Admin Expenses (2023)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Administrative and general business expenses"
+        },
+        { 
           name: "personnel_cost_2025", 
           label: "Personnel Cost (2025)", 
           type: "currency", 
@@ -133,6 +173,14 @@ export const financialAnalysisConfig = {
         { 
           name: "personnel_cost_2024", 
           label: "Personnel Cost (2024)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Salaries, benefits, and personnel-related costs"
+        },
+        { 
+          name: "personnel_cost_2023", 
+          label: "Personnel Cost (2023)", 
           type: "currency", 
           required: true, 
           category: "input",
@@ -155,6 +203,14 @@ export const financialAnalysisConfig = {
           helpText: "Marketing, sales, and distribution costs"
         },
         { 
+          name: "selling_expenses_2023", 
+          label: "Selling and Distribution Expenses (2023)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Marketing, sales, and distribution costs"
+        },
+        { 
           name: "misc_expenses_2025", 
           label: "Miscellaneous/Deferred Revenue Expenses (2025)", 
           type: "currency", 
@@ -165,6 +221,14 @@ export const financialAnalysisConfig = {
         { 
           name: "misc_expenses_2024", 
           label: "Miscellaneous/Deferred Revenue Expenses (2024)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Other miscellaneous business expenses"
+        },
+        { 
+          name: "misc_expenses_2023", 
+          label: "Miscellaneous/Deferred Revenue Expenses (2023)", 
           type: "currency", 
           required: false, 
           category: "input",
@@ -189,6 +253,14 @@ export const financialAnalysisConfig = {
           helpText: "Depreciation on assets and amortization"
         },
         { 
+          name: "depreciation_2023", 
+          label: "Depreciation and Amortisation (2023)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Depreciation on assets and amortization"
+        },
+        { 
           name: "interest_charges_2025", 
           label: "Interest and Finance Charges (2025)", 
           type: "currency", 
@@ -199,6 +271,14 @@ export const financialAnalysisConfig = {
         { 
           name: "interest_charges_2024", 
           label: "Interest and Finance Charges (2024)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Interest paid on loans and finance charges"
+        },
+        { 
+          name: "interest_charges_2023", 
+          label: "Interest and Finance Charges (2023)", 
           type: "currency", 
           required: true, 
           category: "input",
@@ -221,6 +301,14 @@ export const financialAnalysisConfig = {
           helpText: "Income from non-business activities"
         },
         { 
+          name: "non_operating_income_2023", 
+          label: "Non Operating Income (2023)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Income from non-business activities"
+        },
+        { 
           name: "non_operating_expenses_2025", 
           label: "Non Operating Expenses (2025)", 
           type: "currency", 
@@ -237,6 +325,14 @@ export const financialAnalysisConfig = {
           helpText: "Expenses from non-business activities"
         },
         { 
+          name: "non_operating_expenses_2023", 
+          label: "Non Operating Expenses (2023)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Expenses from non-business activities"
+        },
+        { 
           name: "tax_2025", 
           label: "Tax (2025)", 
           type: "currency", 
@@ -247,6 +343,14 @@ export const financialAnalysisConfig = {
         { 
           name: "tax_2024", 
           label: "Tax (2024)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Income tax and other statutory taxes"
+        },
+        { 
+          name: "tax_2023", 
+          label: "Tax (2023)", 
           type: "currency", 
           required: true, 
           category: "input",
@@ -279,6 +383,14 @@ export const financialAnalysisConfig = {
           helpText: "Total share capital invested"
         },
         { 
+          name: "equity_share_capital_2023", 
+          label: "Equity and Preference Share Capital (2023)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Total share capital invested"
+        },
+        { 
           name: "quasi_equity_2025", 
           label: "Quasi Equity - Promoter Loans (2025)", 
           type: "currency", 
@@ -289,6 +401,14 @@ export const financialAnalysisConfig = {
         { 
           name: "quasi_equity_2024", 
           label: "Quasi Equity - Promoter Loans (2024)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Promoter loans not requiring immediate repayment"
+        },
+        { 
+          name: "quasi_equity_2023", 
+          label: "Quasi Equity - Promoter Loans (2023)", 
           type: "currency", 
           required: false, 
           category: "input",
@@ -311,6 +431,14 @@ export const financialAnalysisConfig = {
           helpText: "Accumulated profits and reserves"
         },
         { 
+          name: "reserves_2023", 
+          label: "General Reserve, Share Premium and Other Reserves (2023)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Accumulated profits and reserves"
+        },
+        { 
           name: "revaluation_reserve_2025", 
           label: "Revaluation Reserve (2025)", 
           type: "currency", 
@@ -321,6 +449,14 @@ export const financialAnalysisConfig = {
         { 
           name: "revaluation_reserve_2024", 
           label: "Revaluation Reserve (2024)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Reserve from asset revaluation"
+        },
+        { 
+          name: "revaluation_reserve_2023", 
+          label: "Revaluation Reserve (2023)", 
           type: "currency", 
           required: false, 
           category: "input",
@@ -345,6 +481,14 @@ export const financialAnalysisConfig = {
           helpText: "Term loans and long-term debt"
         },
         { 
+          name: "long_term_borrowings_2023", 
+          label: "Long Term Borrowings from Banks & NBFCs (2023)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Term loans and long-term debt"
+        },
+        { 
           name: "affiliate_borrowings_2025", 
           label: "Borrowings from Affiliates & Associates (2025)", 
           type: "currency", 
@@ -361,6 +505,14 @@ export const financialAnalysisConfig = {
           helpText: "Loans from related parties"
         },
         { 
+          name: "affiliate_borrowings_2023", 
+          label: "Borrowings from Affiliates & Associates (2023)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Loans from related parties"
+        },
+        { 
           name: "other_borrowings_2025", 
           label: "Other Borrowings/Provisions (2025)", 
           type: "currency", 
@@ -371,6 +523,14 @@ export const financialAnalysisConfig = {
         { 
           name: "other_borrowings_2024", 
           label: "Other Borrowings/Provisions (2024)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Other long-term liabilities and provisions"
+        },
+        { 
+          name: "other_borrowings_2023", 
+          label: "Other Borrowings/Provisions (2023)", 
           type: "currency", 
           required: false, 
           category: "input",
@@ -395,6 +555,14 @@ export const financialAnalysisConfig = {
           helpText: "Short-term loans from related parties"
         },
         { 
+          name: "short_term_affiliate_borrowings_2023", 
+          label: "Short Term Borrowings from Affiliates (2023)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Short-term loans from related parties"
+        },
+        { 
           name: "creditors_2025", 
           label: "Creditors and Bills Payable (2025)", 
           type: "currency", 
@@ -405,6 +573,14 @@ export const financialAnalysisConfig = {
         { 
           name: "creditors_2024", 
           label: "Creditors and Bills Payable (2024)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Trade creditors and payables"
+        },
+        { 
+          name: "creditors_2023", 
+          label: "Creditors and Bills Payable (2023)", 
           type: "currency", 
           required: true, 
           category: "input",
@@ -427,6 +603,14 @@ export const financialAnalysisConfig = {
           helpText: "Utilized working capital facilities"
         },
         { 
+          name: "wc_limit_2023", 
+          label: "Working Capital Limit from Banks (2023)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Utilized working capital facilities"
+        },
+        { 
           name: "tax_provision_2025", 
           label: "Provision for Taxation (2025)", 
           type: "currency", 
@@ -443,6 +627,14 @@ export const financialAnalysisConfig = {
           helpText: "Tax provisions and accruals"
         },
         { 
+          name: "tax_provision_2023", 
+          label: "Provision for Taxation (2023)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Tax provisions and accruals"
+        },
+        { 
           name: "other_liabilities_2025", 
           label: "Other Liabilities (2025)", 
           type: "currency", 
@@ -453,6 +645,14 @@ export const financialAnalysisConfig = {
         { 
           name: "other_liabilities_2024", 
           label: "Other Liabilities (2024)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Other current liabilities and accruals"
+        },
+        { 
+          name: "other_liabilities_2023", 
+          label: "Other Liabilities (2023)", 
           type: "currency", 
           required: false, 
           category: "input",
@@ -477,6 +677,14 @@ export const financialAnalysisConfig = {
           helpText: "Total cost of fixed assets before depreciation"
         },
         { 
+          name: "gross_fixed_assets_2023", 
+          label: "Gross Block of Fixed Assets (2023)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Total cost of fixed assets before depreciation"
+        },
+        { 
           name: "accumulated_depreciation_2025", 
           label: "Less: Accumulated Depreciation (2025)", 
           type: "currency", 
@@ -487,6 +695,14 @@ export const financialAnalysisConfig = {
         { 
           name: "accumulated_depreciation_2024", 
           label: "Less: Accumulated Depreciation (2024)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Total depreciation charged till date"
+        },
+        { 
+          name: "accumulated_depreciation_2023", 
+          label: "Less: Accumulated Depreciation (2023)", 
           type: "currency", 
           required: true, 
           category: "input",
@@ -509,6 +725,14 @@ export const financialAnalysisConfig = {
           helpText: "Assets under construction"
         },
         { 
+          name: "capital_wip_2023", 
+          label: "Capital Work In Progress (2023)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Assets under construction"
+        },
+        { 
           name: "investments_2025", 
           label: "Investments (2025)", 
           type: "currency", 
@@ -525,6 +749,14 @@ export const financialAnalysisConfig = {
           helpText: "Long-term investments"
         },
         { 
+          name: "investments_2023", 
+          label: "Investments (2023)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Long-term investments"
+        },
+        { 
           name: "deferred_tax_2025", 
           label: "Deferred Tax Asset (2025)", 
           type: "currency", 
@@ -535,6 +767,14 @@ export const financialAnalysisConfig = {
         { 
           name: "deferred_tax_2024", 
           label: "Deferred Tax Asset (2024)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Deferred tax assets net of liabilities"
+        },
+        { 
+          name: "deferred_tax_2023", 
+          label: "Deferred Tax Asset (2023)", 
           type: "currency", 
           required: false, 
           category: "input",
@@ -559,6 +799,14 @@ export const financialAnalysisConfig = {
           helpText: "Stock of raw materials, WIP, and finished goods"
         },
         { 
+          name: "inventories_2023", 
+          label: "Inventories (2023)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Stock of raw materials, WIP, and finished goods"
+        },
+        { 
           name: "debtors_gt6m_2025", 
           label: "Debtors > 6 months (2025)", 
           type: "currency", 
@@ -569,6 +817,14 @@ export const financialAnalysisConfig = {
         { 
           name: "debtors_gt6m_2024", 
           label: "Debtors > 6 months (2024)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Trade receivables overdue by more than 6 months"
+        },
+        { 
+          name: "debtors_gt6m_2023", 
+          label: "Debtors > 6 months (2023)", 
           type: "currency", 
           required: true, 
           category: "input",
@@ -591,6 +847,14 @@ export const financialAnalysisConfig = {
           helpText: "Trade receivables within 6 months"
         },
         { 
+          name: "debtors_lt6m_2023", 
+          label: "Debtors < 6 months (2023)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Trade receivables within 6 months"
+        },
+        { 
           name: "cash_bank_2025", 
           label: "Cash and Bank (2025)", 
           type: "currency", 
@@ -607,6 +871,14 @@ export const financialAnalysisConfig = {
           helpText: "Cash in hand and bank balances"
         },
         { 
+          name: "cash_bank_2023", 
+          label: "Cash and Bank (2023)", 
+          type: "currency", 
+          required: true, 
+          category: "input",
+          helpText: "Cash in hand and bank balances"
+        },
+        { 
           name: "other_current_assets_2025", 
           label: "Other Current Assets (2025)", 
           type: "currency", 
@@ -617,6 +889,14 @@ export const financialAnalysisConfig = {
         { 
           name: "other_current_assets_2024", 
           label: "Other Current Assets (2024)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Other current assets and prepayments"
+        },
+        { 
+          name: "other_current_assets_2023", 
+          label: "Other Current Assets (2023)", 
           type: "currency", 
           required: false, 
           category: "input",
@@ -641,6 +921,14 @@ export const financialAnalysisConfig = {
           helpText: "Advances given to directors and partners"
         },
         { 
+          name: "director_loans_2023", 
+          label: "Loans & Advances to Directors/Partners (2023)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Advances given to directors and partners"
+        },
+        { 
           name: "other_loans_advances_2025", 
           label: "Other Loans and Advances (2025)", 
           type: "currency", 
@@ -655,6 +943,260 @@ export const financialAnalysisConfig = {
           required: false, 
           category: "input",
           helpText: "Other loans and advances given"
+        },
+        { 
+          name: "other_loans_advances_2023", 
+          label: "Other Loans and Advances (2023)", 
+          type: "currency", 
+          required: false, 
+          category: "input",
+          helpText: "Other loans and advances given"
+        }
+      ]
+    },
+
+    {
+      name: "financial_ratios",
+      title: "Financial Ratios Analysis",
+      description: "Key financial ratios for creditworthiness assessment",
+      icon: "📈",
+      fields: [
+        // Calculated Ratios - Read-only display fields
+        { 
+          name: "current_ratio", 
+          label: "Current Ratio", 
+          type: "calculated", 
+          category: "ratio",
+          helpText: "Current Assets / Current Liabilities (Ideal: >1.5)"
+        },
+        { 
+          name: "quick_ratio", 
+          label: "Quick Ratio (Acid Test)", 
+          type: "calculated", 
+          category: "ratio",
+          helpText: "(Current Assets - Inventories) / Current Liabilities"
+        },
+        { 
+          name: "debt_equity_ratio", 
+          label: "Debt to Equity Ratio", 
+          type: "calculated", 
+          category: "ratio",
+          helpText: "Total Debt / Net Worth (Lower is better)"
+        },
+        { 
+          name: "gross_profit_margin", 
+          label: "Gross Profit Margin %", 
+          type: "calculated", 
+          category: "ratio",
+          helpText: "Gross Profit / Sales * 100"
+        },
+        { 
+          name: "net_profit_margin", 
+          label: "Net Profit Margin %", 
+          type: "calculated", 
+          category: "ratio",
+          helpText: "Net Profit / Sales * 100"
+        },
+        { 
+          name: "return_on_assets", 
+          label: "Return on Assets (ROA) %", 
+          type: "calculated", 
+          category: "ratio",
+          helpText: "Net Profit / Total Assets * 100"
+        },
+        { 
+          name: "return_on_equity", 
+          label: "Return on Equity (ROE) %", 
+          type: "calculated", 
+          category: "ratio",
+          helpText: "Net Profit / Net Worth * 100"
+        },
+        { 
+          name: "interest_coverage_ratio", 
+          label: "Interest Coverage Ratio", 
+          type: "calculated", 
+          category: "ratio",
+          helpText: "EBIT / Interest Expense (Higher is better)"
+        },
+        { 
+          name: "debtor_days", 
+          label: "Debtor Days", 
+          type: "calculated", 
+          category: "ratio",
+          helpText: "Debtors / Sales * 365"
+        },
+        { 
+          name: "inventory_days", 
+          label: "Inventory Days", 
+          type: "calculated", 
+          category: "ratio",
+          helpText: "Inventories / COGS * 365"
+        },
+        { 
+          name: "creditor_days", 
+          label: "Creditor Days", 
+          type: "calculated", 
+          category: "ratio",
+          helpText: "Creditors / Purchases * 365"
+        },
+        { 
+          name: "cash_conversion_cycle", 
+          label: "Cash Conversion Cycle (Days)", 
+          type: "calculated", 
+          category: "ratio",
+          helpText: "Debtor Days + Inventory Days - Creditor Days"
+        }
+      ]
+    },
+
+    {
+      name: "cash_flow_operations",
+      title: "Cash Flow From Operations",
+      description: "Operating cash flow analysis and working capital changes",
+      icon: "💵",
+      fields: [
+        // Net Profit (auto-calculated from P&L)
+        { 
+          name: "cf_net_profit", 
+          label: "Net Profit After Tax (2025)", 
+          type: "calculated", 
+          category: "cashflow",
+          helpText: "From P&L Statement"
+        },
+        
+        // Add Back Non-Cash Expenses
+        { 
+          name: "cf_depreciation", 
+          label: "Add: Depreciation & Amortisation", 
+          type: "calculated", 
+          category: "cashflow",
+          helpText: "Non-cash expense added back"
+        },
+        { 
+          name: "cf_interest", 
+          label: "Add: Interest Expense", 
+          type: "calculated", 
+          category: "cashflow",
+          helpText: "Interest expense added back"
+        },
+        
+        // Changes in Working Capital
+        { 
+          name: "cf_inventory_change", 
+          label: "Less: Increase in Inventories", 
+          type: "calculated", 
+          category: "cashflow",
+          helpText: "Inventory 2025 - Inventory 2024"
+        },
+        { 
+          name: "cf_debtor_change", 
+          label: "Less: Increase in Debtors", 
+          type: "calculated", 
+          category: "cashflow",
+          helpText: "Debtors 2025 - Debtors 2024"
+        },
+        { 
+          name: "cf_creditor_change", 
+          label: "Add: Increase in Creditors", 
+          type: "calculated", 
+          category: "cashflow",
+          helpText: "Creditors 2025 - Creditors 2024"
+        },
+        { 
+          name: "cf_other_assets_change", 
+          label: "Less: Increase in Other Current Assets", 
+          type: "calculated", 
+          category: "cashflow",
+          helpText: "Other Assets 2025 - Other Assets 2024"
+        },
+        { 
+          name: "cf_other_liabilities_change", 
+          label: "Add: Increase in Other Current Liabilities", 
+          type: "calculated", 
+          category: "cashflow",
+          helpText: "Other Liabilities 2025 - Other Liabilities 2024"
+        },
+        
+        // Operating Cash Flow
+        { 
+          name: "cf_operating_cash_flow", 
+          label: "Net Cash Flow from Operations", 
+          type: "calculated", 
+          category: "cashflow",
+          helpText: "Sum of all operating cash flows"
+        }
+      ]
+    },
+
+    {
+      name: "working_capital_assessment",
+      title: "Net Working Capital & Customer Margin",
+      description: "Working capital requirement and customer contribution analysis",
+      icon: "🏦",
+      fields: [
+        // Working Capital Components (calculated)
+        { 
+          name: "wc_current_assets", 
+          label: "Total Current Assets (2025)", 
+          type: "calculated", 
+          category: "working_capital",
+          helpText: "Sum of all current assets"
+        },
+        { 
+          name: "wc_current_liabilities_excl_bank", 
+          label: "Total Current Liabilities (Excluding Bank Borrowings)", 
+          type: "calculated", 
+          category: "working_capital",
+          helpText: "Current Liabilities minus WC Limit"
+        },
+        { 
+          name: "wc_gap", 
+          label: "Working Capital Gap", 
+          type: "calculated", 
+          category: "working_capital",
+          helpText: "Current Assets - Current Liabilities (excl. bank)"
+        },
+        { 
+          name: "wc_existing_bank_limit", 
+          label: "Existing Bank Borrowing for Working Capital", 
+          type: "calculated", 
+          category: "working_capital",
+          helpText: "Current WC limit from banks"
+        },
+        { 
+          name: "wc_loan_amount_applied", 
+          label: "Loan Amount Applied", 
+          type: "calculated", 
+          category: "working_capital",
+          helpText: "New loan amount being requested"
+        },
+        { 
+          name: "wc_total_bank_finance", 
+          label: "Total Bank Finance (Existing + New)", 
+          type: "calculated", 
+          category: "working_capital",
+          helpText: "Existing WC + New Loan"
+        },
+        { 
+          name: "wc_customer_margin", 
+          label: "Customer Margin ($)", 
+          type: "calculated", 
+          category: "working_capital",
+          helpText: "WC Gap - Total Bank Finance"
+        },
+        { 
+          name: "wc_customer_margin_percent", 
+          label: "Customer Margin (%)", 
+          type: "calculated", 
+          category: "working_capital",
+          helpText: "(Customer Margin / WC Gap) * 100"
+        },
+        { 
+          name: "wc_bank_finance_percent", 
+          label: "Bank Finance (%)", 
+          type: "calculated", 
+          category: "working_capital",
+          helpText: "(Total Bank Finance / WC Gap) * 100"
         }
       ]
     },

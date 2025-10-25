@@ -216,6 +216,261 @@ export const expertScorecardConfig = {
     required: false,
     placeholder: 'Enter any additional comments or observations about the customer assessment...',
     maxLength: 1000
+  },
+
+  // GO-NOGO CRITERIA Section
+  goNoGoCriteria: {
+    title: "GO-NOGO CRITERIA",
+    description: "Mandatory criteria that must be met for loan approval consideration",
+    criteria: [
+      {
+        name: 'age_criteria',
+        label: 'Age should be greater than 21 years and less than 60 years',
+        required: true,
+        type: 'checkbox'
+      },
+      {
+        name: 'business_vintage_criteria',
+        label: 'Business Vintage should be greater than 2 years',
+        required: true,
+        type: 'checkbox'
+      },
+      {
+        name: 'cibil_score_criteria',
+        label: 'CIBIL score should be greater than 650',
+        required: true,
+        type: 'checkbox'
+      },
+      {
+        name: 'dpd_criteria',
+        label: 'Should not have been 90 DPD ever',
+        required: true,
+        type: 'checkbox'
+      },
+      {
+        name: 'current_delinquency_criteria',
+        label: 'Should not be currently delinquent',
+        required: true,
+        type: 'checkbox'
+      },
+      {
+        name: 'loan_purpose_criteria',
+        label: 'Loan purpose should not be for repayment of existing loan',
+        required: true,
+        type: 'checkbox'
+      }
+    ]
+  },
+
+  // Scorecard Notes Section
+  scorecardNotes: {
+    title: "Scorecard Notes",
+    description: "Important guidelines for scorecard implementation",
+    notes: [
+      {
+        id: 1,
+        text: "The scorecard is designed for risk assessment of MSME loans above $50,000"
+      },
+      {
+        id: 2,
+        text: "All GO-NOGO criteria must be met before proceeding with scorecard evaluation"
+      },
+      {
+        id: 3,
+        text: "Qualitative parameters account for 35% of total score (Age, Business Vintage, Shop Ownership, Constitution, Income Source)"
+      },
+      {
+        id: 4,
+        text: "Quantitative parameters account for 65% of total score (Debt Burden, DSCR, LTV, Gross Margin, Working Capital Cycle, Customer Margin, Repayment Track)"
+      },
+      {
+        id: 5,
+        text: "Total score ranges from 30 to 100, with risk categories defined based on score ranges"
+      },
+      {
+        id: 6,
+        text: "Lowest Risk (82-100): Excellent creditworthiness - Recommended for approval"
+      },
+      {
+        id: 7,
+        text: "Low Risk (76-81): Good creditworthiness - Recommended for approval with standard terms"
+      },
+      {
+        id: 8,
+        text: "Moderate Risk (69-75): Acceptable risk - Approval with enhanced monitoring"
+      },
+      {
+        id: 9,
+        text: "High Risk (63-68): Requires careful evaluation - Credit committee approval needed"
+      },
+      {
+        id: 10,
+        text: "Highest Risk (30-62): Not recommended for approval unless exceptional circumstances"
+      }
+    ]
+  },
+
+  // Scorecard Implementation and Validation Section
+  scorecardImplementation: {
+    title: "Scorecard Implementation and Validation",
+    description: "Guidelines for proper implementation and validation of the expert scorecard",
+    sections: [
+      {
+        heading: "Implementation Guidelines",
+        points: [
+          "Ensure all data inputs are verified from authentic sources (CIBIL report, financial statements, field verification)",
+          "Sales officer must complete field visit and verify business premises before scoring",
+          "All financial ratios should be calculated from audited or certified financial statements where available",
+          "For businesses without formal accounts, use bank statement analysis for at least 12 months",
+          "Document all assumptions made during data collection and scoring process"
+        ]
+      },
+      {
+        heading: "Validation Requirements",
+        points: [
+          "Credit officer must review and validate all parameter selections made by sales officer",
+          "Cross-verify calculated ratios (DSCR, LTV, DBR, etc.) with source documents",
+          "Ensure consistency between scorecard assessment and field visit report",
+          "Flag any discrepancies between declared income and observed business activity",
+          "Obtain management override approval for any exceptions to GO-NOGO criteria"
+        ]
+      },
+      {
+        heading: "Periodic Review",
+        points: [
+          "Scorecard weights and ranges should be reviewed quarterly based on portfolio performance",
+          "Analyze correlation between scorecard scores and actual default rates",
+          "Update risk category thresholds if required based on portfolio delinquency trends",
+          "Maintain audit trail of all scorecard assessments and final credit decisions",
+          "Conduct random sampling validation of 10% of approved loans each month"
+        ]
+      }
+    ]
+  },
+
+  // Max Min Section (Score Ranges)
+  maxMinScores: {
+    title: "Max Min Score Configuration",
+    description: "Minimum and maximum possible scores for each parameter",
+    parameters: [
+      {
+        name: 'Age',
+        minScore: 3,
+        maxScore: 10,
+        weight: 10,
+        minWeightedScore: 0.3,
+        maxWeightedScore: 1.0,
+        category: 'Qualitative'
+      },
+      {
+        name: 'Business Vintage',
+        minScore: 2,
+        maxScore: 10,
+        weight: 10,
+        minWeightedScore: 0.2,
+        maxWeightedScore: 1.0,
+        category: 'Qualitative'
+      },
+      {
+        name: 'Shop Ownership',
+        minScore: 5,
+        maxScore: 10,
+        weight: 10,
+        minWeightedScore: 0.5,
+        maxWeightedScore: 1.0,
+        category: 'Qualitative'
+      },
+      {
+        name: 'Constitution',
+        minScore: 1,
+        maxScore: 5,
+        weight: 5,
+        minWeightedScore: 0.05,
+        maxWeightedScore: 0.25,
+        category: 'Qualitative'
+      },
+      {
+        name: 'Single or Multiple Income Source',
+        minScore: 5,
+        maxScore: 10,
+        weight: 10,
+        minWeightedScore: 0.5,
+        maxWeightedScore: 1.0,
+        category: 'Qualitative'
+      },
+      {
+        name: 'Debt Burden Ratio',
+        minScore: 3,
+        maxScore: 10,
+        weight: 10,
+        minWeightedScore: 0.3,
+        maxWeightedScore: 1.0,
+        category: 'Quantitative'
+      },
+      {
+        name: 'DSCR',
+        minScore: 3,
+        maxScore: 10,
+        weight: 10,
+        minWeightedScore: 0.3,
+        maxWeightedScore: 1.0,
+        category: 'Quantitative'
+      },
+      {
+        name: 'LTV',
+        minScore: 2,
+        maxScore: 10,
+        weight: 10,
+        minWeightedScore: 0.2,
+        maxWeightedScore: 1.0,
+        category: 'Quantitative'
+      },
+      {
+        name: 'Gross Margin/EBITDA',
+        minScore: 3,
+        maxScore: 10,
+        weight: 10,
+        minWeightedScore: 0.3,
+        maxWeightedScore: 1.0,
+        category: 'Quantitative'
+      },
+      {
+        name: 'Working Capital Cycle',
+        minScore: 2,
+        maxScore: 10,
+        weight: 10,
+        minWeightedScore: 0.2,
+        maxWeightedScore: 1.0,
+        category: 'Quantitative'
+      },
+      {
+        name: 'Customer Margin in Transaction',
+        minScore: 2,
+        maxScore: 10,
+        weight: 10,
+        minWeightedScore: 0.2,
+        maxWeightedScore: 1.0,
+        category: 'Quantitative'
+      },
+      {
+        name: 'Repayment Track Record',
+        minScore: 2,
+        maxScore: 5,
+        weight: 5,
+        minWeightedScore: 0.1,
+        maxWeightedScore: 0.25,
+        category: 'Quantitative'
+      }
+    ],
+    summary: {
+      qualitativeMin: 1.55,
+      qualitativeMax: 3.25,
+      quantitativeMin: 1.60,
+      quantitativeMax: 6.25,
+      overallMin: 3.15,
+      overallMax: 9.50,
+      note: "Weighted scores are calculated as: (Parameter Score × Weight) / 100"
+    }
   }
 };
 
