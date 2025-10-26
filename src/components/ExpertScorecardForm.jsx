@@ -5,6 +5,7 @@ import {
   getRiskCategory, 
   getParametersByCategory 
 } from '../data/expertScorecardConfig';
+import { completeFormAndNavigate } from '../utils/formHelpers';
 import './ExpertScorecardForm.css';
 import FormTabs from './FormTabs';
 import axios from 'axios';
@@ -137,24 +138,23 @@ const ExpertScorecardForm = () => {
         assessmentType: 'Expert Scorecard'
       };
 
-      // Mark form as completed
-      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
-        formData: submissionData,
-        currentStep: 1,
-        totalSteps: 1,
-        completionPercentage: 100,
-        isCompleted: true
-      }, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      });
-
-      if (response.status === 200) {
-        alert(`✓ Expert Scorecard completed!\nTotal Score: ${totalScore}\nRisk Category: ${riskCategory.name}\n\nRedirecting to Credit App Memo...`);
-        // Redirect to next form
-        window.location.href = '/credit-app-memo';
-      } else {
-        alert('❌ Error completing form');
-      }
+      // Use helper function to complete and navigate to next form
+      await completeFormAndNavigate(
+        'expert_scorecard',
+        activeFormId,
+        submissionData,
+        (nextForm) => {
+          if (nextForm) {
+            alert(`✓ Expert Scorecard completed!\nTotal Score: ${totalScore}\nRisk Category: ${riskCategory.name}\n\nRedirecting to ${nextForm.name}...`);
+          } else {
+            alert(`✓ Expert Scorecard completed!\nTotal Score: ${totalScore}\nRisk Category: ${riskCategory.name}\n\nAll forms completed!`);
+          }
+        },
+        (error) => {
+          console.error('Complete error:', error);
+          alert('❌ Error completing form: ' + (error.response?.data?.message || error.message));
+        }
+      );
     } catch (error) {
       console.error('Complete error:', error);
       alert('❌ Error completing form');

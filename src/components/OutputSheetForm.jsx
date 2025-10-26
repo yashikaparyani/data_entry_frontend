@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { outputFormSections, calculationFormulas } from '../data/outputFormConfig';
+import { completeFormAndNavigate } from '../utils/formHelpers';
 import FormTabs from './FormTabs';
 import './OutputSheetForm.css';
 import axios from 'axios';
@@ -174,24 +175,23 @@ const OutputSheetForm = () => {
     }
 
     try {
-      // Mark form as completed
-      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
-        formData: { ...formData, ...calculatedFields },
-        currentStep: totalSteps,
-        totalSteps: totalSteps,
-        completionPercentage: 100,
-        isCompleted: true
-      }, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      });
-
-      if (response.status === 200) {
-        alert('✓ All 6 forms completed! You can now view the complete submission on dashboard.');
-        // Redirect to dashboard
-        window.location.href = '/loan-officer/dashboard';
-      } else {
-        alert('❌ Error completing form');
-      }
+      // Use helper function to complete and navigate to next form
+      await completeFormAndNavigate(
+        'output_sheet',
+        activeFormId,
+        { ...formData, ...calculatedFields },
+        (nextForm) => {
+          if (nextForm) {
+            alert(`✓ Output Sheet completed! Redirecting to ${nextForm.name}...`);
+          } else {
+            alert('✓ All forms completed! Redirecting to dashboard...');
+          }
+        },
+        (error) => {
+          console.error('Complete error:', error);
+          alert('❌ Error completing form: ' + (error.response?.data?.message || error.message));
+        }
+      );
     } catch (error) {
       console.error('Complete error:', error);
       alert('❌ Error completing form');
