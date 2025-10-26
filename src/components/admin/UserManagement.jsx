@@ -258,7 +258,7 @@ const UserManagement = () => {
       </header>
 
       {/* Search and Filters */}
-      {/* <div className="search-section">
+      <div className="search-section">
         <div className="search-container">
           <input
             type="text"
@@ -269,7 +269,7 @@ const UserManagement = () => {
           />
           <span className="search-icon">🔍</span>
         </div>
-      </div> */}
+      </div>
 
       {/* Users Table */}
       <div className="users-container">
