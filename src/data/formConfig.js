@@ -35,6 +35,117 @@ export const formConfig = {
       fields: [
         { name: 'coApplicantName', label: 'Name', type: 'text', required: true },
         { name: 'coApplicantGender', label: 'Gender', type: 'select', required: true, options: ['Male', 'Female', 'Other'] },
+    {
+      step: 3.5,
+      title: 'Business Financials',
+      fields: [
+        // Sales
+        { name: 'noOfDaysShopClosedWeek', label: 'No. of Days Shop/Factory is closed in a week', type: 'number', required: false },
+        { name: 'noOfDaysWorkingMonth', label: 'No. of Days Working in a month', type: 'number', required: false },
+        { name: 'salesDaily', label: 'Sales Daily (USD)', type: 'number', required: false },
+        { name: 'salesWeekly', label: 'Sales Weekly (USD)', type: 'number', required: false },
+        { name: 'salesMonthly', label: 'Sales Monthly (USD)', type: 'number', required: false },
+        { name: 'salesMonthlyCoApplicant', label: 'Sales Monthly (USD) - Co applicant/Guarantor', type: 'number', required: false },
+        { name: 'salesMonthlyGuarantor', label: 'Sales Monthly (USD) - Guarantor', type: 'number', required: false },
+        { name: 'salesSeasonalityLow', label: 'Sales Seasonality Low (USD)', type: 'number', required: false },
+        { name: 'salesSeasonalityHigh', label: 'Sales Seasonality High (USD)', type: 'number', required: false },
+        { name: 'salesSeasonalityNormal', label: 'Sales Seasonality Normal (USD)', type: 'number', required: false },
+        { name: 'salesSeasonalityMonthsLow', label: 'Sales Seasonality Months Low', type: 'number', required: false },
+        { name: 'salesSeasonalityMonthsHigh', label: 'Sales Seasonality Months High', type: 'number', required: false },
+        { name: 'salesSeasonalityMonthsNormal', label: 'Sales Seasonality Months Normal', type: 'number', required: false },
+        { name: 'debtors', label: 'Debtors', type: 'number', required: false },
+        { name: 'salesGrowth', label: 'Sales Growth (%)', type: 'number', required: false },
+
+        // Purchases
+        { name: 'purchasesDaily', label: 'Purchases Daily (USD)', type: 'number', required: false },
+        { name: 'purchasesWeekly', label: 'Purchases Weekly (USD)', type: 'number', required: false },
+        { name: 'purchasesMonthly', label: 'Purchases Monthly (USD)', type: 'number', required: false },
+        { name: 'creditors', label: 'Creditors', type: 'number', required: false },
+        { name: 'purchasesTotal', label: 'Purchases Total Amount (USD)', type: 'number', required: false },
+        { name: 'purchasesCoApplicant', label: 'Purchases Amount (USD) - Co applicant/Guarantor', type: 'number', required: false },
+        { name: 'purchasesGuarantor', label: 'Purchases Amount (USD) - Guarantor', type: 'number', required: false },
+
+        // Stock
+        { name: 'stockFinishedGoods', label: 'Stock Value (Finished Goods)', type: 'number', required: false },
+        { name: 'stockRawMaterial', label: 'Stock Value (Raw Material/Consumables)', type: 'number', required: false },
+
+        // Business Expense - Monthly
+        { name: 'shopRent', label: 'Shop/Godown/Factory Rent', type: 'number', required: false },
+        { name: 'electricity', label: 'Electricity', type: 'number', required: false },
+        { name: 'staffSalary', label: 'Staff Salary', type: 'number', required: false },
+        { name: 'telephoneInternet', label: 'Telephone/Mobile/Internet', type: 'number', required: false },
+        { name: 'transport', label: 'Transport/Conveyance', type: 'number', required: false },
+        { name: 'gasWater', label: 'Gas and Water', type: 'number', required: false },
+        { name: 'repairMaintenance', label: 'Repair and Maintenance', type: 'number', required: false },
+        { name: 'dieselGenerator', label: 'Diesel for Generator', type: 'number', required: false },
+        { name: 'marketing', label: 'Marketing', type: 'number', required: false },
+        { name: 'labourExpense', label: 'Labour Expense', type: 'number', required: false },
+        { name: 'societyBillSecurity', label: 'Society Bill Security', type: 'number', required: false },
+        { name: 'tax', label: 'Tax', type: 'number', required: false },
+        { name: 'entertainment', label: 'Entertainment', type: 'number', required: false },
+        { name: 'otherBusinessExpense', label: 'Other Business Expense', type: 'number', required: false },
+        { name: 'totalBusinessExpense', label: 'Total Business Expense', type: 'number', required: false },
+        { name: 'businessExpenseCoApplicant', label: 'Business Expense (USD) - Co applicant/Guarantor', type: 'number', required: false },
+        { name: 'businessExpenseGuarantor', label: 'Business Expense (USD) - Guarantor', type: 'number', required: false },
+
+        // Applicant/Guarantor Other Income
+        { name: 'agricultureIncome', label: 'Agriculture Income (Co applicant/Guarantor)', type: 'number', required: false },
+        { name: 'rentalIncome', label: 'Rental Income (Co applicant/Guarantor)', type: 'number', required: false },
+        { name: 'salaryIncome', label: 'Salary Income (Co applicant/Guarantor)', type: 'number', required: false },
+        { name: 'alliedAgriIncome', label: 'Allied Agri Income (Co applicant/Guarantor)', type: 'number', required: false },
+        { name: 'otherIncome', label: 'Other Income (Interest etc.) (Co applicant/Guarantor)', type: 'number', required: false },
+        { name: 'otherIncomeCoApplicant', label: 'Other Income (Co applicant)', type: 'number', required: false },
+        { name: 'otherIncomeGuarantor', label: 'Other Income (Guarantor)', type: 'number', required: false },
+
+        // Cash in Hand
+        { name: 'cashInHandEndMonth', label: 'Cash in Hand end of month from Business (USD)', type: 'number', required: false },
+        { name: 'cashInHandGuarantor', label: 'Cash in Hand (Guarantor)', type: 'number', required: false },
+
+        // Product Sale Price - Trading
+        { name: 'productSaleType1', label: 'Product Sale Type 1', type: 'text', required: false },
+        { name: 'productSaleUnits1', label: 'Product Sale Number of Units 1', type: 'number', required: false },
+        { name: 'productSaleAvgPrice1', label: 'Product Sale Average Price per Unit 1', type: 'number', required: false },
+        { name: 'productSaleType2', label: 'Product Sale Type 2', type: 'text', required: false },
+        { name: 'productSaleUnits2', label: 'Product Sale Number of Units 2', type: 'number', required: false },
+        { name: 'productSaleAvgPrice2', label: 'Product Sale Average Price per Unit 2', type: 'number', required: false },
+        { name: 'productSaleMargin', label: 'Average Product Margin (%)', type: 'number', required: false },
+
+        // Product Purchase Price - Trading
+        { name: 'productPurchaseType1', label: 'Product Purchase Type 1', type: 'text', required: false },
+        { name: 'productPurchaseUnits1', label: 'Product Purchase Number of Units 1', type: 'number', required: false },
+        { name: 'productPurchaseAvgPrice1', label: 'Product Purchase Average Price per Unit 1', type: 'number', required: false },
+        { name: 'productPurchaseType2', label: 'Product Purchase Type 2', type: 'text', required: false },
+        { name: 'productPurchaseUnits2', label: 'Product Purchase Number of Units 2', type: 'number', required: false },
+        { name: 'productPurchaseAvgPrice2', label: 'Product Purchase Average Price per Unit 2', type: 'number', required: false },
+
+        // Service Sale Price
+        { name: 'serviceSaleType1', label: 'Service Sale Type 1', type: 'text', required: false },
+        { name: 'serviceSaleUnits1', label: 'Service Sale Number of Units 1', type: 'number', required: false },
+        { name: 'serviceSaleAvgPrice1', label: 'Service Sale Average Price per Unit 1', type: 'number', required: false },
+        { name: 'serviceSaleType2', label: 'Service Sale Type 2', type: 'text', required: false },
+        { name: 'serviceSaleUnits2', label: 'Service Sale Number of Units 2', type: 'number', required: false },
+        { name: 'serviceSaleAvgPrice2', label: 'Service Sale Average Price per Unit 2', type: 'number', required: false },
+        { name: 'serviceSaleMargin', label: 'Average Service Product Margin (%)', type: 'number', required: false },
+
+        // Service Purchase Price
+        { name: 'servicePurchaseType1', label: 'Service Purchase Type 1', type: 'text', required: false },
+        { name: 'servicePurchaseUnits1', label: 'Service Purchase Number of Units 1', type: 'number', required: false },
+        { name: 'servicePurchaseAvgPrice1', label: 'Service Purchase Average Price per Unit 1', type: 'number', required: false },
+        { name: 'servicePurchaseType2', label: 'Service Purchase Type 2', type: 'text', required: false },
+        { name: 'servicePurchaseUnits2', label: 'Service Purchase Number of Units 2', type: 'number', required: false },
+        { name: 'servicePurchaseAvgPrice2', label: 'Service Purchase Average Price per Unit 2', type: 'number', required: false },
+
+        // Manufacturing
+        { name: 'manufacturingProductType', label: 'Manufacturing Product Type', type: 'text', required: false },
+        { name: 'manufacturingProductUnits', label: 'Manufacturing Product Number of Units', type: 'number', required: false },
+        { name: 'manufacturingProductAvgSalePrice', label: 'Manufacturing Product Average Sale Price per Unit', type: 'number', required: false },
+        { name: 'manufacturingProductCostPerUnit', label: 'Manufacturing Product Cost per Unit', type: 'number', required: false },
+        { name: 'manufacturingGrossMargin', label: 'Manufacturing Gross Margin (%)', type: 'number', required: false },
+
+        // Debt Burden
+        { name: 'debtBurdenPercent', label: 'Debt Burden (%)', type: 'number', required: false }
+      ]
+    },
         { name: 'coApplicantDateOfBirth', label: 'Date of Birth', type: 'date', required: true },
         { name: 'coApplicantMaritalStatus', label: 'Marital Status', type: 'select', required: true, options: ['Married', 'Unmarried', 'Divorced', 'Widowed'] },
         { name: 'coApplicantQualification', label: 'Qualification', type: 'select', required: true, options: ['Graduate', 'Post Graduate', 'Diploma', 'High School', 'Others'] },
@@ -79,7 +190,7 @@ export const formConfig = {
         { name: 'expectedMarginCapitalExpenditure', label: 'Expected Customer Margin in Capital Expenditure Transaction', type: 'number', required: true },
         { name: 'affordableEMI', label: 'Customer Afforable EMI (USD)', type: 'number', required: true },
         { name: 'loanEligibility', label: 'Loan Eligilibity as per Cash Flow Analysis and Policy (USD)', type: 'number', required: true },
-        { name: 'loanAmountApproved', label: 'Loan Amount Approved (USD)- To be filled at the end *', type: 'number', required: false },
+        { name: 'loanAmountApproved', label: 'Loan Amount Approved (USD)- To be filled at the end', type: 'number', required: false },
         { name: 'loanPerProgramLTV', label: 'Loan per program LTV', type: 'number', required: true },
         { name: 'loanToMarketValue', label: 'Loan to Market Value (%)', type: 'number', required: true },
         { name: 'customerMarginTransaction', label: 'Customer Margin in Transaction (%)', type: 'number', required: true }

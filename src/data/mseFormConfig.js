@@ -9,6 +9,7 @@ export const mseFormConfig = {
       title: 'Business Sales Data',
       description: 'Historical sales patterns and current sales information',
       fields: [
+  
         { name: 'salesMemoType', label: 'Sales Memo/Cash Book Type', type: 'select', required: true, options: ['Sales Memo', 'Cash Book', 'Digital Records', 'Manual Records'] },
         
         // Last Month Sales Data
@@ -49,11 +50,36 @@ export const mseFormConfig = {
         { name: 'lastMonthPurchase5th', label: 'Last Month Purchase (5th)', type: 'number', required: true },
         { name: 'lastMonthPurchase15th', label: 'Last Month Purchase (15th)', type: 'number', required: true },
         { name: 'lastMonthPurchase25th', label: 'Last Month Purchase (25th)', type: 'number', required: true },
-        
+        // Two Months Back Purchase Data
+        { name: 'twoMonthsPurchase5th', label: 'Two Months Back Purchase (5th)', type: 'number', required: true },
+        { name: 'twoMonthsPurchase15th', label: 'Two Months Back Purchase (15th)', type: 'number', required: true },
+        { name: 'twoMonthsPurchase25th', label: 'Two Months Back Purchase (25th)', type: 'number', required: true },
+        // Three Months Back Purchase Data
+        { name: 'threeMonthsPurchase5th', label: 'Three Months Back Purchase (5th)', type: 'number', required: true },
+        { name: 'threeMonthsPurchase15th', label: 'Three Months Back Purchase (15th)', type: 'number', required: true },
+        { name: 'threeMonthsPurchase25th', label: 'Three Months Back Purchase (25th)', type: 'number', required: true },
+
         // Historical Purchase Data
-        { name: 'fourMonthsPurchase', label: 'Four Months Back Purchase', type: 'number', required: true },
-        { name: 'fiveMonthsPurchase', label: 'Five Months Back Purchase', type: 'number', required: true },
-        { name: 'sixMonthsPurchase', label: 'Six Months Back Purchase', type: 'number', required: true },
+        { name: 'lastMonthsbankBalance5th', label: 'last Months Bank Balance (5th)', type: 'number', required: true },
+        { name: 'lastMonthsbankBalance15th', label: 'last Months Bank Balance (15th)', type: 'number', required: true },
+        { name: 'lastMonthsbankBalance25th', label: 'last Months Bank Balance (25th)', type: 'number', required: true },
+        { name: 'twoMonthsbankBalance5th', label: 'Two Months Bank Balance (5th)', type: 'number', required: true },
+        { name: 'twoMonthsbankBalance15th', label: 'Two Months Bank Balance (15th)', type: 'number', required: true },
+        { name: 'twoMonthsbankBalance25th', label: 'Two Months Bank Balance (25th)', type: 'number', required: true },
+        { name: 'threeMonthsbankBalance5th', label: 'Three Months Bank Balance (5th)', type: 'number', required: true },
+        { name: 'threeMonthsbankBalance15th', label: 'Three Months Bank Balance (15th)', type: 'number', required: true },
+        { name: 'threeMonthsbankBalance25th', label: 'Three Months Bank Balance (25th)', type: 'number', required: true },
+        { name: 'fourMonthsbankBalance5th', label: 'Four Months Bank Balance (5th)', type: 'number', required: true },
+        { name: 'fourMonthsbankBalance15th', label: 'Four Months Bank Balance (15th)', type: 'number', required: true },
+        { name: 'fourMonthsbankBalance25th', label: 'Four Months Bank Balance (25th)', type: 'number', required: true },
+        { name: 'fiveMonthsbankBalance5th', label: 'Five Months Bank Balance (5th)', type: 'number', required: true },
+        { name: 'fiveMonthsbankBalance15th', label: 'Five Months Bank Balance (15th)', type: 'number', required: true },
+        { name: 'fiveMonthsbankBalance25th', label: 'Five Months Bank Balance (25th)', type: 'number', required: true },
+        { name: 'SixMonthsbankBalance5th', label: 'Six Months Bank Balance (5th)', type: 'number', required: true },
+        { name: 'SixMonthsbankBalance15th', label: 'Six Months Bank Balance (15th)', type: 'number', required: true },
+        { name: 'SixMonthsbankBalance25th', label: 'Six Months Bank Balance (25th)', type: 'number', required: true },
+
+
         
         // Current Purchase Patterns
         { name: 'purchaseDaily', label: 'Daily Purchases (USD)', type: 'number', required: true },

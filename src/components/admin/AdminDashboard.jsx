@@ -74,19 +74,13 @@ const formConfigs = [
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const [stats, setStats] = useState({
-    totalUsers: 0,
-    totalSubmissions: 0,
-    completedSubmissions: 0,
-    completionRate: 0
-  });
+  const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
-      setError('');
       const token = localStorage.getItem('token') || localStorage.getItem('adminToken');
       
       if (!token) {
@@ -96,24 +90,25 @@ const AdminDashboard = () => {
 
       const response = await axios.get(`${API_BASE_URL}/api/admin/stats`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        timeout: 10000 // 10 second timeout
+          'Authorization': `Bearer ${token}`
+        }
       });
-      if (!response.data) {
-        throw new Error('No data received from server');
-      }
 
-      setStats({
-        totalUsers: response.data.totalUsers || 0,
-        totalSubmissions: response.data.totalSubmissions || 0,
-        completedSubmissions: response.data.completedSubmissions || 0,
-        completionRate: response.data.completionRate || 0
-      });
+      // The backend returns the stats directly in response.data, not in response.data.stats
+      setStats(response.data);
+      setError('');
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
-      setError(err.response?.data?.message || err.message || 'Failed to load dashboard data');
+      if (err.response?.status === 401) {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        delete axios.defaults.headers.common['Authorization'];
+        navigate('/login');
+      } else {
+        const errorMessage = err.response?.data?.message || err.message || 'Failed to load dashboard data';
+        setError(`Error: ${errorMessage}`);
+        console.error('Full error details:', err.response?.data);
+      }
     } finally {
       setLoading(false);
     }
@@ -136,13 +131,12 @@ const AdminDashboard = () => {
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminUser');
     delete axios.defaults.headers.common['Authorization'];
-    navigate('/login');
+    navigate('/admin/login');
   };
 
   const handleFormNavigation = (route) => {
     navigate(route);
   };
-
   if (loading) {
     return (
       <div className="admin-loading">
@@ -156,8 +150,8 @@ const AdminDashboard = () => {
     return (
       <div className="admin-error">
         <h2>Error Loading Dashboard</h2>
-        <p>{error}</p>
-        <button onClick={fetchDashboardData} className="retry-btn">
+        <p className="error-message">{error}</p>
+        <button onClick={fetchDashboardData} className="retry-button">
           Retry
         </button>
       </div>
@@ -175,16 +169,16 @@ const AdminDashboard = () => {
           </div>
           <div className="header-actions">
             <button onClick={fetchDashboardData} className="refresh-btn">
-              Refresh
+              🔄 Refresh
             </button>
             <button onClick={handleLogout} className="logout-btn">
-              Logout
+              🚪 Logout
             </button>
           </div>
         </div>
       </header>
 
-      <main className="admin-main">
+      <main className="admin-main"  >
         {/* Statistics Cards */}
         <section className="stats-section">
           <h2>System Statistics</h2>
@@ -192,7 +186,7 @@ const AdminDashboard = () => {
             <div className="stat-card">
               <div className="stat-icon">👥</div>
               <div className="stat-content">
-                <h3>{stats?.totalUsers || 0}</h3>
+                <h3>{stats?.totalUsers ?? 0}</h3>
                 <p>Total Users</p>
               </div>
             </div>
@@ -200,7 +194,7 @@ const AdminDashboard = () => {
             <div className="stat-card">
               <div className="stat-icon">📝</div>
               <div className="stat-content">
-                <h3>{stats.totalSubmissions}</h3>
+                <h3>{stats?.totalSubmissions ? stats.totalSubmissions : 0}</h3>
                 <p>Total Submissions</p>
               </div>
             </div>
@@ -208,23 +202,15 @@ const AdminDashboard = () => {
             <div className="stat-card">
               <div className="stat-icon">✅</div>
               <div className="stat-content">
-                <h3>{stats.completedSubmissions}</h3>
+                <h3>{stats?.completedSubmissions ? stats.completedSubmissions : 0}</h3>
                 <p>Completed</p>
               </div>
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon">🔄</div>
+              <div className="stat-icon">📊</div>
               <div className="stat-content">
-                <h3>{stats.inProgressSubmissions}</h3>
-                <p>In Progress</p>
-              </div>
-            </div>
-
-            <div className="stat-card">
-              <div className="stat-icon">📈</div>
-              <div className="stat-content">
-                <h3>{stats.completionRate}%</h3>
+                <h3>{stats?.completionRate ? `${stats.completionRate}%` : '0%'}</h3>
                 <p>Completion Rate</p>
               </div>
             </div>
@@ -313,13 +299,13 @@ const AdminDashboard = () => {
         </section>
 
         {/* Loan Officer Statistics */}
-        {stats.loanOfficerStats && stats.loanOfficerStats.length > 0 && (
+        {stats?.loanOfficerStats?.length > 0 && (
           <section className="loan-officer-section" >
             <h2>Loan Officer Performance</h2>
             <p>Overview of client forms processed by each loan officer</p>
             
             <div className="loan-officers-grid">
-              {stats.loanOfficerStats.map((officer) => (
+              {stats?.loanOfficerStats?.map((officer) => (
                 <div
                   key={officer.id}
                   className="officer-card"
