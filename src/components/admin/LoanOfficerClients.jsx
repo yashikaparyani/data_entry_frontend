@@ -148,7 +148,7 @@ const LoanOfficerClients = () => {
       </header>
 
       {/* Search */}
-      {/* <div className="search-section">
+      <div className="search-section">
         <div className="search-container">
           <input
             type="text"
@@ -159,7 +159,7 @@ const LoanOfficerClients = () => {
           />
           <span className="search-icon">🔍</span>
         </div>
-      </div> */}
+      </div>
 
       {/* Clients Table */}
       <div className="clients-container">
