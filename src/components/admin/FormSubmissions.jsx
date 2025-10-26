@@ -262,7 +262,7 @@ const FormSubmissions = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
             />
-            <span className="search-icon">🔍</span>
+            <span className="search-icon" >🔍</span>
           </div>
 
           <select
@@ -392,13 +392,13 @@ const FormSubmissions = () => {
                         >
                           👁️ View
                         </button>
-                        <button
+                       {/* <button
                           onClick={() => handleDownload(submission._id)}
                           className="action-btn download-btn"
                           title="Download"
                         >
                           📥
-                        </button>
+                        </button>*/}
                       </div>
                     </td>
                   </tr>
