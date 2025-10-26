@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { financialAnalysisConfig, financialCalculations } from '../data/financialAnalysisConfig';
+import { completeFormAndNavigate } from '../utils/formHelpers';
 import FormTabs from './FormTabs';
 import './FinancialAnalysisForm.css';
 import axios from 'axios';
@@ -140,19 +141,32 @@ const FinancialAnalysisForm = () => {
     const section = financialAnalysisConfig.sections[sectionIndex];
     const newErrors = {};
     
+    console.log(`🔍 Validating section ${sectionIndex}:`, section.title);
+    
     section.fields.forEach(field => {
-      if (field.required && (!formData[field.name] || parseFloat(formData[field.name] || 0) <= 0)) {
-        newErrors[field.name] = `${field.label} is required and must be greater than 0`;
+      if (field.required) {
+        const value = formData[field.name];
+        const numValue = parseFloat(value || 0);
+  console.log(`  Field ${field.name}: value="${value}", required=${field.required}, numValue=${numValue}`);
+        if (!value || numValue <= 0) {
+          newErrors[field.name] = `${field.label} is required and must be greater than 0`;
+          console.log(`  ❌ Validation failed for ${field.name}`);
+        }
       }
     });
     
-    // Special validation for loan amount
-    if (sectionIndex === 3 && formData.loan_amount && parseFloat(formData.loan_amount) <= 50000) {
-      newErrors.loan_amount = "Loan amount must be greater than $50,000";
-    }
+    // Loan amount validation removed as per request
     
     setErrors(prev => ({ ...prev, ...newErrors }));
-    return Object.keys(newErrors).length === 0;
+    
+    const isValid = Object.keys(newErrors).length === 0;
+    console.log(`  Validation result: ${isValid ? '✅ PASS' : '❌ FAIL'}, errors:`, newErrors);
+    
+    if (!isValid) {
+      alert(`Please fill all required fields:\n${Object.values(newErrors).join('\n')}`);
+    }
+    
+    return isValid;
   };
 
   const validateAllSections = () => {
@@ -190,37 +204,32 @@ const FinancialAnalysisForm = () => {
   };
 
   const saveProgress = async () => {
-    const clientId = localStorage.getItem('activeClientId');
-    const formId = localStorage.getItem('activeFormId_financial_analysis');
-    
-    if (!clientId || !formId) {
+    if (!clientId || !activeFormId) {
       alert('❌ No active client or form found. Please start from dashboard.');
       return;
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
-        method: 'PUT',
+      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
+        formData,
+        calculatedFields: calculatedValues,
+        currentStep: activeSection + 1,
+        totalSteps: financialAnalysisConfig.sections.length,
+        status: 'in_progress'
+      }, {
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          formData,
-          calculatedFields: calculatedValues,
-          currentStep: activeSection + 1,
-          totalSteps: financialAnalysisConfig.sections.length
-        })
+        }
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert('✓ Progress saved successfully!');
       } else {
         alert('❌ Error saving progress');
       }
     } catch (error) {
       console.error('Save error:', error);
-      alert('❌ Error saving progress');
+      alert('❌ Error saving progress: ' + (error.response?.data?.message || error.message));
     }
   };
 
@@ -238,25 +247,23 @@ const FinancialAnalysisForm = () => {
     }
 
     try {
-      // Mark form as completed
-      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
-        formData,
-        calculatedFields: calculatedValues,
-        currentStep: financialAnalysisConfig.sections.length,
-        totalSteps: financialAnalysisConfig.sections.length,
-        completionPercentage: 100,
-        isCompleted: true
-      }, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      });
-
-      if (response.status === 200) {
-        alert('✓ Financial Analysis form completed! Redirecting to Expert Scorecard...');
-        // Redirect to next form
-        window.location.href = '/expert-scorecard';
-      } else {
-        alert('❌ Error completing form');
-      }
+      // Use helper function to complete and navigate to next form
+      await completeFormAndNavigate(
+        'financial_analysis',
+        activeFormId,
+        { ...formData, calculatedFields: calculatedValues },
+        (nextForm) => {
+          if (nextForm) {
+            alert(`✓ Financial Analysis completed! Redirecting to ${nextForm.name}...`);
+          } else {
+            alert('✓ Financial Analysis completed! All forms completed!');
+          }
+        },
+        (error) => {
+          console.error('Complete error:', error);
+          alert('❌ Error completing form: ' + (error.response?.data?.message || error.message));
+        }
+      );
     } catch (error) {
       console.error('Complete error:', error);
       alert('❌ Error completing form');
@@ -264,15 +271,28 @@ const FinancialAnalysisForm = () => {
   };
 
   const nextSection = () => {
-    if (validateSection(activeSection)) {
+    console.log('🔄 Next button clicked');
+    console.log('Current section:', activeSection);
+    console.log('Total sections:', financialAnalysisConfig.sections.length);
+    console.log('Form data:', formData);
+    console.log('Errors:', errors);
+    
+    const isValid = validateSection(activeSection);
+    console.log('Section validation result:', isValid);
+    
+    if (isValid) {
       // Check if this is the last section
       if (activeSection === financialAnalysisConfig.sections.length - 1) {
+        console.log('✅ Last section - completing form');
         // All sections complete, mark as complete and redirect
         completeFormAndRedirect();
       } else {
+        console.log('➡️ Moving to next section');
         // Move to next section within current form
         setActiveSection(prev => Math.min(prev + 1, financialAnalysisConfig.sections.length - 1));
       }
+    } else {
+      console.log('❌ Validation failed - staying on current section');
     }
   };
 

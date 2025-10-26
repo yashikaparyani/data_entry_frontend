@@ -305,7 +305,7 @@
 }
 
 .calculated-label {
-  color: white !important;
+  color: rgb(11, 11, 11) !important;
   font-size: 0.95rem;
   margin-bottom: 0.5rem;
   font-weight: 600;
@@ -318,7 +318,7 @@
   padding: 0.75rem;
   background: rgba(255, 255, 255, 0.25);
   border-radius: 6px;
-  color: white;
+  color: rgb(12, 12, 12);
 }
 
 /* Balance Grid */
@@ -349,7 +349,8 @@
 }
 
 .balance-grid-cell {
-  background: white;
+  background: #222;
+  color: white;
   padding: 0.75rem;
   display: flex;
   align-items: center;
@@ -386,6 +387,8 @@
   text-align: center;
   font-size: 0.9rem;
   transition: all 0.3s ease;
+  color: #222 !important;
+  background: #222 !important;
 }
 
 .balance-input:focus {
@@ -422,7 +425,8 @@
 }
 
 .credit-grid-cell {
-  background: white;
+  background: #222;
+  color: white;
   padding: 0.5rem;
   display: flex;
   align-items: center;
@@ -471,6 +475,8 @@
   text-align: center;
   font-size: 0.85rem;
   transition: all 0.3s ease;
+  color: white !important;
+  background: #222 !important;
 }
 
 .credit-input:focus {
@@ -696,5 +702,6 @@
   .credit-input {
     font-size: 0.8rem;
     padding: 0.3rem;
+    color:white
   }
 }

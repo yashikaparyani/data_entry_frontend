@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { creditAppMemoConfig } from '../data/creditAppMemoConfig';
+import { completeFormAndNavigate } from '../utils/formHelpers';
 import './CreditAppMemoForm.css';
 import FormTabs from './FormTabs';
 import axios from 'axios';
@@ -148,25 +149,23 @@ const CreditAppMemoForm = () => {
     }
 
     try {
-      // Mark form as completed
-      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
-        formData,
-        calculatedValues,
-        currentStep: creditAppMemoConfig.sections.length,
-        totalSteps: creditAppMemoConfig.sections.length,
-        completionPercentage: 100,
-        isCompleted: true
-      }, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      });
-
-      if (response.status === 200) {
-        alert('✓ Credit App Memo completed! Redirecting to Output Sheet...');
-        // Redirect to next form
-        window.location.href = '/output-analysis';
-      } else {
-        alert('❌ Error completing form');
-      }
+      // Use helper function to complete and navigate to next form
+      await completeFormAndNavigate(
+        'credit_app_memo',
+        activeFormId,
+        { ...formData, calculatedValues },
+        (nextForm) => {
+          if (nextForm) {
+            alert(`✓ Credit App Memo completed! Redirecting to ${nextForm.name}...`);
+          } else {
+            alert('✓ Credit App Memo completed! All forms completed! Redirecting to dashboard...');
+          }
+        },
+        (error) => {
+          console.error('Complete error:', error);
+          alert('❌ Error completing form: ' + (error.response?.data?.message || error.message));
+        }
+      );
     } catch (error) {
       console.error('Complete error:', error);
       alert('❌ Error completing form');

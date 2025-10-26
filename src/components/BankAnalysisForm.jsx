@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { bankAnalysisConfig } from '../data/bankAnalysisConfig';
+import { completeFormAndNavigate } from '../utils/formHelpers';
 import './BankAnalysisForm.css';
 import axios from 'axios';
 import FormTabs from './FormTabs';
@@ -71,7 +72,6 @@ const BankAnalysisForm = () => {
           }
         }
       } catch (error) {
-        console.error('Error initializing form:', error);
         console.error('Error details:', error.response?.data);
         
         const errorMessage = error.response?.data?.message || error.message || 'Unknown error';
@@ -112,71 +112,61 @@ const BankAnalysisForm = () => {
     setCalculatedValues(newCalculatedValues);
   }, [formData]);
 
-  const handleInputChange = (fieldId, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [fieldId]: value
-    }));
-    
-    // Clear validation error for this field
-    if (validationErrors[fieldId]) {
-      setValidationErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors[fieldId];
-        return newErrors;
-      });
-    }
-  };
 
-  const validateSection = (sectionIndex) => {
-    const section = bankAnalysisConfig.sections[sectionIndex];
-    const errors = {};
-    
-    section.fields.forEach(field => {
-      if (field.required && field.type !== 'calculated') {
-        const value = formData[field.id];
-        if (!value || (typeof value === 'string' && value.trim() === '')) {
-          errors[field.id] = `${field.label} is required`;
-        }
+const handleInputChange = (fieldId, value) => {
+  setFormData(prev => ({
+    ...prev,
+    [fieldId]: value
+  }));
+  setValidationErrors(prev => {
+    const newErrors = { ...prev };
+    delete newErrors[fieldId];
+    return newErrors;
+  });
+};
+
+const validateSection = (sectionIndex) => {
+  const section = bankAnalysisConfig.sections[sectionIndex];
+  const errors = {};
+  section.fields.forEach(field => {
+    if (field.required && field.type !== 'calculated') {
+      const value = formData[field.id];
+      if (!value || (typeof value === 'string' && value.trim() === '')) {
+        errors[field.id] = `${field.label} is required`;
       }
-    });
-    
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const saveProgress = async () => {
-    const clientId = localStorage.getItem('activeClientId');
-    const formId = localStorage.getItem('activeFormId_bank_analysis');
-
-    if (!clientId || !formId) {
-      alert('❌ No active client or form found. Please start from dashboard.');
-      return;
     }
+  });
+  setValidationErrors(errors);
+  return Object.keys(errors).length === 0;
+};
 
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/loan-officer/forms/${formId}/save`, {
-        method: 'PUT',
+const saveProgress = async () => {
+  if (!clientId || !activeFormId) {
+    alert('❌ No active client or form found. Please start from dashboard.');
+    return;
+  }
+
+  try {
+      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
+        formData,
+        calculatedFields: calculatedValues,
+        currentStep: currentSection + 1,
+        totalSteps: bankAnalysisConfig.sections.length,
+        status: 'in_progress'
+      }, {
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          formData,
-          calculatedFields: calculatedValues,
-          currentStep: currentSection + 1,
-          totalSteps: bankAnalysisConfig.sections.length
-        })
+        }
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert('✓ Progress saved successfully!');
       } else {
         alert('❌ Error saving progress');
       }
     } catch (error) {
       console.error('Save error:', error);
-      alert('❌ Error saving progress');
+      alert('❌ Error saving progress: ' + (error.response?.data?.message || error.message));
     }
   };
 
@@ -269,25 +259,23 @@ const BankAnalysisForm = () => {
     }
 
     try {
-      // Mark form as completed
-      const response = await axios.put(`/api/loan-officer/forms/${activeFormId}/save`, {
-        formData,
-        calculatedFields: calculatedValues,
-        currentStep: bankAnalysisConfig.sections.length,
-        totalSteps: bankAnalysisConfig.sections.length,
-        completionPercentage: 100,
-        isCompleted: true
-      }, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      });
-
-      if (response.status === 200) {
-        alert('✓ Bank Analysis form completed! Redirecting to Financial Analysis...');
-        // Redirect to next form
-        window.location.href = '/financial-analysis';
-      } else {
-        alert('❌ Error completing form');
-      }
+      // Use helper function to complete and navigate to next form
+      await completeFormAndNavigate(
+        'bank_analysis',
+        activeFormId,
+        { ...formData, calculatedFields: calculatedValues },
+        (nextForm) => {
+          if (nextForm) {
+            alert(`✓ Bank Analysis completed! Redirecting to ${nextForm.name}...`);
+          } else {
+            alert('✓ Bank Analysis completed! All forms completed!');
+          }
+        },
+        (error) => {
+          console.error('Complete error:', error);
+          alert('❌ Error completing form: ' + (error.response?.data?.message || error.message));
+        }
+      );
     } catch (error) {
       console.error('Complete error:', error);
       alert('❌ Error completing form');
