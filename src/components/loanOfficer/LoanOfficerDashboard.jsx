@@ -215,6 +215,16 @@ const LoanOfficerDashboard = () => {
       <div className="dashboard-header">
         <h1>📊 Loan Officer Dashboard</h1>
         <p className="welcome-text">Welcome back, <strong>{user?.name}!</strong></p>
+        <button
+          className="btn-logout"
+          style={{ float: 'right', marginTop: '-2.5rem', marginRight: '1rem', background: '#e74c3c', color: 'white', border: 'none', borderRadius: '6px', padding: '0.6rem 1.2rem', fontWeight: '600', cursor: 'pointer' }}
+          onClick={() => {
+            localStorage.clear();
+            navigate('/login');
+          }}
+        >
+          Logout
+        </button>
       </div>
 
       <div className="dashboard-stats">

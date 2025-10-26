@@ -78,7 +78,6 @@ const AdminDashboard = () => {
     totalUsers: 0,
     totalSubmissions: 0,
     completedSubmissions: 0,
-    inProgressSubmissions: 0,
     completionRate: 0
   });
   const [loading, setLoading] = useState(true);
@@ -87,7 +86,8 @@ const AdminDashboard = () => {
   const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('adminToken');
+      setError('');
+      const token = localStorage.getItem('token') || localStorage.getItem('adminToken');
       
       if (!token) {
         navigate('/admin/login');
@@ -96,24 +96,24 @@ const AdminDashboard = () => {
 
       const response = await axios.get(`${API_BASE_URL}/api/admin/stats`, {
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        timeout: 10000 // 10 second timeout
       });
+      if (!response.data) {
+        throw new Error('No data received from server');
+      }
 
-      setStats(response.data.stats);
-      setError('');
+      setStats({
+        totalUsers: response.data.totalUsers || 0,
+        totalSubmissions: response.data.totalSubmissions || 0,
+        completedSubmissions: response.data.completedSubmissions || 0,
+        completionRate: response.data.completionRate || 0
+      });
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
-      if (err.response?.status === 401) {
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('adminUser');
-        delete axios.defaults.headers.common['Authorization'];
-        navigate('/login');
-      } else {
-        const errorMessage = err.response?.data?.message || err.message || 'Failed to load dashboard data';
-        setError(`Error: ${errorMessage}`);
-        console.error('Full error details:', err.response?.data);
-      }
+      setError(err.response?.data?.message || err.message || 'Failed to load dashboard data');
     } finally {
       setLoading(false);
     }
@@ -136,12 +136,13 @@ const AdminDashboard = () => {
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminUser');
     delete axios.defaults.headers.common['Authorization'];
-    navigate('/admin/login');
+    navigate('/login');
   };
 
   const handleFormNavigation = (route) => {
     navigate(route);
   };
+
   if (loading) {
     return (
       <div className="admin-loading">
@@ -174,16 +175,16 @@ const AdminDashboard = () => {
           </div>
           <div className="header-actions">
             <button onClick={fetchDashboardData} className="refresh-btn">
-              🔄 Refresh
+              Refresh
             </button>
             <button onClick={handleLogout} className="logout-btn">
-              🚪 Logout
+              Logout
             </button>
           </div>
         </div>
       </header>
 
-      <main className="admin-main"  >
+      <main className="admin-main">
         {/* Statistics Cards */}
         <section className="stats-section">
           <h2>System Statistics</h2>
@@ -191,7 +192,7 @@ const AdminDashboard = () => {
             <div className="stat-card">
               <div className="stat-icon">👥</div>
               <div className="stat-content">
-                <h3>{stats.totalUsers}</h3>
+                <h3>{stats?.totalUsers || 0}</h3>
                 <p>Total Users</p>
               </div>
             </div>

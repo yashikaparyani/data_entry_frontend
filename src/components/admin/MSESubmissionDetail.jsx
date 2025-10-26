@@ -4,12 +4,12 @@ import axios from 'axios';
 import './SubmissionDetail.css';
 
 const MSESubmissionDetail = () => {
+  const [activeTab, setActiveTab] = useState('overview');
   const { submissionId } = useParams();
   const navigate = useNavigate();
   const [submission, setSubmission] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState('overview');
 
   const fetchSubmissionDetail = useCallback(async () => {
     try {
@@ -98,33 +98,6 @@ const MSESubmissionDetail = () => {
     );
   };
 
-  const handleExport = () => {
-    // Create exportable data
-    const exportData = {
-      submissionId: submission._id,
-      userId: submission.userId,
-      formData: submission.formData,
-      status: submission.status,
-      progress: submission.progress,
-      timestamps: {
-        created: submission.createdAt,
-        submitted: submission.submittedAt,
-        lastModified: submission.lastModified
-      }
-    };
-
-    // Create and download JSON file
-    const dataStr = JSON.stringify(exportData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `mse-assessment-${submission._id}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
 
   if (loading) {
     return (
@@ -177,6 +150,33 @@ const MSESubmissionDetail = () => {
             </div>
           </div>
           <div className="header-actions">
+      {/* Tab Navigation */}
+      <div className="tab-navigation">
+        <button 
+          className={`tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
+          onClick={() => setActiveTab('overview')}
+        >
+          📋 Overview
+        </button>
+        <button 
+          className={`tab-btn ${activeTab === 'form-data' ? 'active' : ''}`}
+          onClick={() => setActiveTab('form-data')}
+        >
+          📝 Form Data
+        </button>
+        <button 
+          className={`tab-btn ${activeTab === 'timeline' ? 'active' : ''}`}
+          onClick={() => setActiveTab('timeline')}
+        >
+          ⏱️ Timeline
+        </button>
+        <button 
+          className={`tab-btn ${activeTab === 'raw-data' ? 'active' : ''}`}
+          onClick={() => setActiveTab('raw-data')}
+        >
+          🔍 Raw Data
+        </button>
+      </div>
             {/* <button onClick={handleExport} className="export-btn">
               📥 Export Data
             </button> */}
@@ -222,33 +222,6 @@ const MSESubmissionDetail = () => {
       </div>
 
       {/* Tab Navigation */}
-      <div className="tab-navigation">
-        <button 
-          className={`tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
-          onClick={() => setActiveTab('overview')}
-        >
-          📋 Overview
-        </button>
-        <button 
-          className={`tab-btn ${activeTab === 'form-data' ? 'active' : ''}`}
-          onClick={() => setActiveTab('form-data')}
-        >
-          📝 Form Data
-        </button>
-        <button 
-          className={`tab-btn ${activeTab === 'timeline' ? 'active' : ''}`}
-          onClick={() => setActiveTab('timeline')}
-        >
-          ⏱️ Timeline
-        </button>
-        <button 
-          className={`tab-btn ${activeTab === 'raw-data' ? 'active' : ''}`}
-          onClick={() => setActiveTab('raw-data')}
-        >
-          🔍 Raw Data
-        </button>
-      </div>
-
       {/* Tab Content */}
       <div className="tab-content">
         {activeTab === 'overview' && (

@@ -152,10 +152,6 @@ const FormSubmissions = () => {
     navigate(`/admin/submissions/${formType}/${submissionId}`);
   };
 
-  const handleDownload = (submissionId) => {
-    console.log('Downloading submission:', submissionId);
-    // Implementation for downloading submission data
-  };
 
   const renderBusinessDetails = useCallback((formData) => {
     if (!formData) return <span className="na-text">N/A</span>;
@@ -167,14 +163,12 @@ const FormSubmissions = () => {
     fields.forEach(field => {
       if (formData[field]) {
         let value = formData[field];
-        
         // Format currency fields
         if (field.toLowerCase().includes('amount') || field.toLowerCase().includes('balance') || 
             field.toLowerCase().includes('assets') || field.toLowerCase().includes('liabilities') ||
             field.toLowerCase().includes('worth')) {
           value = formatCurrency(value);
         }
-        
         details.push(value);
       }
     });
@@ -310,10 +304,6 @@ const FormSubmissions = () => {
                   <th>ID</th>
                   <th>User Information</th>
                   <th>Form Details</th>
-                  <th>Status</th>
-                  <th>Progress</th>
-                  <th>Submitted</th>
-                  <th>Modified</th>
                   <th>Actions</th>
                 </tr>
               </thead>

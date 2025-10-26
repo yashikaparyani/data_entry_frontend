@@ -160,35 +160,6 @@ const SubmissionDetail = () => {
     );
   };
 
-  const handleExport = () => {
-    if (!submission) return;
-    
-    const exportData = {
-      submissionId: submission._id,
-      formType: formType,
-      formTitle: currentConfig.title,
-      userId: submission.userId,
-      formData: submission.formData,
-      status: submission.status,
-      progress: submission.progress,
-      timestamps: {
-        created: submission.createdAt,
-        submitted: submission.submittedAt,
-        lastModified: submission.lastModified
-      }
-    };
-
-    const dataStr = JSON.stringify(exportData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${formType}-submission-${submission._id}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
 
   const handleBackClick = () => {
     navigate(`/admin/forms/${formType}`);
