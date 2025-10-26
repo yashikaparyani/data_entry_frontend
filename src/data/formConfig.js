@@ -79,7 +79,7 @@ export const formConfig = {
         { name: 'expectedMarginCapitalExpenditure', label: 'Expected Customer Margin in Capital Expenditure Transaction', type: 'number', required: true },
         { name: 'affordableEMI', label: 'Customer Afforable EMI (USD)', type: 'number', required: true },
         { name: 'loanEligibility', label: 'Loan Eligilibity as per Cash Flow Analysis and Policy (USD)', type: 'number', required: true },
-        { name: 'loanAmountApproved', label: 'Loan Amount Approved (USD)- To be filled at the end', type: 'number', required: false },
+        { name: 'loanAmountApproved', label: 'Loan Amount Approved (USD)- To be filled at the end *', type: 'number', required: false },
         { name: 'loanPerProgramLTV', label: 'Loan per program LTV', type: 'number', required: true },
         { name: 'loanToMarketValue', label: 'Loan to Market Value (%)', type: 'number', required: true },
         { name: 'customerMarginTransaction', label: 'Customer Margin in Transaction (%)', type: 'number', required: true }
