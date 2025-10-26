@@ -11,7 +11,7 @@ const Login = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -45,9 +45,15 @@ const Login = () => {
 
         if (response.ok) {
           const data = await response.json();
-          localStorage.setItem('adminToken', data.token);
-          localStorage.setItem('adminUser', JSON.stringify(data.user));
+          // localStorage.setItem('adminToken', data.token);
+          // localStorage.setItem('adminUser', JSON.stringify(data.user));
+          // navigate('/admin');
+
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
           navigate('/admin');
+
+
         } else {
           // Handle non-200 responses
           let errorMessage = 'Admin login failed';
@@ -73,11 +79,11 @@ const Login = () => {
     } else {
       // Regular user login
       const result = await login(formData.email, formData.password);
-      
+
       if (result.success) {
         // Check user role and redirect accordingly
         const userRole = result.user?.role;
-        
+
         if (userRole === 'loan_officer') {
           navigate('/loan-officer/dashboard');
         } else {
@@ -87,7 +93,7 @@ const Login = () => {
         setError(result.message);
       }
     }
-    
+
     setLoading(false);
   };
 
@@ -134,8 +140,8 @@ const Login = () => {
             />
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="auth-button"
             disabled={loading}
           >
