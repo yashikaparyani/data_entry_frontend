@@ -183,7 +183,7 @@ const AdminDashboard = () => {
         </div>
       </header>
 
-      <main className="admin-main">
+      <main className="admin-main"  >
         {/* Statistics Cards */}
         <section className="stats-section">
           <h2>System Statistics</h2>
@@ -266,7 +266,7 @@ const AdminDashboard = () => {
         </section>
 
         {/* Quick Actions */}
-        <section className="quick-actions">
+        <section className="quick-actions" >
           <h2>Quick Actions</h2>
           <div className="actions-grid">
             <button 
@@ -285,21 +285,21 @@ const AdminDashboard = () => {
               <span className="action-text">Create New User</span>
             </button>
             
-            <button 
+            {/* <button 
               className="action-btn"
               onClick={() => navigate('/admin/reports')}
             >
               <span className="action-icon">📊</span>
               <span className="action-text">Generate Reports</span>
-            </button>
+            </button> */}
             
-            <button 
+            {/* <button 
               className="action-btn"
               onClick={() => navigate('/admin/settings')}
             >
               <span className="action-icon">⚙️</span>
               <span className="action-text">System Settings</span>
-            </button>
+            </button> */}
             
             <button 
               className="action-btn"
@@ -313,7 +313,7 @@ const AdminDashboard = () => {
 
         {/* Loan Officer Statistics */}
         {stats.loanOfficerStats && stats.loanOfficerStats.length > 0 && (
-          <section className="loan-officer-section">
+          <section className="loan-officer-section" >
             <h2>Loan Officer Performance</h2>
             <p>Overview of client forms processed by each loan officer</p>
             

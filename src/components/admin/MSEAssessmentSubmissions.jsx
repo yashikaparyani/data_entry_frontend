@@ -172,9 +172,9 @@ const MSEAssessmentSubmissions = () => {
           <button onClick={fetchSubmissions} className="refresh-btn">
             🔄 Refresh
           </button>
-          <button className="export-btn">
+          {/* <button className="export-btn">
             📊 Export Data
-          </button>
+          </button> */}
         </div>
       </div>
 

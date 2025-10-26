@@ -247,9 +247,9 @@ const SubmissionDetail = () => {
             </div>
           </div>
           <div className="header-actions">
-            <button onClick={handleExport} className="export-btn">
+            {/* <button onClick={handleExport} className="export-btn">
               📥 Export Data
-            </button>
+            </button> */}
             <button onClick={fetchSubmissionDetail} className="refresh-btn">
               🔄 Refresh
             </button>

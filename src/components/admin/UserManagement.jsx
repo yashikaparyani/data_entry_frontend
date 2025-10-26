@@ -210,13 +210,13 @@ const UserManagement = () => {
                 <p>Manage and monitor all registered users</p>
               </div>
             </div>
-            <div className="header-stats">
+            <div className="header-stats " style={{margin: "1rem"}}>
               <div className="stat-card">
-                <span className="stat-value">{users.length}</span>
+                <span className="stat-value" style={{ color: "black" }}>{users.length}</span>
                 <span className="stat-label">Total Users</span>
               </div>
               <div className="stat-card">
-                <span className="stat-value">{users.filter(u => u.submissionCount > 0).length}</span>
+                <span className="stat-value" style={{ color: "black" }}>{users.filter(u => u.submissionCount > 0).length}</span>
                 <span className="stat-label">Active Users</span>
               </div>
             </div>
@@ -258,7 +258,7 @@ const UserManagement = () => {
       </header>
 
       {/* Search and Filters */}
-      <div className="search-section">
+      {/* <div className="search-section">
         <div className="search-container">
           <input
             type="text"
@@ -269,7 +269,7 @@ const UserManagement = () => {
           />
           <span className="search-icon">🔍</span>
         </div>
-      </div>
+      </div> */}
 
       {/* Users Table */}
       <div className="users-container">
