@@ -81,6 +81,7 @@ const UserForm = () => {
         // Set client ID - check if client is populated or just an ID
         const clientIdValue = typeof data.client === 'object' ? data.client._id : data.client;
         setClientId(clientIdValue);
+        localStorage.setItem('activeClientId', clientIdValue); // Store in localStorage
         setActiveFormId(formId);
         
         console.log('✅ Resume: Form loaded successfully', {
@@ -189,6 +190,7 @@ const UserForm = () => {
           });
           const newClientId = clientResponse.data.client._id;
           setClientId(newClientId);
+          localStorage.setItem('activeClientId', newClientId); // Store in localStorage
           console.log('✅ Client created with ID:', newClientId);
           
           // Create form for this client - use 'user_form' 
