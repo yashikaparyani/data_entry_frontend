@@ -191,7 +191,6 @@ const CreditAppMemoForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     // Validate all sections
     let isValid = true;
     for (let i = 0; i < creditAppMemoConfig.sections.length; i++) {
@@ -201,16 +200,43 @@ const CreditAppMemoForm = () => {
         break;
       }
     }
-    
     if (isValid) {
       const submissionData = {
         ...formData,
         calculatedValues,
         submittedAt: new Date().toISOString()
       };
-      
       console.log('Credit App Memo Submitted:', submissionData);
       alert('Credit Application Memo submitted successfully!');
+    }
+  };
+
+  // Save Progress function
+  const saveProgress = async () => {
+    if (!clientId || !activeFormId) {
+      alert('❌ No active client or form found. Please start from dashboard.');
+      return;
+    }
+    try {
+      const response = await axios.put(`${API_URL}/api/loan-officer/forms/${activeFormId}/save`, {
+        formData,
+        calculatedFields: calculatedValues,
+        currentStep: currentSection + 1,
+        totalSteps: creditAppMemoConfig.sections.length,
+        status: 'in_progress'
+      }, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.status === 200) {
+        alert('✓ Progress saved successfully!');
+      } else {
+        alert('❌ Error saving progress');
+      }
+    } catch (error) {
+      console.error('Save error:', error);
+      alert('❌ Error saving progress: ' + (error.response?.data?.message || error.message));
     }
   };
 
@@ -402,7 +428,15 @@ const CreditAppMemoForm = () => {
           >
             Previous
           </button>
-          
+
+          <button
+            type="button"
+            onClick={saveProgress}
+            className="nav-button save-button"
+          >
+            💾 Save Progress
+          </button>
+
           <button
             type="button"
             onClick={handleNextSection}
